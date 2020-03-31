@@ -1,0 +1,15 @@
+@startuml
+
+App o-- ProjectDashboard
+ProjectDashboard *-- AddProject
+ProjectDashboard *-- DisplayProjects
+DisplayProjects o-- Project
+Project o-- Tag
+Tag o-- TagForm
+Project o-- Deployment
+Project o-- DependentToMe
+Project o--IamDepentendTo
+DependentToMe *-- RelatedProjects
+IamDepentendTo *-- RelatedProjects
+
+@enduml

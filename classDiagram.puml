@@ -1,0 +1,17 @@
+@startuml
+
+class Application {
+- link
+- tag
+}
+
+enum Environment
+
+Application "many" o-- "many" Application : dependentTo
+Application -- Environment : deployedEnvironments
+
+
+
+
+
+@enduml
