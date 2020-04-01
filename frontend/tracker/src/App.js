@@ -1,10 +1,16 @@
 import React, {Component} from 'react';
-import logo from './logo.svg';
+
 import './App.css';
-import {AddProject} from "./AddProject";
+
 import ProjectDashboard from "./ProjectDashboard";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'mdbreact/dist/css/mdb.css';
+import { BrowserRouter }
+  from "react-router-dom";
+import Navigation from './components/Navbar';
+import history from "./history";
+import {Route, Router, Switch} from "react-router-dom";
+import {DisplayTags} from "./DisplayTags";
 
 export default class App extends Component {
   state = {
@@ -34,8 +40,17 @@ export default class App extends Component {
 
   render = () =>
 
-      <div className="container">
-        <ProjectDashboard/>
-      </div>
+<div>
+  <Router history={history}>
+    <Switch>
+      <Route exact path="/" component={ProjectDashboard}/>
+      <Route exact path="/tags" component={DisplayTags}/>
+    </Switch>
+  </Router>
+</div>
+
+
+
+
 }
 
