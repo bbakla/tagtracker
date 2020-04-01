@@ -5,12 +5,11 @@ import './App.css';
 import ProjectDashboard from "./ProjectDashboard";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'mdbreact/dist/css/mdb.css';
-import { BrowserRouter }
-  from "react-router-dom";
+
 import Navigation from './components/Navbar';
 import history from "./history";
 import {Route, Router, Switch} from "react-router-dom";
-import {DisplayTags} from "./DisplayTags";
+import {DisplayTags} from "./tags/DisplayTags";
 
 export default class App extends Component {
   state = {
@@ -48,9 +47,6 @@ export default class App extends Component {
     </Switch>
   </Router>
 </div>
-
-
-
 
 }
 

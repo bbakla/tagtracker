@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import history from './history';
+import history from '../history';
 import {Button} from "react-bootstrap";
 
 export class Tag extends Component {

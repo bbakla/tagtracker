@@ -1,8 +1,7 @@
 import React, {Component} from "react";
-import {Tag} from "./Tag";
-import {Deployment} from "./Deployment";
-import {DependentToMe} from "./DependentToMe";
-import {DependentOn} from "./DependentOn";
+import {Tag} from "./tags/Tag";
+import {Deployment} from "./deployment/Deployment";
+import {ShowDependency} from "./dependencies/ShowDependency";
 
 export class Project extends Component {
 
@@ -22,11 +21,10 @@ export class Project extends Component {
                 <Deployment/>
               </div>
               <div className="col-xs-6 col-md-6">
-                <DependentToMe/>
-                <DependentOn/>
+                <ShowDependency relationshipType = "dependentToMe"/>
+                <ShowDependency relationshipType = "dependentOn"/>
               </div>
             </div>
-
           </div>
         </div>
       </div>

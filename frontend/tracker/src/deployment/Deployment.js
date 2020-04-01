@@ -1,5 +1,6 @@
 import React, {Component} from "react";
-import {DeployStatusForm} from "./DeployStatusForm";
+
+import {DeployEnvironment} from "./DeployEnvironment";
 
 export class Deployment extends Component {
   constructor(props) {
@@ -27,7 +28,7 @@ export class Deployment extends Component {
 
             <br/>Deployments
           </button>
-          {this.state.showDeployStatus && <DeployStatusForm/>}
+          {this.state.showDeployStatus && <DeployEnvironment/>}
         </div>
     );
   }

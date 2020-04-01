@@ -1,11 +1,12 @@
 import React, {Component} from "react";
+import {NewTagForm} from "./NewTagForm";
 
 export class DisplayTags extends Component{
     render() {
         return (
 
             <div>
-
+                <NewTagForm/>
                 <table className="table table-striped table-responsive-md btn-table">
 
                     <thead>

@@ -1,0 +1,21 @@
+@startuml
+
+note "* Routing is done in App component" as N1
+
+App o-- ProjectDashboard
+ProjectDashboard *-- NavigationMenu
+ProjectDashboard *-- AddProject
+ProjectDashboard *-- DisplayProjects
+
+DisplayProjects o-- Project
+Project o-- Tag
+Tag *-- DisplayTags
+DisplayTags o-- EditTag
+DisplayTags o-- NewTagForm
+Project o-- Deployment
+Project "1-2" o-- ShowDependency
+Deployment *-- DeployEnvironment
+ShowDependency *-- RelatedProjects
+
+
+@enduml
