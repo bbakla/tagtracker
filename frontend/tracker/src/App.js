@@ -10,6 +10,7 @@ import Navigation from './components/Navbar';
 import history from "./history";
 import {Route, Router, Switch} from "react-router-dom";
 import {DisplayTags} from "./tags/DisplayTags";
+import {TagForm} from "./tags/TagForm";
 
 export default class App extends Component {
   state = {
@@ -37,6 +38,7 @@ export default class App extends Component {
         console.log("this part will display the application")
       }*/
 
+
   render = () =>
 
 <div>
@@ -44,6 +46,7 @@ export default class App extends Component {
     <Switch>
       <Route exact path="/" component={ProjectDashboard}/>
       <Route exact path="/tags" component={DisplayTags}/>
+     // <Route exact path="/tags/new" component={TagForm}/>
     </Switch>
   </Router>
 </div>

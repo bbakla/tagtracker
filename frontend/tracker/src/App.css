@@ -112,3 +112,8 @@ input:checked + .slider:before {
   width: 25px;
   height: 25px;
 }
+
+.table.table-striped .minimal_cell {
+  background: none;
+  border-width: 0;
+}

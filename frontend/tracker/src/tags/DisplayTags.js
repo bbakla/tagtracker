@@ -1,56 +1,89 @@
 import React, {Component} from "react";
 import {NewTagForm} from "./NewTagForm";
+import {EditTag} from "./EditTag";
+import {Tag} from "./Tag";
+import {TagForm} from "./TagForm";
+import {TagFormModal} from "./TagFormModal";
 
 export class DisplayTags extends Component{
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            showModal: false,
+        }
+    }
+
+    editTagForm = () => {
+        this.setState({showModal: true})
+    }
+
     render() {
         return (
 
-            <div>
-                <NewTagForm/>
+            <div className="container">
+                <div className="row">
+                    <div className="col-12">
                 <table className="table table-striped table-responsive-md btn-table">
-
                     <thead>
                     <tr>
-                        <th>#</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Username</th>
+                        <th>Tag Name</th>
+                        <th>Message</th>
+                        <th>Release Notes</th>
                     </tr>
                     </thead>
 
                     <tbody>
                     <tr>
-                        <th scope="row">1</th>
+                        <td>v0.1.0</td>
+                        <td>message1</td>
+                        <td>releaseNotes1</td>
                         <td>
-                            <button type="button" className="btn btn-outline-primary btn-sm m-0 waves-effect">Button
+                            <button type="button" className="btn btn-success" onClick={this.editTagForm}>
+                                <i className="fas fa-edit"></i>
+                            </button>
+                            {this.state.showModal && <TagFormModal/>}
+
+
+                            <button type="button" className="btn btn-warning ">
+                                <i className="far fa-trash-alt"></i>
                             </button>
                         </td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
                     </tr>
                     <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
+                        <td>v0.1.2</td>
+                        <td>message2</td>
+                        <td>releaseNotes2</td>
                         <td>
-                            <button type="button" className="btn btn-outline-primary btn-sm m-0 waves-effect">Button
+                            <button type="button" className="btn btn-success">
+                                <i className="fas fa-edit"></i>
+                            </button>
+
+                            <button type="button" className="btn btn-warning">
+                                <i className="far fa-trash-alt"></i>
                             </button>
                         </td>
-                        <td>@fat</td>
                     </tr>
                     <tr>
-                        <th scope="row">3</th>
-                        <td>Larry</td>
-                        <td>the Bird</td>
+                        <td>v0.1.2</td>
+                        <td>message2</td>
+                        <td>releaseNotes2</td>
                         <td>
-                            <button type="button" className="btn btn-outline-primary btn-sm m-0 waves-effect">Button
+                            <button type="button" className="btn btn-success">
+                                <i className="fas fa-edit"></i>
+                            </button>
+
+                            <button type="button" className="btn btn-warning">
+                                <i className="far fa-trash-alt"></i>
                             </button>
                         </td>
                     </tr>
                     </tbody>
-
                 </table>
 
-
+                <NewTagForm/>
+            </div>
+                </div>
             </div>
 
 

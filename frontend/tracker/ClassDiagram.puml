@@ -16,6 +16,4 @@ Project o-- Deployment
 Project "1-2" o-- ShowDependency
 Deployment *-- DeployEnvironment
 ShowDependency *-- RelatedProjects
-
-
 @enduml
