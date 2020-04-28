@@ -1,6 +1,6 @@
 import React, {Component, useState} from "react";
-import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button"
+import {Modal} from "react-bootstrap";
 
 export class TagFormModal extends Component {
 
@@ -8,7 +8,7 @@ export class TagFormModal extends Component {
     super(props);
 
     this.state = {
-      showModal: true,
+      showModal: false
     }
   }
 
@@ -20,19 +20,37 @@ export class TagFormModal extends Component {
     this.setState({showModal: true});
   }
 
+
   render() {
+    const label = this.props.buttonLabel;
+    let title = ""
+    let button = ''
+
+        if(label === "Edit") {
+          title = "Edit tag";
+          button = <Button type="button" variant={"success"} onClick={this.open}
+                           style={{float: "left"}}>
+                      <i className="fas fa-edit"></i>
+                  </Button>
+        } else {
+          button =  <Button className="btn btn-outline-primary btn-block" onClick={this.open}>
+            Create New Tag
+          </Button>
+          title = "Create New Tag";
+        }
+
 
     return (
-          <Modal show={this.state.showModal} onHide={this.close}>
-            <Modal.Header closeButton>
-              <Modal.Title>New Tag</Modal.Title>
-            </Modal.Header>
+        <div>
+          {button}
+          <Modal show={this.state.showModal}>
+            <Modal.Header>{title}</Modal.Header>
             <Modal.Body>
 
               <form>
                 <div className="form-group">
                   <label htmlFor="tagNameInput">Tag Name </label>
-                  <input type="text" className="form-control" id="tagNameInput" aria-describedby="emailHelp"
+                  <input type="text" className="form-control" id="tagNameInput" aria-describedby="tagName"
                          placeholder="Enter tag name with the format v2.5.6"/>
                     <small id="emailHelp" className="form-text text-muted">should be in the format of v0.2.1 </small>
                 </div>
@@ -49,10 +67,11 @@ export class TagFormModal extends Component {
 
             </Modal.Body>
             <Modal.Footer>
-              <button type="submit" className="btn btn-primary">Submit</button>
+              <Button type="submit" className="btn btn-primary" onClick={this.toggle}>{label}</Button>
               <Button onClick={this.close}>Close</Button>
             </Modal.Footer>
           </Modal>
+        </div>
     );
   }
 

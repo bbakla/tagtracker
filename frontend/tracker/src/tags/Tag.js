@@ -11,6 +11,8 @@ export class Tag extends Component {
     }
   }
 
+
+
 /*  handleOptions = () => {
    if (this.state.showTagOptions) {
       this.setState({showTagOptions: false});
@@ -21,6 +23,11 @@ export class Tag extends Component {
     }
 
   }*/
+
+getItems = () => {
+
+}
+
 
   render() {
 
