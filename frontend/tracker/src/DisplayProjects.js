@@ -1,7 +1,12 @@
 import React, {Component} from "react";
 import {Project} from "./Project";
+import {Route, Router, Switch} from "react-router-dom";
+import history from "./history";
+import ProjectDashboard from "./ProjectDashboard";
+import {DisplayTags} from "./tags/DisplayTags";
 
 export class DisplayProjects extends Component {
+
   /*    render = () =>
           this.props.repos.map(repo =>
                   <div className="col-sm-3">
@@ -19,11 +24,20 @@ export class DisplayProjects extends Component {
           );*/
 
   render = () =>
-      <div className="row">
-        <Project/>
-        <Project/>
-        <Project/>
-        <Project/>
+
+
+      <div id="project-list" className="row">
+          {
+              this.props.projects.map(project => (
+                  <Project name = {project.projectName}
+                           description = {project.description}
+                           tags = {project.tags}
+                           dependentToMe = {project.dependentToMe}
+                           dependentOn = {project.dependentOn}
+                           deployments = {project.deployments}
+                  />
+              ))
+          }
       </div>
 
 }
