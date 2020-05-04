@@ -14,7 +14,16 @@ export class RelatedProjects extends Component{
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
+
+                    {this.props.dependencies.map(dependency => (
+                        <tr key={dependency.projectName + "_" + dependency.tag}>
+                            <td>{dependency.projectName}</td>
+                            <td>{dependency.tag}</td>
+
+                        </tr>
+                    ))}
+
+                   {/* <tr>
                         <td>Soris Adapter</td>
                         <td>v2.1.1</td>
 
@@ -23,7 +32,7 @@ export class RelatedProjects extends Component{
                         <td>Rule Engine</td>
                         <td>v1.0.0</td>
 
-                    </tr>
+                    </tr>*/}
                     </tbody>
                 </Table>
             </div>

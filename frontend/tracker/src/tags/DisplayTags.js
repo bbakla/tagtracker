@@ -9,6 +9,7 @@ export class DisplayTags extends Component{
 
         this.state = {
             showModal: false,
+            tagsToDisplay: this.props.location.aboutProps.tags
         }
     }
 
@@ -22,17 +23,24 @@ export class DisplayTags extends Component{
         let confirmDelete = window.confirm("Are you sure deleting the tag?")
         if(confirmDelete) {
             this.setState({
-                tags: this.state.tags.filter(tag => tag.tagName !== tagName)
+                tagsToDisplay: this.state.tagsToDisplay.filter(tag => tag.tagName !== tagName)
             });
         }
     }
 
-    render() {
+    putTagsToState = () => {
+        this.setState({tagsToDisplay: this.props.location.aboutProps.tags});
+    }
 
-        const tagsList = this.props.location.aboutProps.tags.map( tag => {
+    render() {
+        console.log(this.props.location.aboutProps);
+
+
+        const tagsList = this.state.tagsToDisplay.map( tag => {
             return(
 
                 <tr key={tag.tagName}>
+                    <td>{tag.tagName}</td>
                     <td>{tag.message}</td>
                     <td>{tag.releaseNotes}</td>
 
@@ -59,7 +67,7 @@ export class DisplayTags extends Component{
 
 
             <div className="container">
-                <h1>{this.props.location.aboutProps.projectName}</h1>
+              <h1>{this.props.location.aboutProps.projectName}</h1>
                 <div className="row">
                     <div className="col-12">
                         <Table  responsive hover>
@@ -68,6 +76,7 @@ export class DisplayTags extends Component{
                                 <th>Tag Name</th>
                                 <th>Message</th>
                                 <th>Release Notes</th>
+
                             </tr>
                             </thead>
 

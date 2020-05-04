@@ -3,7 +3,6 @@ import history from '../history';
 import {Button} from "react-bootstrap";
 import {Route, Switch, Link} from "react-router-dom";
 import {DisplayTags} from "./DisplayTags";
-import {PropsPage} from "./propspage";
 
 export class Tag extends Component {
     constructor(props) {
@@ -30,8 +29,6 @@ export class Tag extends Component {
 
     render() {
 
-
-
         return (
             <div>
 
@@ -44,7 +41,7 @@ export class Tag extends Component {
     }}  >
          <span>
             <span className="fa fa-tag p-2"></span>
-            <span className="badge badge-light">{this.props.tag.tagName}</span>
+            <span className="badge badge-light">{this.props.currentTagName}</span>
         </span>
         <br/>Tags
     </Link>

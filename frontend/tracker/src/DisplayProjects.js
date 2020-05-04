@@ -22,14 +22,10 @@ export class DisplayProjects extends Component {
                   </div>
               /!* <a href="#" className="btn btn-primary">Go somewhere</a>*!/
           );*/
+
     sortTag = (tags) => {
 
         let sorted = tags.sort((tag1, tag2) => new Date(tag2.createdDate) - new Date(tag1.createdDate));
-
-        console.log("sorting");
-        console.log(sorted);
-
-        //this.setState({selectedTag: sorted}, () => console.log( this.state.selectedTag));
 
         return sorted;
     }

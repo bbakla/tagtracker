@@ -7,6 +7,7 @@ import {Switch, Route} from "react-router-dom";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
+import Button from "react-bootstrap/Button";
 
 export class Project extends Component {
     constructor(props) {
@@ -36,19 +37,6 @@ export class Project extends Component {
                     <h5 className="card-header">{this.props.name}</h5>
 
                     <div className="card-body">
-                      {/*    <Dropdown>
-                        <Dropdown.Toggle variant="outline-danger" id="dropdown-basic">
-                           Tags
-                        </Dropdown.Toggle>
-
-                        <Dropdown.Menu>
-                            {
-                                this.props.tags.map(tag => (
-                                    <Dropdown.Item as="button" onClick={() => this.handleSelect({tag})}>{tag.tagName}</Dropdown.Item>
-                                ))
-                            }
-                        </Dropdown.Menu>
-                    </Dropdown>*/}
 
                         <select className="form-control col-md-4"
                                 onChange={this.handleSelect}>
@@ -65,8 +53,9 @@ export class Project extends Component {
                         <div className="row">
                             <div className="col-xs-6 col-md-6">
 
-                                <Tag projectName={this.props.name}
-                                     tag={this.props.tags[this.state.selectedTagIndex]}/>
+                                <Tag currentTagName = {this.props.tags[this.state.selectedTagIndex].tagName}
+                                     projectName={this.props.name}
+                                     tags={this.props.tags}/>
 
                                 <Deployment deploymentStatus={this.props.tags[this.state.selectedTagIndex].deployments}/>
                             </div>
@@ -78,6 +67,12 @@ export class Project extends Component {
                             </div>
                         </div>
                     </div>
+                 {/*   <ButtonGroup className="p-3" toggle={true}>
+                        <Button variant="outline-info"> <i className="fas fa-edit"></i></Button>
+                        <Button variant="outline-warning"><i className="fa fa-plus"></i></Button>
+                        <Button variant="outline-danger"> <i className="far fa-trash-alt"></i></Button>
+
+                    </ButtonGroup>*/}
                 </div>
 
             </div>
