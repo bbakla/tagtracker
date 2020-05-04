@@ -22,6 +22,17 @@ export class DisplayProjects extends Component {
                   </div>
               /!* <a href="#" className="btn btn-primary">Go somewhere</a>*!/
           );*/
+    sortTag = (tags) => {
+
+        let sorted = tags.sort((tag1, tag2) => new Date(tag2.createdDate) - new Date(tag1.createdDate));
+
+        console.log("sorting");
+        console.log(sorted);
+
+        //this.setState({selectedTag: sorted}, () => console.log( this.state.selectedTag));
+
+        return sorted;
+    }
 
   render = () =>
 
@@ -29,9 +40,10 @@ export class DisplayProjects extends Component {
 
           {
               this.props.projects.map(project => (
-                  <Project name = {project.projectName}
+                  <Project key={project.projectName}
+                           name = {project.projectName}
                            description = {project.description}
-                           tags = {project.tags}
+                           tags = {project.tags.sort((tag1, tag2) => new Date(tag2.createdDate) - new Date(tag1.createdDate))}
                            dependentToMe = {project.dependentToMe}
                            dependentOn = {project.dependentOn}
                            deployments = {project.deployments}

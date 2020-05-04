@@ -26,6 +26,10 @@ public class Tag implements Serializable {
   //@Column(name = "id")
   private Long id;
 
+  @NotNull
+  @Column(name = "tagName")
+  private String tagName;
+
   private String message;
 
   private String releaseMessage;
@@ -38,10 +42,6 @@ public class Tag implements Serializable {
   @JoinColumn(name = "project_id", referencedColumnName = "project_id")
   @JsonBackReference
   private Application application;
-
-  @NotNull
-  @Column(name = "tagName")
-  private String tagName;
 
 
   public Long getId() {

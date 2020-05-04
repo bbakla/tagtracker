@@ -30,6 +30,8 @@ export class Tag extends Component {
 
     render() {
 
+
+
         return (
             <div>
 
@@ -42,7 +44,7 @@ export class Tag extends Component {
     }}  >
          <span>
             <span className="fa fa-tag p-2"></span>
-            <span className="badge badge-light">{this.props.tags[0].tagName}</span>
+            <span className="badge badge-light">{this.props.tag.tagName}</span>
         </span>
         <br/>Tags
     </Link>
