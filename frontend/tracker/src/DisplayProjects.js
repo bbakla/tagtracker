@@ -25,8 +25,8 @@ export class DisplayProjects extends Component {
 
   render = () =>
 
+      <div id="project-list" className="row col-md-12">
 
-      <div id="project-list" className="row">
           {
               this.props.projects.map(project => (
                   <Project name = {project.projectName}

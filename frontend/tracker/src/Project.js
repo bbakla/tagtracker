@@ -9,8 +9,8 @@ export class Project extends Component {
 
   render = () =>
 
-      <div key={this.props.name} className="col-md-6 mb-3">
-        <div className="card p-1">
+      <div key={this.props.name} className="col-md-6">
+            <div className="card p-1">
           <h5 className="card-header">{this.props.name}</h5>
           <div className="card-body">
             <p className="card-title font-weight-bold">Special title
@@ -31,7 +31,7 @@ export class Project extends Component {
               </div>
             </div>
           </div>
-        </div>
+            </div>
 
       </div>
 

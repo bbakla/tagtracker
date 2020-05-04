@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 
 import './App.css';
 
-import ProjectDashboard from "./ProjectDashboard";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'mdbreact/dist/css/mdb.css';
 
@@ -11,6 +10,7 @@ import history from "./history";
 import {Link, Route, Router, Switch} from "react-router-dom";
 import {DisplayTags} from "./tags/DisplayTags";
 import {TagForm} from "./tags/TagForm";
+import ProjectDashboard from "./ProjectDashboard";
 
 export default class App extends Component {
    /* state = {
@@ -38,7 +38,7 @@ export default class App extends Component {
           console.log("this part will display the application")
         }*/
 
-    constructor(props) {
+   /* constructor(props) {
         super(props);
 
         this.state = {
@@ -129,7 +129,7 @@ export default class App extends Component {
                 }
             ]
         }
-    }
+    }*/
 
     render = () =>
            // <Router history={history}>
@@ -137,9 +137,9 @@ export default class App extends Component {
         <div>
                 <Link to="/"  exact="true">Home</Link>
               </div>
-
                 <Switch>
-                    <Route exact path="/projects" render={ (props) => <ProjectDashboard {...props} projects = {this.state.projects}/>}/>
+                    {/*<Route exact path="/projects" render={ (props) => <ProjectDashboard {...props} projects = {this.state.projects}/>}/>*/}
+                    <Route exact path="/projects" component={ProjectDashboard}/>
                     <Route exact path="/projects/tags" component={DisplayTags}/>}
                 </Switch>
     </div>
