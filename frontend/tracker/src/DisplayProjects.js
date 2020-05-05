@@ -30,6 +30,10 @@ export class DisplayProjects extends Component {
         return sorted;
     }
 
+    removeProject = (projectName) => {
+        this.props.removeProjectFromTheList(projectName)
+    }
+
   render = () =>
 
       <div id="project-list" className="row col-md-12">
@@ -43,6 +47,7 @@ export class DisplayProjects extends Component {
                            dependentToMe = {project.dependentToMe}
                            dependentOn = {project.dependentOn}
                            deployments = {project.deployments}
+                           removeProjectFromList = {this.removeProject}
                   />
               ))
           }

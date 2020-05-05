@@ -2,6 +2,14 @@ import React, {Component} from "react";
 
 export class AddProject extends Component {
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            projectIdentifier: ""
+        }
+    }
+
   /*constructor(props) {
       super(props);
       this.state = {
@@ -37,13 +45,22 @@ export class AddProject extends Component {
           <button className="btn btn-primary mt-1"
           onClick={this.getRepoInfo}> Add</button>
       </div>
-
    */
+
+    saveIdentifier = (event) => {
+        this.setState({[event.target.name] : event.target.value});
+    }
+
+    addProject = () => {
+        this.props.addProject({
+            id: this.state.projectIdentifier
+        })
+    }
 
   render = () =>
       <div className="input-group mb-2 ">
-        <input type="text" className="form-control"/>
-        <button className="btn-md btn-outline-secondary" type="submit">Add
+        <input type="text" name="projectIdentifier" className="form-control" defaultValue={this.state.projectIdentifier} onChange={this.saveIdentifier}/>
+        <button className="btn-md btn-outline-secondary" type="submit" onClick={this.addProject}>Add
           repository
         </button>
 

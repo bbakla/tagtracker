@@ -28,13 +28,28 @@ export class Project extends Component {
 
     }
 
+    removeProject = () => {
+        let confirmDelete = window.confirm("Are you sure deleting the tag?")
+        if (confirmDelete) {
+            this.props.removeProjectFromList(this.props.name)
+        }
+
+    }
+
     render() {
+        console.log("project");
+        console.log(this.props.description.length);
+
+        const description = this.props.description.length === 0 ? <br/> : this.props.description
+
 
         return (
             <div key={this.props.name} className="col-md-6">
 
                 <div className="card p-1">
-                    <h5 className="card-header">{this.props.name}</h5>
+                    <h5 className=" card-header">{this.props.name}
+                    <button className="outline-danger float-right btn-sm" onClick={this.removeProject}> <i className=" far fa-trash-alt"></i></button>
+                    </h5>
 
                     <div className="card-body">
 
@@ -48,7 +63,10 @@ export class Project extends Component {
                             }
                         </select>
 
-                        <p className="card-title font-weight-bold">{this.props.description}</p>
+                        <div>
+                        <p className= "card-title font-weight-bold">{description}</p>
+
+                        </div>
 
                         <div className="row">
                             <div className="col-xs-6 col-md-6">
