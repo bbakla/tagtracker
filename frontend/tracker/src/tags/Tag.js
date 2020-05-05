@@ -1,8 +1,5 @@
 import React, {Component} from "react";
-import history from '../history';
-import {Button} from "react-bootstrap";
-import {Route, Switch, Link} from "react-router-dom";
-import {DisplayTags} from "./DisplayTags";
+import { Link} from "react-router-dom";
 
 export class Tag extends Component {
     constructor(props) {

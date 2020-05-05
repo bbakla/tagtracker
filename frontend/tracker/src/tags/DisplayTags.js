@@ -13,13 +13,8 @@ export class DisplayTags extends Component{
         }
     }
 
-    editTagForm = () => {
-
-        this.setState({showModal: true})
-    }
 
     deleteTag = (tagName) => {
-        //console.log("delete tag");
         let confirmDelete = window.confirm("Are you sure deleting the tag?")
         if(confirmDelete) {
             this.setState({
@@ -28,22 +23,71 @@ export class DisplayTags extends Component{
         }
     }
 
+    saveTagHandle = (tag) => {
+        const newTag = {
+            tagName: tag.name,
+            message: tag.message,
+            releaseNotes: tag.releaseNotes,
+            createdDate: new Date(),
+            dependentToMe: [],
+            dependentOn: [],
+            deployments:
+                {
+                    dev: "",
+                    int: "",
+                    prod: ""
+                }
+
+        }
+
+        this.setState({tagsToDisplay: this.state.tagsToDisplay.concat(newTag)});
+    }
+
+    editTagHandle = (modifiedTag) => {
+        const existingTag = this.state.tagsToDisplay.find(t => t.tagName === modifiedTag.name)
+
+        let newTags = this.state.tagsToDisplay.map(t => {
+            if(t.tagName === modifiedTag.name) {
+
+                return Object.assign({}, t,
+                    {tagName: existingTag.tagName,
+                       message: existingTag.message,
+                       releaseNotes: modifiedTag.releaseNotes,
+                     /*  createdDate: existingTag.createdDate,
+                       dependentToMe: existingTag.dependentToMe,
+                       dependentOn: existingTag.dependentOn,
+                       deployments: existingTag.deployments*/
+                    });
+            } else {
+                return t;
+            }
+        });
+
+        this.setState({tagsToDisplay: newTags});
+    }
+
     render() {
 
         const tagsList = this.state.tagsToDisplay.map( tag => {
+
             return(
 
-                <tr key={tag.tagName}>
+                <tr key = {tag.tagName}>
                     <td>{tag.tagName}</td>
-                    <td>{tag.message}</td>
-                    <td>{tag.releaseNotes}</td>
+                    <td key = {tag.message}>{tag.message}</td>
+                    <td key = {tag.releaseNotes} >{tag.releaseNotes}</td>
 
                     <td>
                         <div>
                             {/* <button type="button" className="btn btn-success" onClick={this.editTagForm}>
                         <i className="fas fa-edit"></i>
                     </button>*/}
-                            <TagFormModal buttonLabel="Edit" />
+                            <TagFormModal buttonLabel="Edit"
+                                          tagName = {tag.tagName}
+                                          message = {tag.message}
+                                          releaseNotes = {tag.releaseNotes}
+                                          saveTag = {this.editTagHandle}
+                            />
                             {' '}
 
 
@@ -79,7 +123,10 @@ export class DisplayTags extends Component{
                             </tbody>
                         </Table>
 
-                        <TagFormModal buttonLabel="Create" />
+                        <TagFormModal
+                            buttonLabel="Create"
+                            saveTag = {this.saveTagHandle}
+                        />
                     </div>
                 </div>
             </div>

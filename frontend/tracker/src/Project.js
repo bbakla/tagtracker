@@ -2,12 +2,6 @@ import React, {Component} from "react";
 import {Tag} from "./tags/Tag";
 import {Deployment} from "./deployment/Deployment";
 import {ShowDependency} from "./dependencies/ShowDependency";
-import {DisplayTags} from "./tags/DisplayTags";
-import {Switch, Route} from "react-router-dom";
-import Dropdown from "react-bootstrap/Dropdown";
-import DropdownButton from "react-bootstrap/DropdownButton";
-import ButtonGroup from "react-bootstrap/ButtonGroup";
-import Button from "react-bootstrap/Button";
 
 export class Project extends Component {
     constructor(props) {
@@ -37,8 +31,6 @@ export class Project extends Component {
     }
 
     render() {
-        console.log("project");
-        console.log(this.props.description.length);
 
         const description = this.props.description.length === 0 ? <br/> : this.props.description
 

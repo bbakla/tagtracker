@@ -6,10 +6,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'mdbreact/dist/css/mdb.css';
 
 import Navigation from './components/Navbar';
-import history from "./history";
+
 import {Link, Route, Router, Switch} from "react-router-dom";
 import {DisplayTags} from "./tags/DisplayTags";
-import {TagForm} from "./tags/TagForm";
 import ProjectDashboard from "./ProjectDashboard";
 
 export default class App extends Component {

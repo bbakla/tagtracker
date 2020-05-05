@@ -1,4 +1,4 @@
-import React, {Component, useState} from "react";
+import React, {Component} from "react";
 import Button from "react-bootstrap/Button"
 import {Modal} from "react-bootstrap";
 
@@ -8,7 +8,10 @@ export class TagFormModal extends Component {
     super(props);
 
     this.state = {
-      showModal: false
+      showModal: false,
+      tagName: this.props.tagName,
+      message: this.props.message,
+      releaseNotes: this.props.releaseNotes
     }
   }
 
@@ -20,14 +23,29 @@ export class TagFormModal extends Component {
     this.setState({showModal: true});
   }
 
+  saveTag = () => {
+this.props.saveTag({
+    name: this.state.tagName,
+    message: this.state.message,
+    releaseNotes: this.state.releaseNotes
+    })
+    this.close()
+  }
+
+  saveValue = (event) => {
+    this.setState({[event.target.name] : event.target.value});
+  }
+
 
   render() {
     const label = this.props.buttonLabel;
-    let title = ""
-    let button = ''
+    let title = "";
+    let button = '';
+    let disabled = false;
 
         if(label === "Edit") {
           title = "Edit tag";
+          disabled= true;
           button = <Button type="button" variant={"success"} onClick={this.open}
                            style={{float: "left"}}>
                       <i className="fas fa-edit"></i>
@@ -37,6 +55,7 @@ export class TagFormModal extends Component {
             Create New Tag
           </Button>
           title = "Create New Tag";
+
         }
 
 
@@ -50,24 +69,24 @@ export class TagFormModal extends Component {
               <form>
                 <div className="form-group">
                   <label htmlFor="tagNameInput">Tag Name </label>
-                  <input type="text" className="form-control" id="tagNameInput" aria-describedby="tagName"
-                         placeholder="Enter tag name with the format v2.5.6"/>
+                  <input type="text" className="form-control" name="tagName" aria-describedby="tagName"  disabled = {disabled}  onChange={this.saveValue}
+                         placeholder="Enter tag name with the format v2.5.6" defaultValue={this.state.tagName}/>
                     <small id="emailHelp" className="form-text text-muted">should be in the format of v0.2.1 </small>
                 </div>
                 <div className="form-group">
                   <label htmlFor="messageInput">Message</label>
-                  <input type="text" className="form-control" id="messageInput" placeholder="Enter message"/>
+                  <input type="text" className="form-control" name="message" onChange={this.saveValue} placeholder="Enter message" disabled = {disabled} defaultValue={this.state.message}/>
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="releaseNotesInput">Message</label>
-                  <input type="text" className="form-control" id="releaseNotesInput" placeholder="Enter release notes"/>
+                  <label htmlFor="releaseNotesInput">Release note</label>
+                  <input type="text" className="form-control" name="releaseNotes" onChange={this.saveValue} placeholder="Enter release notes" defaultValue={this.state.releaseNotes}/>
                 </div>
               </form>
 
             </Modal.Body>
             <Modal.Footer>
-              <Button type="submit" className="btn btn-primary" onClick={this.toggle}>{label}</Button>
+              <button type="submit" className="btn btn-primary" onClick={this.saveTag}>{label}</button>
               <Button onClick={this.close}>Close</Button>
             </Modal.Footer>
           </Modal>
