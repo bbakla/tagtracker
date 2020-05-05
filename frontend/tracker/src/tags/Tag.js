@@ -34,10 +34,13 @@ export class Tag extends Component {
 
     <Link className="btn btn-outline-success btn-lg btn-block mb-2" to={{
        pathname:'/projects/tags',
-       aboutProps: {
+      /* aboutProps: {
            tags : this.props.tags,
            projectName: this.props.projectName
-       }
+       },*/
+        state:{
+           tags : this.props.tags,
+           projectName: this.props.projectName}
     }}  >
          <span>
             <span className="fa fa-tag p-2"></span>

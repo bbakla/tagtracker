@@ -9,7 +9,7 @@ export class DisplayTags extends Component{
 
         this.state = {
             showModal: false,
-            tagsToDisplay: this.props.location.aboutProps.tags
+            tagsToDisplay: this.props.location.state.tags
         }
     }
 
@@ -28,13 +28,7 @@ export class DisplayTags extends Component{
         }
     }
 
-    putTagsToState = () => {
-        this.setState({tagsToDisplay: this.props.location.aboutProps.tags});
-    }
-
     render() {
-        console.log(this.props.location.aboutProps);
-
 
         const tagsList = this.state.tagsToDisplay.map( tag => {
             return(
@@ -67,7 +61,7 @@ export class DisplayTags extends Component{
 
 
             <div className="container">
-              <h1>{this.props.location.aboutProps.projectName}</h1>
+              <h1>{this.props.location.state.projectName}</h1>
                 <div className="row">
                     <div className="col-12">
                         <Table  responsive hover>
