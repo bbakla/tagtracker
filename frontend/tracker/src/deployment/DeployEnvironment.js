@@ -3,15 +3,21 @@ import React, {Component} from "react";
 export class DeployEnvironment extends Component {
 
   render() {
+
+      console.log("in DeployEnvironment");
+      console.log(this.props.deploymentStatus);
+
+      const classNameForDev = this.props.deploymentStatus.dev === "true" ? "far fa-check-circle pipelinePass text-success pr-2" : "far fa-times-circle pipelineFails text-danger pr-2";
+      const classNameForInt = this.props.deploymentStatus.int === "true" ? "far fa-check-circle pipelinePass text-success pr-2" : "far fa-times-circle pipelineFails text-danger pr-2";
+      const classNameForProd = this.props.deploymentStatus.prod === "true" ? "far fa-check-circle pipelinePass text-success pr-2" : "far fa-times-circle pipelineFails text-danger pr-2";
+    const inProgress = "pipelineRunning spinner-border  text-primary";
+
     return (
         <div className="custom-control custom-switch">
           <div className="row">
-            <a className="far fa-check-circle pipelinePass text-success pr-2"
+            <a className={classNameForDev}
                href="#">
-
             </a>
-
-
             <label className="switch">
               <input type="checkbox"/>
               <span className="slider round"></span>
@@ -20,7 +26,7 @@ export class DeployEnvironment extends Component {
           </div>
 
           <div className="row">
-            <a className="far fa-times-circle pipelineFails text-danger pr-2"
+            <a className= {classNameForInt}
                href="#"></a>
             <label className="switch">
               <input type="checkbox"/>
@@ -30,9 +36,9 @@ export class DeployEnvironment extends Component {
           </div>
 
           <div className="row">
-            <a className="pipelineRunning spinner-border  text-primary"
+            <a className= {classNameForProd}
                role="status">
-              <span className="sr-only">Loading...</span>
+              <span className="sr-only"></span>
             </a>
             <label className="switch">
               <input type="checkbox"/>

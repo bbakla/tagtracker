@@ -12,6 +12,7 @@ export class Deployment extends Component {
   }
 
   showDeploymentStatus = () => {
+
     if (this.state.showDeployStatus) {
       this.setState({showDeployStatus: false});
     } else {
@@ -20,6 +21,7 @@ export class Deployment extends Component {
   }
 
   render() {
+
     return (
         <div>
           <button className="btn btn-outline-warning btn-lg btn-block mb-2"
@@ -28,7 +30,7 @@ export class Deployment extends Component {
 
             <br/>Deployments
           </button>
-          {this.state.showDeployStatus && <DeployEnvironment/>}
+          {this.state.showDeployStatus && <DeployEnvironment deploymentStatus = {this.props.deploymentStatus}/>}
         </div>
     );
   }

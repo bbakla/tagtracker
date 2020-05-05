@@ -26,7 +26,7 @@ export class ShowDependency extends Component {
              role="button" onClick={this.showDependency}>
               <span className="fa fa-caret-right p-2"></span>
               <br/>{buttonName}</a>
-          {this.state.showDependencyTable && <RelatedProjects/>}
+          {this.state.showDependencyTable && <RelatedProjects dependencies = {this.props.dependencies}/>}
       </div>);
 
   }
