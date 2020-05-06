@@ -56,7 +56,6 @@ this.props.saveTag({
 
         }
 
-
     return (
         <div>
           {button}

@@ -9,7 +9,9 @@ export class RelatedProjects extends Component {
         super(props);
 
         this.state = {
-            showModal: true
+            showModal: true,
+            dependencies: this.props.location.state.dependencies
+
         }
     }
 
@@ -21,12 +23,44 @@ export class RelatedProjects extends Component {
         this.setState({showModal: true});
     }
 
-    deleteDependency = () => {
+    deleteDependency = (projectName) => {
+        let confirmDelete = window.confirm("Are you sure deleting the tag?")
+        if(confirmDelete) {
+            this.setState({
+                dependencies: this.state.dependencies.filter(d => d.projectName !== projectName )
+            });
+        }
+    }
 
+    saveDependency = (dependency) => {
+        const newDependency = {
+            projectName: dependency.projectName,
+            tag: dependency.tagName
+        }
+
+        this.setState({dependencies: this.state.dependencies.concat(newDependency)});
+    }
+
+    updateDependency = (updated) => {
+
+        let newDependencies = this.state.dependencies.map(d => {
+            if (d.projectName === updated.projectName) {
+                console.log("updating")
+                return Object.assign({}, d,
+                    {
+                        projectName: updated.projectName,
+                        tag: updated.tagName
+                    });
+            } else {
+                return d;
+            }
+        });
+
+        this.setState({dependencies: newDependencies})
     }
 
     render() {
-        const dependencies = this.props.location.state.dependencies.map(dependency => {
+        const dependencies = this.state.dependencies.map(dependency => {
 
             return (
                 <tr key={dependency.projectName + "_" + dependency.tag}>
@@ -39,6 +73,7 @@ export class RelatedProjects extends Component {
                             <DependencyModal buttonLabel = "Edit"
                                              projectName = {dependency.projectName}
                                              tagName = {dependency.tag}
+                                             saveDependency = {this.updateDependency}
                             >
 
                             </DependencyModal>

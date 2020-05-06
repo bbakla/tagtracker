@@ -23,22 +23,34 @@ export class DependencyModal extends Component {
     }
 
     saveDependency = () => {
+        this.props.saveDependency({
+            projectName: this.state.projectName,
+            tagName: this.state.tagName
+        });
 
+        this.close();
+    }
+
+    saveValue = (event) => {
+        this.setState({[event.target.name]: event.target.value});
     }
 
     render() {
-        const label = this.props.buttonLabel;
+        let label = this.props.buttonLabel;
         let button = '';
 
-        if(label === "Edit") {
+        if (label === "Edit") {
+            label = "Save"
             button = <button className="float-left btn btn-sm btn-success" onClick={this.open}>
                 <i className="fas fa-edit"></i>
             </button>
         } else {
-            button = <Button className="btn btn-outline-primary btn-block" onClick={this.open}>Create dependency</Button>
+            label = "Create"
+            button =
+                <Button className="btn btn-outline-primary btn-block" onClick={this.open}>Create dependency</Button>
         }
 
-        return(
+        return (
             <div>
                 {button}
                 <Modal show={this.state.showModal}>
@@ -47,12 +59,14 @@ export class DependencyModal extends Component {
                         <form>
                             <div className="form-group">
                                 <label htmlFor="projectNameInput">Project Name</label>
-                                <input type="text" className="form-control" name="projectName" defaultValue={this.state.projectName} />
+                                <input type="text" className="form-control" name="projectName"
+                                       defaultValue={this.state.projectName} onChange={this.saveValue}/>
                             </div>
 
                             <div className="form-group">
                                 <label htmlFor="tagNameInput">Tag Name</label>
-                                <input type="text" className="form-control" name="tagName" defaultValue={this.state.tagName}/>
+                                <input type="text" className="form-control" name="tagName"
+                                       defaultValue={this.state.tagName} onChange={this.saveValue}/>
                             </div>
                         </form>
                     </Modal.Body>
@@ -60,9 +74,6 @@ export class DependencyModal extends Component {
                         <button type="submit" className="btn btn-primary" onClick={this.saveDependency}>{label}</button>
                         <Button onClick={this.close}>Close</Button>
                     </Modal.Footer>
-
-
-
                 </Modal>
             </div>
         );
