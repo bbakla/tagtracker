@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 
-import {DeployEnvironment} from "./DeployEnvironment";
+import {Modal} from "react-bootstrap";
+import Button from "react-bootstrap/Button";
 
 export class Deployment extends Component {
   constructor(props) {
@@ -11,26 +12,106 @@ export class Deployment extends Component {
     }
   }
 
+  close = () => {
+    this.setState({showDeployStatus: false});
+  }
+
   showDeploymentStatus = () => {
 
     if (this.state.showDeployStatus) {
       this.setState({showDeployStatus: false});
+
     } else {
       this.setState({showDeployStatus: true});
     }
   }
 
+  deploy = (event) => {
+    console.log(event.target.value);
+
+  }
+
+
+
   render() {
+    const inProgress = "pipelineRunning spinner-border  text-primary";
+
+    console.log(this.props.deploymentStatus);
+
+      const s2 = Object.keys(this.props.deploymentStatus).map((key, value) =>
+          console.log(key + " " + this.props.deploymentStatus[key])
+      );
+
+    const s = Object.keys(this.props.deploymentStatus).map((key, value) =>
+
+        <div key={key} className="row">
+            <i className={this.props.deploymentStatus[key] === "true" ? "far fa-check-circle pipelinePass text-success pr-2" : "far fa-times-circle pipelineFails text-danger pr-2"}/>
+            <label className="switch">
+                <input type="checkbox" checked={this.props.deploymentStatus[key] === "true"} onChange={this.deploy}/>
+                <span className="slider round"></span>
+            </label>
+            <label className="pl-2">{key}</label>
+        </div>
+    );
+
+
 
     return (
+
+
         <div>
           <button className="btn btn-outline-warning btn-lg btn-block mb-2"
                   onClick={this.showDeploymentStatus}>
             <span className="fa fa-plug p-2"></span>
-
             <br/>Deployments
           </button>
-          {this.state.showDeployStatus && <DeployEnvironment deploymentStatus = {this.props.deploymentStatus}/>}
+
+          <div>
+            <Modal show={this.state.showDeployStatus}>
+              <Modal.Header>Deployment status</Modal.Header>
+              <Modal.Body>
+
+                <div className="custom-control custom-switch">
+                  {s}
+
+                 {/* <div className="row">
+                    <i className={classNameForDev} >
+                    </i>
+                    <label className="switch">
+                      <input type="checkbox" onChange={this.deploy}/>
+                      <span className="slider round"></span>
+                    </label>
+                    <label className="pl-2">dev</label>
+                  </div>
+
+                  <div className="row">
+                    <i className= {classNameForInt} ></i>
+                    <label className="switch">
+                      <input type="checkbox" onChange={this.deploy}/>
+                      <span className="slider round"></span>
+                    </label>
+                    <label className="pl-2">int</label>
+                  </div>
+
+                  <div className="row">
+                    <i className= {classNameForProd}>
+                      <span className="sr-only"></span>
+                    </i>
+                    <label className="switch">
+                      <input type="checkbox" onChange={this.deploy}/>
+                      <span className="slider round"></span>
+                    </label>
+                    <label className="pl-2">prod</label>
+                  </div>*/}
+
+                </div>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button onClick={this.close}>Close</Button>
+              </Modal.Footer>
+
+            </Modal>
+        </div>
         </div>
     );
   }

@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import {Table} from "react-bootstrap";
 import {DependencyModal} from "./DependencyModal";
-import {TagFormModal} from "../tags/TagFormModal";
 
 export class RelatedProjects extends Component {
 
@@ -13,10 +12,6 @@ export class RelatedProjects extends Component {
             dependencies: this.props.location.state.dependencies
 
         }
-    }
-
-    close = () => {
-        this.setState({showModal: false});
     }
 
     open = () => {

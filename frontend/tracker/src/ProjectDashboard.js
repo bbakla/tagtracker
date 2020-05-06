@@ -33,11 +33,13 @@ export default class ProjectDashboard extends Component {
                                     tag: "v0.1.1"
                                 }],
                             deployments:
+
                                 {
-                                    dev: "false",
-                                    int: "false",
-                                    prod: "false"
+                                    "dev": "false",
+                                    "int": "false",
+                                    "prod": "false"
                                 }
+
 
                         },
                         {
@@ -88,13 +90,13 @@ export default class ProjectDashboard extends Component {
                                 }],
                             deployments:
                                 {
-                                    dev: "true",
-                                    int: "true",
-                                    prod: "false"
+                                    "dev": "true",
+                                    "int": "false",
+                                    "prod": "false"
                                 }
                         }]
                 },
-                {
+            {
                     projectName: "SorisAdapter",
                     projectId: "2",
                     description: "SorisAdapter description",
@@ -121,7 +123,7 @@ export default class ProjectDashboard extends Component {
                             deployments:
                                 {
                                     dev: "true",
-                                    int: "true",
+                                    int: "false",
                                     prod: "false"
                                 }
                         },
