@@ -71,7 +71,6 @@ export class DisplayTags extends Component{
         const tagsList = this.state.tagsToDisplay.map( tag => {
 
             return(
-
                 <tr key = {tag.tagName}>
                     <td>{tag.tagName}</td>
                     <td key = {tag.message}>{tag.message}</td>
@@ -79,9 +78,6 @@ export class DisplayTags extends Component{
 
                     <td>
                         <div>
-                            {/* <button type="button" className="btn btn-success" onClick={this.editTagForm}>
-                        <i className="fas fa-edit"></i>
-                    </button>*/}
                             <TagFormModal buttonLabel="Edit"
                                           tagName = {tag.tagName}
                                           message = {tag.message}
@@ -92,8 +88,8 @@ export class DisplayTags extends Component{
 
 
 
-                            <button type="button" className="btn btn-danger" onClick={ () => this.deleteTag(tag.tagName)}>
-                                <i className="far fa-trash-alt"></i>
+                            <button type="button" className="btn btn-sm btn-danger" onClick={ () => this.deleteTag(tag.tagName)}>
+                                <i className=" far fa-trash-alt"></i>
                             </button>
                         </div>
                     </td>
@@ -105,7 +101,7 @@ export class DisplayTags extends Component{
 
 
             <div className="container">
-              <h1>{this.props.location.state.projectName}</h1>
+              <h3 className= "mt-3">{this.props.location.state.projectName}</h3>
                 <div className="row">
                     <div className="col-12">
                         <Table  responsive hover>

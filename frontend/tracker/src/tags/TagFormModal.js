@@ -36,7 +36,6 @@ this.props.saveTag({
     this.setState({[event.target.name] : event.target.value});
   }
 
-
   render() {
     const label = this.props.buttonLabel;
     let title = "";
@@ -46,10 +45,9 @@ this.props.saveTag({
         if(label === "Edit") {
           title = "Edit tag";
           disabled= true;
-          button = <Button type="button" variant={"success"} onClick={this.open}
-                           style={{float: "left"}}>
+          button = <button className="float-left btn btn-sm btn-success" onClick={this.open}>
                       <i className="fas fa-edit"></i>
-                  </Button>
+                  </button>
         } else {
           button =  <Button className="btn btn-outline-primary btn-block" onClick={this.open}>
             Create New Tag

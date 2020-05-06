@@ -71,9 +71,13 @@ export class Project extends Component {
                             </div>
                             <div className="col-xs-6 col-md-6">
                                 <ShowDependency relationshipType="dependentToMe"
-                                                dependencies={this.props.tags[this.state.selectedTagIndex].dependentToMe}/>
+                                                dependencies={this.props.tags[this.state.selectedTagIndex].dependentToMe}
+                                                projectName={this.props.name}
+                                />
                                 <ShowDependency relationshipType="dependentOn"
-                                                dependencies={this.props.tags[this.state.selectedTagIndex].dependentOn}/>
+                                                dependencies={this.props.tags[this.state.selectedTagIndex].dependentOn}
+                                                projectName={this.props.name}
+                                />
                             </div>
                         </div>
                     </div>

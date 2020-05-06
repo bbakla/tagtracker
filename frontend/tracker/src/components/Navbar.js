@@ -1,21 +1,16 @@
 import React from 'react';
 import './Navbar.css';
-import { Navbar, Nav, Form, Button } from 'react-bootstrap';
-import { withRouter } from 'react-router-dom';
+import { Navbar } from 'react-bootstrap';
+import {Link, withRouter} from 'react-router-dom';
 
-const Navigation = (props) => {
-    console.log(props);
+const Navigation = () => {
     return (
-        <Navbar bg="primary" variant="dark">
-            <Navbar.Brand href="#home">React Button</Navbar.Brand>
+        <Navbar bg="primary-outline" variant="dark">
+            <Navbar.Brand href=""> <Link to="/projects"  exact="true">
+                <span className="img-thumbnail"> <i className="fa fa-home"></i>Home</span>
+            </Link></Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
-                <Nav className="mr-auto">
-                    <Nav.Link href="/">Home</Nav.Link>
-                    <Nav.Link href="/About">About</Nav.Link>
-                    <Nav.Link href="/Contact">Contact</Nav.Link>
-                    <Nav.Link href="/tags">Products</Nav.Link>
-                </Nav>
             </Navbar.Collapse>
         </Navbar>
     )

@@ -1,36 +1,27 @@
 import React, {Component} from "react";
-import {DeployEnvironment} from "../deployment/DeployEnvironment";
-import {RelatedProjects} from "./RelatedProjects";
+import {Link} from "react-router-dom";
 
 export class ShowDependency extends Component {
-    constructor(props) {
-        super(props);
 
-        this.state = {
-            showDependencyTable : false
-        }
+    render() {
+        const buttonName = this.props.relationshipType === "dependentOn" ? "DependentOn" : "DependentToMe";
+        const dependencyType = this.props.relationshipType === "dependentOn" ? "Depends on " + this.props.projectName : "Projects dependent on " + this.props.projectName
+
+        return (
+            <div>
+                <Link className="btn btn-outline-info btn-lg btn-block mb-2" to={{
+                    pathname: `/projects/${this.props.relationshipType}`,
+                    state: {
+                        dependencies: this.props.dependencies,
+                        dependencyType: dependencyType
+                    }
+                }}>
+
+                    <span className="fa fa-caret-right p-2"></span>
+                    <br/>{buttonName}
+                </Link>
+            </div>);
     }
-    showDependency = () => {
-        if (this.state.showDependencyTable) {
-            this.setState({showDependencyTable: false});
-        } else {
-            this.setState({showDependencyTable: true});
-        }
-    }
-
-  render () {
-        const buttonName = this.props.relationshipType == "dependentOn" ? "DependentOn" : "DependentToMe";
-
-      return (<div>
-          <a href="#" className="btn btn-outline-info btn-lg btn-block mb-2"
-             role="button" onClick={this.showDependency}>
-              <span className="fa fa-caret-right p-2"></span>
-              <br/>{buttonName}</a>
-          {this.state.showDependencyTable && <RelatedProjects dependencies = {this.props.dependencies}/>}
-      </div>);
-
-  }
-
 
 
 }
