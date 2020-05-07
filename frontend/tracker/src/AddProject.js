@@ -53,7 +53,8 @@ export class AddProject extends Component {
 
     addProject = () => {
         this.props.addProject({
-            id: this.state.projectIdentifier
+            projectName: this.state.projectIdentifier,
+            projectId: Math.floor(Math.random() * 10)
         })
     }
 

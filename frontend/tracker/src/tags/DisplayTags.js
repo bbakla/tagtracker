@@ -67,11 +67,10 @@ export class DisplayTags extends Component{
     }
 
     render() {
-
         const tagsList = this.state.tagsToDisplay.map( tag => {
 
             return(
-                <tr key = {tag.tagName}>
+                <tr key = {tag.tagName + "key"}>
                     <td>{tag.tagName}</td>
                     <td key = {tag.message}>{tag.message}</td>
                     <td key = {tag.releaseNotes} >{tag.releaseNotes}</td>
@@ -85,8 +84,6 @@ export class DisplayTags extends Component{
                                           saveTag = {this.editTagHandle}
                             />
                             {' '}
-
-
 
                             <button type="button" className="btn btn-sm btn-danger" onClick={ () => this.deleteTag(tag.tagName)}>
                                 <i className=" far fa-trash-alt"></i>

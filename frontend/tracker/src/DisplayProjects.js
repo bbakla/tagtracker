@@ -23,6 +23,7 @@ export class DisplayProjects extends Component {
               this.props.projects.map(project => (
                   <Project key={project.projectName}
                            name = {project.projectName}
+                           projectId = {project.projectId}
                            description = {project.description}
                            tags = {project.tags.sort((tag1, tag2) => new Date(tag2.createdDate) - new Date(tag1.createdDate))}
                            dependentToMe = {project.dependentToMe}

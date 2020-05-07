@@ -187,10 +187,11 @@ export default class ProjectDashboard extends Component {
     createProject = (projectData) => {
 
         const project = {
-            projectName: projectData.id,
-            projectId: "",
+            projectName: projectData.projectName,
+            projectId: projectData.projectId,
             description: "",
-            tags: [{
+            tags: [
+         /*       {
                 tagName: "",
                 message: "",
                 releaseNotes: "",
@@ -203,8 +204,8 @@ export default class ProjectDashboard extends Component {
                         int: "",
                         prod: ""
                     }
-            }]
-
+            }*/
+            ]
         };
 
         this.setState({projects: this.state.projects.concat(project)});
@@ -214,19 +215,26 @@ export default class ProjectDashboard extends Component {
         this.setState({projects: this.state.projects.filter(p => p.projectName !== projectName)})
     }
 
-    render = () =>
+    render() {
 
-        <div className="container">
+        console.log(this.state.projects.length)
 
-            <div className="row mt-3">
-                <AddProject addProject={this.createProject}/>
+        return(
+            <div className="container">
+
+                <div className="row mt-3">
+                    <AddProject addProject={this.createProject}/>
+                </div>
+                <div className="row mt-5">
+                    <DisplayProjects
+                        projects={this.state.projects}
+                        removeProjectFromTheList={this.deleteProject}
+                    />
+                </div>
+
             </div>
-            <div className="row mt-5">
-                <DisplayProjects
-                    projects={this.state.projects}
-                    removeProjectFromTheList={this.deleteProject}
-                />
-            </div>
+        );
+    }
 
-        </div>
+
 }

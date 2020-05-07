@@ -40,20 +40,17 @@ export default class App extends Component {
 
 
     render = () =>
-           // <Router history={history}>
+
         <div>
         <div>
-             {/*   <Link to="/"  exact="true">
-                    <span className="img-thumbnail"> <i className="fa fa-home"></i>Home</span>
-               </Link>*/}
                <Navbar/>
               </div>
                 <Switch>
                     {/*<Route exact path="/projects" render={ (props) => <ProjectDashboard {...props} projects = {this.state.projects}/>}/>*/}
                     <Route exact path="/projects" component={ProjectDashboard}/>
-                    <Route exact path="/projects/tags" component={DisplayTags}/>
-                    <Route exact path="/projects/dependentOn" component={RelatedProjects}/>
-                    <Route exact path="/projects/dependentToMe" component={RelatedProjects}/>
+                    <Route exact path="/projects/:projectId/tags" component={DisplayTags}/>
+                    <Route exact path="/projects/:projectId/dependentOn" component={RelatedProjects}/>
+                    <Route exact path="/projects/:projectId/dependentToMe" component={RelatedProjects}/>
                     }
 
                 </Switch>

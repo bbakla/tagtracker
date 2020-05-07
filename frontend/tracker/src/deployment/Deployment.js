@@ -31,18 +31,11 @@ export class Deployment extends Component {
 
   }
 
-
-
   render() {
     const inProgress = "pipelineRunning spinner-border  text-primary";
 
-    console.log(this.props.deploymentStatus);
 
-      const s2 = Object.keys(this.props.deploymentStatus).map((key, value) =>
-          console.log(key + " " + this.props.deploymentStatus[key])
-      );
-
-    const s = Object.keys(this.props.deploymentStatus).map((key, value) =>
+    const status = Object.keys(this.props.deploymentStatus).map((key, value) =>
 
         <div key={key} className="row">
             <i className={this.props.deploymentStatus[key] === "true" ? "far fa-check-circle pipelinePass text-success pr-2" : "far fa-times-circle pipelineFails text-danger pr-2"}/>
@@ -54,11 +47,7 @@ export class Deployment extends Component {
         </div>
     );
 
-
-
     return (
-
-
         <div>
           <button className="btn btn-outline-warning btn-lg btn-block mb-2"
                   onClick={this.showDeploymentStatus}>
@@ -72,37 +61,7 @@ export class Deployment extends Component {
               <Modal.Body>
 
                 <div className="custom-control custom-switch">
-                  {s}
-
-                 {/* <div className="row">
-                    <i className={classNameForDev} >
-                    </i>
-                    <label className="switch">
-                      <input type="checkbox" onChange={this.deploy}/>
-                      <span className="slider round"></span>
-                    </label>
-                    <label className="pl-2">dev</label>
-                  </div>
-
-                  <div className="row">
-                    <i className= {classNameForInt} ></i>
-                    <label className="switch">
-                      <input type="checkbox" onChange={this.deploy}/>
-                      <span className="slider round"></span>
-                    </label>
-                    <label className="pl-2">int</label>
-                  </div>
-
-                  <div className="row">
-                    <i className= {classNameForProd}>
-                      <span className="sr-only"></span>
-                    </i>
-                    <label className="switch">
-                      <input type="checkbox" onChange={this.deploy}/>
-                      <span className="slider round"></span>
-                    </label>
-                    <label className="pl-2">prod</label>
-                  </div>*/}
+                  {status}
 
                 </div>
               </Modal.Body>

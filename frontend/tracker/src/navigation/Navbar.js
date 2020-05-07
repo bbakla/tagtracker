@@ -6,7 +6,7 @@ import {Link, withRouter} from 'react-router-dom';
 const Navigation = () => {
     return (
         <Navbar bg="primary-outline" variant="dark">
-            <Navbar.Brand href=""> <Link to="/projects"  exact="true">
+            <Navbar.Brand href=""> <Link to="/projects" exact="true">
                 <span className="img-thumbnail"> <i className="fa fa-home"></i>Home</span>
             </Link></Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />

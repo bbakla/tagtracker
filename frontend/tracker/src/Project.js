@@ -33,6 +33,11 @@ export class Project extends Component {
     render() {
 
         const description = this.props.description.length === 0 ? <br/> : this.props.description
+        const tagName = this.props.tags.length === 0 ? "" : this.props.tags[this.state.selectedTagIndex].tagName
+        const tagList = this.props.tags.length === 0 ? [] : this.props.tags
+        const deployments = this.props.tags.length === 0 ? [] : this.props.tags[this.state.selectedTagIndex].deployments
+        const dependentToMe = this.props.tags.length === 0 ? [] : this.props.tags[this.state.selectedTagIndex].dependentToMe
+        const dependentOn =  this.props.tags.length === 0 ? [] : this.props.tags[this.state.selectedTagIndex].dependentOn
 
 
         return (
@@ -63,20 +68,24 @@ export class Project extends Component {
                         <div className="row">
                             <div className="col-xs-6 col-md-6">
 
-                                <Tag currentTagName = {this.props.tags[this.state.selectedTagIndex].tagName}
+                                <Tag currentTagName = {tagName}
                                      projectName={this.props.name}
-                                     tags={this.props.tags}/>
+                                     projectId = {this.props.projectId}
+                                     tags={tagList} />
 
-                                <Deployment deploymentStatus={this.props.tags[this.state.selectedTagIndex].deployments}/>
+                                <Deployment deploymentStatus={deployments}
+                                            projectId = {this.props.projectId}/>
                             </div>
                             <div className="col-xs-6 col-md-6">
                                 <ShowDependency relationshipType="dependentToMe"
-                                                dependencies={this.props.tags[this.state.selectedTagIndex].dependentToMe}
+                                                dependencies={dependentToMe}
                                                 projectName={this.props.name}
+                                                projectId = {this.props.projectId}
                                 />
                                 <ShowDependency relationshipType="dependentOn"
-                                                dependencies={this.props.tags[this.state.selectedTagIndex].dependentOn}
+                                                dependencies={dependentOn}
                                                 projectName={this.props.name}
+                                                projectId = {this.props.projectId}
                                 />
                             </div>
                         </div>
