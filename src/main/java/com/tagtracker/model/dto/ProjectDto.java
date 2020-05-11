@@ -1,6 +1,6 @@
 package com.tagtracker.model.dto;
 
-public class ApplicationDto {
+public class ProjectDto {
 
   private String identifier;
 

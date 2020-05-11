@@ -18,15 +18,25 @@ public class BeanConfiguration {
 
   @Bean
   public WebClient webClient() {
-    return
-        WebClient.builder()
-            .baseUrl("https://code.siemens.com/api/v4")
-            .defaultHeader("PRIVATE-TOKEN", privateToken())
-            .build();
+
+    return WebClient.builder()
+        .baseUrl("https://code.siemens.com/api/v4")
+
+        .defaultHeader(
+            "Cookie", "mellon-entitlement=" + entitlementValue())
+        .defaultHeader("PRIVATE-TOKEN", privateToken())
+        .build();
   }
 
   @Bean
   public String privateToken() {
     return env.getProperty("PRIVATE-TOKEN");
   }
+
+  @Bean
+  public String entitlementValue() {
+    return env.getProperty("mellon-entitlement");
+  }
 }
+
+

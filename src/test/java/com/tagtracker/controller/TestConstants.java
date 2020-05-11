@@ -1,16 +1,16 @@
 package com.tagtracker.controller;
 
-import static com.tagtracker.controller.Constants.APPLICATION_BASE_PATH;
+import static com.tagtracker.controller.Constants.PROJECT_BASE_PATH;
 import static com.tagtracker.controller.Constants.GITLAB_PROJECT_BASE_PATH;
 
 public class TestConstants {
 
-  public static final String APPLICATION_PATH_BY_ID = APPLICATION_BASE_PATH + "/%s/";
+  public static final String APPLICATION_PATH_BY_ID = PROJECT_BASE_PATH + "/%s/";
   public static final String APPLICATION_PATH_BY_ID_AND_DEPENDENCY_PATH_TEMPLATE =
-      APPLICATION_BASE_PATH + "/%s/dependent_to/%s";
+      PROJECT_BASE_PATH + "/%s/dependent_to/%s";
 
   public static final String APPLICATION_DEPLOY_PATH_TEMPLATE =
-      APPLICATION_BASE_PATH + "/%s/deploy/%s";
+      PROJECT_BASE_PATH + "/%s/deploy/%s";
 
   public static final String APPLICATION_PATH_DELETE_TAG_BY_NAME = APPLICATION_PATH_BY_ID +
       "/tags/%s?deleteRemoteTag=%b";

@@ -34,7 +34,7 @@ public class TagRepositoryTests {
 
   @Test
   public void canAddTagToAProject() throws Exception {
-    Project project = TestSampleCreator.createApplicationWithNoDependencies(false);
+    Project project = TestSampleCreator.createAProjectWithNoDependencies(false);
     Project savedProject = projectRepository.save(project);
 
     Tag tag = TestSampleCreator.createTag("tagName", savedProject);

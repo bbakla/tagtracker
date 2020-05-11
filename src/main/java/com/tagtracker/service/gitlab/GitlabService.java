@@ -1,12 +1,11 @@
 package com.tagtracker.service.gitlab;
 
 import com.tagtracker.model.dto.gitlab.TagDto;
-import com.tagtracker.model.entity.gitlab.Project;
-import com.tagtracker.model.entity.gitlab.RemoteTag;
+import com.tagtracker.model.entity.gitlab.GitlabProject;
+import com.tagtracker.model.entity.gitlab.GitlabTag;
 
 import com.tagtracker.service.ProjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -28,37 +27,37 @@ public class GitlabService {
   @Autowired
   private String privateToken;
 
-  public Project getProjectFromGitlab(String projectId) throws ProjectNotFoundException {
+  public GitlabProject getProjectFromGitlab(String projectId) throws ProjectNotFoundException {
 
     try {
       WebClient.RequestBodySpec request =
           client.method(HttpMethod.GET).uri("/projects/{projectIdentifier}", projectId);
       WebClient.ResponseSpec responseSpec = request.accept(MediaType.APPLICATION_JSON).retrieve();
 
-      return responseSpec.bodyToMono(Project.class).block();
+      return responseSpec.bodyToMono(GitlabProject.class).block();
     } catch (WebClientResponseException e) {
       throw new ProjectNotFoundException(e);
     }
   }
 
-  public RemoteTag[] getTagsOfProject(String projectId) {
+  public GitlabTag[] getTagsOfAProject(String projectId) {
     WebClient.RequestBodySpec request =
         (RequestBodySpec) client.get().uri("/projects/" + projectId + "/repository/tags");
 
     WebClient.ResponseSpec responseSpec = request.accept(MediaType.APPLICATION_JSON).retrieve();
 
-    return responseSpec.bodyToMono(RemoteTag[].class).block();
+    return responseSpec.bodyToMono(GitlabTag[].class).block();
   }
 
   // should be refactored
-  public RemoteTag getTagOfARepo(String projectId, String tagName)
+  public GitlabTag getTagOfAProject(String projectId, String tagName)
       throws TagNotFoundException {
     WebClient.RequestBodySpec request =
         (RequestBodySpec)
             client.get().uri("/projects/" + projectId + "/repository/tags/" + tagName);
 
     try {
-      Mono<RemoteTag> tagMono =
+      Mono<GitlabTag> tagMono =
           request
               .accept(MediaType.APPLICATION_JSON)
               .retrieve()
@@ -68,7 +67,7 @@ public class GitlabService {
                   response
                       .bodyToMono(String.class)
                       .map(body -> new OperationNotSuccessfulException(body)))*/
-              .bodyToMono(RemoteTag.class);
+              .bodyToMono(GitlabTag.class);
 
       return tagMono.block();
 
@@ -106,7 +105,7 @@ public class GitlabService {
     }
   }
 
-  public RemoteTag createTag(String projectId, TagDto tagDto) {
+  public GitlabTag createTag(String projectId, TagDto tagDto) {
     WebClient.RequestBodySpec request =
         (RequestBodySpec)
             client
@@ -123,18 +122,18 @@ public class GitlabService {
 
     WebClient.ResponseSpec responseSpec = request.accept(MediaType.APPLICATION_JSON).retrieve();
 
-    return responseSpec.bodyToMono(RemoteTag.class).block();
+    return responseSpec.bodyToMono(GitlabTag.class).block();
   }
 
-  public Project getProject() {
-    Project project =
+  public GitlabProject getProject() {
+    GitlabProject project =
         WebClient.builder()
             .build()
             .get()
             .uri("https://code.siemens.com/api/v4/projects/102943")
             .header("PRIVATE-TOKEN", privateToken)
             .retrieve()
-            .bodyToMono(Project.class)
+            .bodyToMono(GitlabProject.class)
             .block();
 
     System.out.println("sdfsdfsdfsdf");

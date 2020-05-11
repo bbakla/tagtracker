@@ -41,6 +41,8 @@ public class Tag implements Serializable {
 
   private String releaseMessage;
 
+  private Date commitMessage;
+
   @CreatedDate
   private Date createdDate;
 
@@ -176,6 +178,18 @@ public class Tag implements Serializable {
     }
 
     this.dependentOn.remove(dependency);
+  }
+
+  public Date getCommitMessage() {
+    return commitMessage;
+  }
+
+  public void setCommitMessage(Date commitMessage) {
+    this.commitMessage = commitMessage;
+  }
+
+  public Set<Tag> getDependentToMe() {
+    return dependentToMe;
   }
 
   private Optional<Tag> checkIfDependencyAddedToTheDependentService(Tag dependency) {

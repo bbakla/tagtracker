@@ -2,7 +2,7 @@ package com.tagtracker.model.entity.gitlab;
 
 import java.util.ArrayList;
 
-public class Project {
+public class GitlabProject {
 
   private String id;
   private String description;
@@ -533,6 +533,18 @@ public class Project {
 
   public void setPermissions(Permissions permissionsObject) {
     this.PermissionsObject = permissionsObject;
+  }
+
+  public ArrayList<Object> getTag_list() {
+    return tag_list;
+  }
+
+  public void setTag_list(ArrayList<Object> tag_list) {
+    this.tag_list = tag_list;
+  }
+
+  public boolean isJobs_enabled() {
+    return jobs_enabled;
   }
 }
 

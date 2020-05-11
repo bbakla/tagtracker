@@ -7,7 +7,7 @@ import java.util.Date;
 
 public class TestSampleCreator {
 
-  public static Project createApplicationWithNoDependencies(boolean withTag) throws Exception {
+  public static Project createAProjectWithNoDependencies(boolean withTag) throws Exception {
     Project project = new Project();
     project.setProjectName("SampleApplication");
     project.setProjectId("testId");

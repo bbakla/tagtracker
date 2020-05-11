@@ -5,11 +5,13 @@ import com.tagtracker.model.dto.gitlab.TagDto;
 import com.tagtracker.model.entity.Project;
 import com.tagtracker.model.entity.Environment;
 import com.tagtracker.model.entity.Tag;
-import com.tagtracker.model.entity.gitlab.RemoteTag;
-import com.tagtracker.model.resource.ApplicationResource;
+import com.tagtracker.model.entity.gitlab.GitlabProject;
+import com.tagtracker.model.entity.gitlab.GitlabTag;
+import com.tagtracker.model.resource.ProjectResource;
 import com.tagtracker.repository.ProjectRepository;
 import com.tagtracker.repository.TagRepository;
 import com.tagtracker.service.gitlab.GitlabService;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -17,6 +19,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.TimeZone;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +27,7 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ApplicationService {
+public class ProjectService {
 
   @Autowired
   private ProjectRepository projectRepository;
@@ -38,9 +41,9 @@ public class ApplicationService {
   @Autowired
   ConversionService conversionService;
 
-  public ApplicationResource saveApplication(String appIdentifier) throws ProjectNotFoundException {
+  public ProjectResource saveProject(String appIdentifier) throws ProjectNotFoundException {
 
-    com.tagtracker.model.entity.gitlab.Project project = gitService
+    GitlabProject project = gitService
         .getProjectFromGitlab(appIdentifier);
 
     if (project == null) {
@@ -48,37 +51,34 @@ public class ApplicationService {
           .format("Be ure that project with the identifier %s is saved in this service",
               appIdentifier));
     }
-    Project application = new Project();
-    application.setProjectId(project.getId());
-    application.setProjectName(project.getName());
-    application.setEncodedPath(project.getPath_with_namespace());
+    Project projectEntity = new Project();
+    projectEntity.setProjectId(project.getId());
+    projectEntity.setProjectName(project.getName());
+    projectEntity.setEncodedPath(project.getPath_with_namespace());
 
-    Tag applicationTag = getTag(application.getProjectId());
-    // applicationTag.(project.getId());
+    Set<Tag> projectTags = getTag(projectEntity.getProjectId());
 
-    if (applicationTag != null) {
-      applicationTag.setProject(application);
-      application.addTag(applicationTag);
-    }
+    projectTags.forEach(t -> t.setProject(projectEntity));
+    projectEntity.setTags(projectTags);
 
-    Project savedProject = projectRepository.save(application);
+    Project savedProject = projectRepository.save(projectEntity);
 
-    return conversionService.convert(savedProject, ApplicationResource.class);
+    return conversionService.convert(savedProject, ProjectResource.class);
   }
 
-  public ApplicationResource getByProjectIdOrPath(String identifier)
+  public ProjectResource getByProjectIdOrPath(String identifier)
       throws ProjectNotFoundException {
-    Optional<Project> application = getApplicationByProjectIdOrPath(identifier);
+    Optional<Project> project = getProjectByProjectIdOrPath(identifier);
 
-    if (application.isEmpty()) {
+    if (project.isEmpty()) {
       throw new ProjectNotFoundException(String
           .format("Project with the identifier %s is not found in the repository", identifier));
     }
 
-    return conversionService.convert(application.get(), ApplicationResource.class);
+    return conversionService.convert(project.get(), ProjectResource.class);
   }
 
-  private Optional<Project> getApplicationByProjectIdOrPath(String identifier) {
+  private Optional<Project> getProjectByProjectIdOrPath(String identifier) {
     Optional<Project> applicationByProjectId =
         projectRepository.findProjectByProjectId(identifier);
     if (applicationByProjectId.isEmpty()) {
@@ -88,7 +88,7 @@ public class ApplicationService {
     return applicationByProjectId;
   }
 
-  public Tag getLatestTagOfApplication(String id) throws ProjectNotFoundException {
+/*  public Tag getLatestTagOfApplication(String id) throws ProjectNotFoundException {
     Optional<Project> application = projectRepository.findProjectByProjectId(id);
     if (application.isEmpty()) {
       throw new ProjectNotFoundException(
@@ -102,45 +102,33 @@ public class ApplicationService {
             .get(0);
 
     return latestTag;
-  }
+  }*/
 
-  private Tag getTag(String appId) {
-    RemoteTag[] tags = gitService.getTagsOfProject(appId);
+
+  private Set<Tag> getTag(String projectId) {
+    GitlabTag[] tags = gitService.getTagsOfAProject(projectId);
 
     if (tags.length == 0) {
       return null;
     }
 
-    Tag applicationTag = new Tag();
-    //    applicationTag.setId(appId);
-
-    RemoteTag latestTag =
+    return
         Arrays.stream(tags)
-            .sorted(Comparator.comparing(RemoteTag::getCommitDate))
-            .collect(Collectors.toList())
-            .get(0);
+            .map(gitlabTag -> {
+              Tag tag = conversionService.convert(gitlabTag, Tag.class);
 
-    applicationTag.setTagName(latestTag.getName());
-    applicationTag.setMessage(latestTag.getMessage());
+              return tag;
+            })
+            //.sorted(Comparator.comparing(GitlabTag::getCommitDate))
+            .collect(Collectors.toSet());
 
-    final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
-    sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-
-    try {
-      Date creationDate = sdf.parse(latestTag.getCommitDate());
-      applicationTag.setCreatedDate(creationDate);
-    } catch (ParseException e) {
-      e.printStackTrace();
-    }
-
-    return applicationTag;
   }
 
-  public ApplicationResource addDependency(String identifier, String tagName,
+  public ProjectResource addDependency(String identifier, String tagName,
       DependencyDto dependentTo)
       throws ProjectNotFoundException {
 
-    Optional<Project> application = getApplicationByProjectIdOrPath(identifier);
+    Optional<Project> application = getProjectByProjectIdOrPath(identifier);
     if (application.isEmpty()) {
       throw new ProjectNotFoundException(
           String.format(
@@ -164,12 +152,12 @@ public class ApplicationService {
     //  application.get().findTag(tagName).addDependency(dependentToApplication);
     Project savedProject = projectRepository.save(application.get());
 
-    return conversionService.convert(savedProject, ApplicationResource.class);
+    return conversionService.convert(savedProject, ProjectResource.class);
   }
 
-  public ApplicationResource deploy(String identifier, Environment environment)
+  public ProjectResource deploy(String identifier, Environment environment)
       throws ProjectNotFoundException {
-    Optional<Project> applicationFound = getApplicationByProjectIdOrPath(identifier);
+    Optional<Project> applicationFound = getProjectByProjectIdOrPath(identifier);
     if (applicationFound.isEmpty()) {
       throw new ProjectNotFoundException(
           String.format(
@@ -183,11 +171,11 @@ public class ApplicationService {
 
     Project savedProject = projectRepository.save(project);
 
-    return conversionService.convert(savedProject, ApplicationResource.class);
+    return conversionService.convert(savedProject, ProjectResource.class);
   }
 
   public void deleteApp(String identifier) throws ProjectNotFoundException {
-    Optional<Project> applicationFound = getApplicationByProjectIdOrPath(identifier);
+    Optional<Project> applicationFound = getProjectByProjectIdOrPath(identifier);
     if (applicationFound.isEmpty()) {
       throw new ProjectNotFoundException(
           String.format(
@@ -200,7 +188,7 @@ public class ApplicationService {
 
   public void deleteTag(String identifier, String tagName, Boolean deleteRemoteTag)
       throws ProjectNotFoundException {
-    Optional<Project> applicationFound = getApplicationByProjectIdOrPath(identifier);
+    Optional<Project> applicationFound = getProjectByProjectIdOrPath(identifier);
     if (applicationFound.isEmpty()) {
       throw new ProjectNotFoundException(
           String.format(
@@ -220,7 +208,7 @@ public class ApplicationService {
   }
 
   public Tag createTag(String identifier, TagDto tagDto) throws ProjectNotFoundException {
-    Optional<Project> applicationFound = getApplicationByProjectIdOrPath(identifier);
+    Optional<Project> applicationFound = getProjectByProjectIdOrPath(identifier);
     if (applicationFound.isEmpty()) {
       throw new ProjectNotFoundException(
           String.format(
@@ -229,7 +217,7 @@ public class ApplicationService {
     }
 
     Project projectInDatabase = applicationFound.get();
-    RemoteTag tagInRemote = gitService.createTag(projectInDatabase.getProjectId(), tagDto);
+    GitlabTag tagInRemote = gitService.createTag(projectInDatabase.getProjectId(), tagDto);
 
     List<Tag> tags = tagRepository.findAll();
 

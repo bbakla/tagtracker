@@ -8,8 +8,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.tagtracker.model.dto.gitlab.TagDto;
-import com.tagtracker.model.entity.gitlab.Project;
-import com.tagtracker.model.entity.gitlab.RemoteTag;
+import com.tagtracker.model.entity.gitlab.GitlabProject;
+import com.tagtracker.model.entity.gitlab.GitlabTag;
 import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,7 +26,7 @@ public class GitlabServiceTest {
 
   @Test
   public void canDisplayTheProjects() throws Exception {
-    Project project = gitlabService.getProjectFromGitlab("102943");
+    GitlabProject project = gitlabService.getProjectFromGitlab("102943");
 
     assertNotNull(project);
     assertEquals("terraform", project.getName());
@@ -34,7 +34,7 @@ public class GitlabServiceTest {
 
   @Test
   public void canGetTagsOfAnProject() throws Exception {
-    RemoteTag[] tags = gitlabService.getTagsOfProject("102943");
+    GitlabTag[] tags = gitlabService.getTagsOfAProject("102943");
 
     assertNotNull(tags);
     assertNotEquals(0, tags.length);
@@ -43,7 +43,7 @@ public class GitlabServiceTest {
 
   @Test
   public void canGetASpecificTagOfAnProject() throws Exception {
-    RemoteTag tag = gitlabService.getTagOfARepo("102943", "v1.1.0");
+    GitlabTag tag = gitlabService.getTagOfAProject("102943", "v1.1.0");
 
     assertNotNull(tag);
     assertEquals("v1.1.0", tag.getName());
@@ -52,7 +52,7 @@ public class GitlabServiceTest {
   @Test
   public void canTagARepository() throws Exception {
     String tagName = "testTag";
-    RemoteTag newTag = gitlabService
+    GitlabTag newTag = gitlabService
         .createTag("102943", new TagDto(tagName, "message for testTag", "* release note"));
 
     assertNotNull(newTag);
@@ -65,7 +65,7 @@ public class GitlabServiceTest {
 
   @Test
   public void canDeleteATagInARepository() throws Exception {
-    RemoteTag newTag = gitlabService.createTag("102943",
+    GitlabTag newTag = gitlabService.createTag("102943",
         new TagDto("to_delete", "message for testTag", "* release note before deletion"));
     assertNotNull(newTag);
 

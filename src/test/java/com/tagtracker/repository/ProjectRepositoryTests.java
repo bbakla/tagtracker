@@ -33,8 +33,8 @@ public class ProjectRepositoryTests {
   }
 
   @Test
-  public void canSaveAnApplication() throws Exception {
-    Project project = TestSampleCreator.createApplicationWithNoDependencies(true);
+  public void canSaveAProject() throws Exception {
+    Project project = TestSampleCreator.createAProjectWithNoDependencies(true);
     Project savedProject = projectRepository.save(project);
 
     assertNotNull(savedProject.getProjectId());
@@ -47,7 +47,7 @@ public class ProjectRepositoryTests {
 
   @Test
   public void cannotCreateAnApplicationWithTheSameProjectId() throws Exception {
-    Project project = TestSampleCreator.createApplicationWithNoDependencies(true);
+    Project project = TestSampleCreator.createAProjectWithNoDependencies(true);
     Project savedProject = projectRepository.save(project);
 
     assertEquals(project.getProjectName(), savedProject.getProjectName());
@@ -59,7 +59,7 @@ public class ProjectRepositoryTests {
 
   @Test
   public void canGetAnApplicationFromDatabaseById() throws Exception {
-    Project project = TestSampleCreator.createApplicationWithNoDependencies(true);
+    Project project = TestSampleCreator.createAProjectWithNoDependencies(true);
     Project savedProject = projectRepository.save(project);
 
     Optional<Project> applicationInDatabase =
@@ -75,10 +75,10 @@ public class ProjectRepositoryTests {
 
   @Test
   public void canGetAnApplicationByTagAndId() throws Exception {
-    Project project = TestSampleCreator.createApplicationWithNoDependencies(true);
+    Project project = TestSampleCreator.createAProjectWithNoDependencies(true);
     projectRepository.save(project);
 
-    Project project2 = TestSampleCreator.createApplicationWithNoDependencies(true);
+    Project project2 = TestSampleCreator.createAProjectWithNoDependencies(true);
     project2.setProjectId("secondAppId");
     project2.setProjectName("secondApplicationName");
 
@@ -100,22 +100,22 @@ public class ProjectRepositoryTests {
 
   @Test
   public void cannotCreateATagWithTheSameNameToAnApplication() throws Exception {
-    Project project = TestSampleCreator.createApplicationWithNoDependencies(true);
+    Project project = TestSampleCreator.createAProjectWithNoDependencies(true);
     Project savedProject = projectRepository.save(project);
 
     assertEquals(project.getProjectName(), savedProject.getProjectName());
     assertEquals(project.getTags(), savedProject.getTags());
 
-    Project project1 = TestSampleCreator.createApplicationWithNoDependencies(true);
+    Project project1 = TestSampleCreator.createAProjectWithNoDependencies(true);
     assertThrows(DataIntegrityViolationException.class, () -> projectRepository.save(project1));
   }
 
   @Test
   public void canDeleteAProjectUsingProjectId() throws Exception {
-    Project project = TestSampleCreator.createApplicationWithNoDependencies(true);
+    Project project = TestSampleCreator.createAProjectWithNoDependencies(true);
     Project savedProject = projectRepository.save(project);
 
-    Project project2 = TestSampleCreator.createApplicationWithNoDependencies(true);
+    Project project2 = TestSampleCreator.createAProjectWithNoDependencies(true);
     project2.setProjectId("projectId2");
 
     String secondTagName = "secondTag";
@@ -133,7 +133,7 @@ public class ProjectRepositoryTests {
 
   @Test
   public void canAddMultipleTagsToAProject() throws Exception {
-    Project project = TestSampleCreator.createApplicationWithNoDependencies(true);
+    Project project = TestSampleCreator.createAProjectWithNoDependencies(true);
     Project savedProject = projectRepository.save(project);
 
     String secondTagName = "secondTag";
@@ -149,7 +149,7 @@ public class ProjectRepositoryTests {
 
   @Test
   public void canFindTheTagOfAProjectUsingTagNameAndProjectId() throws Exception {
-    Project project = TestSampleCreator.createApplicationWithNoDependencies(true);
+    Project project = TestSampleCreator.createAProjectWithNoDependencies(true);
     String secondTagName = "secondTag";
     Tag sampleTag = TestSampleCreator.createTag(secondTagName, project);
     project.addTag(sampleTag);
@@ -167,7 +167,7 @@ public class ProjectRepositoryTests {
   @Test
   // @Transactional
   public void canDeleteTagOfAProject() throws Exception {
-    Project project = TestSampleCreator.createApplicationWithNoDependencies(true);
+    Project project = TestSampleCreator.createAProjectWithNoDependencies(true);
     projectRepository.save(project);
 
     String secondTagName = "secondTag";
@@ -186,12 +186,12 @@ public class ProjectRepositoryTests {
 
   @Test
   public void canBeDependentOnOtherServices() throws Exception {
-    Project project = TestSampleCreator.createApplicationWithNoDependencies(false);
+    Project project = TestSampleCreator.createAProjectWithNoDependencies(false);
     Tag tagForApplication = TestSampleCreator.createTag("tagName", project);
     project.addTag(tagForApplication);
     Project savedProject = projectRepository.save(project);
 
-    Project project2 = TestSampleCreator.createApplicationWithNoDependencies(false);
+    Project project2 = TestSampleCreator.createAProjectWithNoDependencies(false);
     project2.setProjectId("Independent");
     project2.setProjectName("independentProject");
     project2.setEncodedPath("/independent");
@@ -212,7 +212,7 @@ public class ProjectRepositoryTests {
 
   @Test
   public void canDeployToAnEnvironment() throws Exception {
-    Project project = TestSampleCreator.createApplicationWithNoDependencies(true);
+    Project project = TestSampleCreator.createAProjectWithNoDependencies(true);
     projectRepository.save(project);
 
     project.getTags().iterator().next().deployedTo(Environment.DEV);

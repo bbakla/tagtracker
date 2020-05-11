@@ -5,8 +5,8 @@ import static com.tagtracker.controller.Constants.GITLAB_PROJECT_BY_IDENTIFIER;
 import static com.tagtracker.controller.Constants.GITLAB_PROJECT_SPECIFIC_TAGS_BY_IDENTIFIER;
 import static com.tagtracker.controller.Constants.GITLAB_PROJECT_TAGS_BY_IDENTIFIER;
 
-import com.tagtracker.model.entity.gitlab.Project;
-import com.tagtracker.model.entity.gitlab.RemoteTag;
+import com.tagtracker.model.entity.gitlab.GitlabProject;
+import com.tagtracker.model.entity.gitlab.GitlabTag;
 import com.tagtracker.service.ProjectNotFoundException;
 import com.tagtracker.service.gitlab.GitlabService;
 import com.tagtracker.service.gitlab.TagNotFoundException;
@@ -25,26 +25,26 @@ public class GitlabController {
   private GitlabService gitlabService;
 
   @GetMapping(GITLAB_PROJECT_BY_IDENTIFIER)
-  public ResponseEntity<Project> getProjectByIdentifier(@PathVariable String identifier)
+  public ResponseEntity<GitlabProject> getProjectByIdentifier(@PathVariable String identifier)
       throws ProjectNotFoundException {
-    Project project = gitlabService.getProjectFromGitlab(identifier);
+    GitlabProject project = gitlabService.getProjectFromGitlab(identifier);
 
     return ResponseEntity.ok(project);
   }
 
   @GetMapping(GITLAB_PROJECT_TAGS_BY_IDENTIFIER)
-  public ResponseEntity<RemoteTag[]> getProjectTags(@PathVariable String identifier)
+  public ResponseEntity<GitlabTag[]> getProjectTags(@PathVariable String identifier)
       throws ProjectNotFoundException {
-    RemoteTag[] tags = gitlabService.getTagsOfProject(identifier);
+    GitlabTag[] tags = gitlabService.getTagsOfAProject(identifier);
 
     return ResponseEntity.ok(tags);
   }
 
   @GetMapping(GITLAB_PROJECT_SPECIFIC_TAGS_BY_IDENTIFIER)
-  public ResponseEntity<RemoteTag> getProjectTagById(
+  public ResponseEntity<GitlabTag> getProjectTagById(
       @PathVariable String identifier, @PathVariable String tagName)
       throws ProjectNotFoundException, TagNotFoundException {
-    RemoteTag tag = gitlabService.getTagOfARepo(identifier, tagName);
+    GitlabTag tag = gitlabService.getTagOfAProject(identifier, tagName);
 
     return ResponseEntity.ok(tag);
   }

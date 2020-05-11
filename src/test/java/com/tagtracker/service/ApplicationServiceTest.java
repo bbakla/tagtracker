@@ -1,12 +1,14 @@
-/*
+
 package com.tagtracker.service;
 
-import com.tagtracker.model.entity.Application;
-import com.tagtracker.model.resource.ApplicationResource;
-import com.tagtracker.repository.ApplicationRepository;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.tagtracker.model.entity.Project;
+import com.tagtracker.model.resource.ProjectResource;
+import com.tagtracker.repository.ProjectRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -20,50 +22,56 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 public class ApplicationServiceTest {
 
   @Autowired
-  private ApplicationService applicationService;
+  private ProjectService projectService;
 
   @Autowired
-  private ApplicationRepository applicationRepository;
+  private ProjectRepository projectRepository;
 
   @AfterEach
   public void cleanup() {
-    applicationRepository.deleteAll();
+    projectRepository.deleteAll();
   }
 
   @Test
   public void canSaveTheApplicationAvailableInRemoteRepoById() throws Exception {
     String applicationId = "102943";
-    ApplicationResource application = applicationService.saveApplication(applicationId);
+    ProjectResource project = projectService.saveProject(applicationId);
 
-    Optional<Application> applicationInDatabase =
-        applicationRepository.findApplicationByProjectId(applicationId);
+    Optional<Project> projectInDatabase =
+        projectRepository.findProjectByProjectId(applicationId);
 
-    assertEquals(applicationId, applicationInDatabase.get().getProjectId());
-    assertEquals(application.getEncodedPath(), applicationInDatabase.get().getEncodedPath());
+    assertEquals(applicationId, projectInDatabase.get().getProjectId());
+    assertEquals(project.getEncodedPath(), projectInDatabase.get().getEncodedPath());
     assertEquals(
-        applicationInDatabase.get().getTags().getTagName(), application.getTag().getTagName());
+        projectInDatabase.get().getTags().size(), project.getTags().size());
+
+    projectInDatabase.get().getTags().forEach(t -> assertTrue(project.getTags().stream()
+        .anyMatch(tagInProject -> tagInProject.getTagName().equals(t.getTagName()))));
   }
 
   @Test
   public void canSaveTheApplicationAvailableInRemoteRepoByProjectPathWithNamespace()
       throws Exception {
-    String applicationId = "baris.bakla1/terraform";
-    ApplicationResource application = applicationService.saveApplication(applicationId);
+    String projectNamespace = "baris.bakla1/terraform";
 
-    Optional<Application> applicationInDatabase =
-        applicationRepository.findApplicationByProjectId(application.getProjectId());
+    ProjectResource project = projectService.saveProject(projectNamespace);
 
-    assertEquals(application.getProjectId(), applicationInDatabase.get().getProjectId());
-    assertEquals(application.getEncodedPath(), applicationInDatabase.get().getEncodedPath());
+    Optional<Project> projectInDatabase =
+        projectRepository.findProjectByEncodedPath(project.getEncodedPath());
+
+    assertEquals(project.getProjectId(), projectInDatabase.get().getProjectId());
+    assertEquals(project.getEncodedPath(), projectInDatabase.get().getEncodedPath());
     assertEquals(
-        application.getTag().getTagName(), applicationInDatabase.get().getTags().getTagName());
-  }
+        projectInDatabase.get().getTags().size(), project.getTags().size());
 
+    projectInDatabase.get().getTags().forEach(t -> assertTrue(project.getTags().stream()
+        .anyMatch(tagInProject -> tagInProject.getTagName().equals(t.getTagName()))));
+  }
   @Test
   public void returnsExceptionWhenApplicationBeingSavedIsNotFoundInRemoteRepo() throws Exception {
-    String applicationId = "NoProject";
+    String projectId = "NoProject";
     assertThrows(
-        ProjectNotFoundException.class, () -> applicationService.saveApplication(applicationId));
+        ProjectNotFoundException.class, () -> projectService.saveProject(projectId));
   }
 }
-*/
+
