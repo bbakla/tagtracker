@@ -1,0 +1,19 @@
+@startuml
+
+header DataClassFlows
+footer Page %page% of %lastpage%
+title Save Repository in Tracker
+
+User -> ApplicationController : ApplicationDTO
+ApplicationController --> ApplicationService : ApplicationDTO
+
+database ApplicationDatabase
+
+ApplicationService --> ApplicationDatabase : Application
+ApplicationDatabase --> ApplicationService : Application
+User <-- ApplicationController : ApplicationResource
+
+
+newpage Get Repository already saved in Tracker
+
+@enduml

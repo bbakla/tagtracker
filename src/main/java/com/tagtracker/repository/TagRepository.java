@@ -8,5 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TagRepository extends JpaRepository<Tag, Long> {
 
-  List<Tag> findAllByApplication_ProjectId(String projectId);
+  List<Tag> findAllByProject_ProjectId(String projectId);
+
 }

@@ -60,10 +60,13 @@ public class ApplicationController {
 
   @PatchMapping(APPLICATION_PATH_BY_ID_AND_DEPENDENCY_PATH)
   public ResponseEntity<ApplicationResource> addDependency(
-      @PathVariable String identifier, @PathVariable String dependentTo)
+      @PathVariable String identifier, @PathVariable String tagName,
+      @RequestBody DependencyDto dependentTo)
+
       throws ProjectNotFoundException {
 
-    ApplicationResource application = applicationService.addDependency(identifier, dependentTo);
+    ApplicationResource application = applicationService
+        .addDependency(identifier, tagName, dependentTo);
 
     return ResponseEntity.ok().body(application);
   }

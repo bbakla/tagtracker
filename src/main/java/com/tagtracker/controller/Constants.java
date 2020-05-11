@@ -5,8 +5,9 @@ public class Constants {
   public static final String APPLICATION_BASE_PATH = "/applications";
   public static final String APPLICATION_PATH_BY_ID = "/{identifier}";
   public static final String APPLICATION_PATH_DELETE_TAG_BY_NAME = "/{identifier}/tags/{tagName}";
-  public static final String APPLICATION_PATH_TO_DEPLOY = "/{identifier}/deploy/{environment}";
-  public static final String APPLICATION_PATH_BY_ID_AND_DEPENDENCY_PATH = "/{identifier}/dependent_to/{dependentTo}";
+  public static final String APPLICATION_PATH_TO_DEPLOY = "/{identifier}/tags/{tag}/deploy/{environment}";
+  public static final String APPLICATION_PATH_BY_ID_AND_DEPENDENCY_PATH = "/{identifier}/tags/{tagName}/dependent-to";
+  public static final String APPLICATION_PATH_BY_ID_AND_DEPENDENT_TO_ME_PATH = "/{identifier}/tags/{tagName}/dependent-to-me/{dependentToMe}";
 
 
   public static final String GITLAB_PROJECT_BASE_PATH = "/repositories";

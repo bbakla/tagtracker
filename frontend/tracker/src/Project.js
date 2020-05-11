@@ -12,43 +12,51 @@ export class Project extends Component {
         };
     }
 
+  handleSelect = (event) => {
+    let selectedTagName = event.target.value
 
-    handleSelect = (event) => {
-        let selectedTagName = event.target.value
+    let index = this.props.tags.findIndex(t => (t.tagName === selectedTagName));
 
-        let index = this.props.tags.findIndex(t => (t.tagName === selectedTagName));
+    this.setState({selectedTagIndex: index});
 
-        this.setState({selectedTagIndex: index});
+  }
 
+  removeProject = () => {
+    let confirmDelete = window.confirm("Are you sure deleting the tag?")
+    if (confirmDelete) {
+      this.props.removeProjectFromList(this.props.name)
     }
+  }
 
-    removeProject = () => {
-        let confirmDelete = window.confirm("Are you sure deleting the tag?")
-        if (confirmDelete) {
-            this.props.removeProjectFromList(this.props.name)
-        }
+  saveTag = (tag = {}) => {
+    console.log("in project");
+    //console.log(tag);
+  }
 
-    }
+  render() {
+    const description = this.props.description.length === 0 ? <br/>
+        : this.props.description
+    const tagName = this.props.tags.length === 0 ? ""
+        : this.props.tags[this.state.selectedTagIndex].tagName
+    const tagList = this.props.tags.length === 0 ? [] : this.props.tags
+    const deployments = this.props.tags.length === 0 ? []
+        : this.props.tags[this.state.selectedTagIndex].deployments
+    const dependentToMe = this.props.tags.length === 0 ? []
+        : this.props.tags[this.state.selectedTagIndex].dependentToMe
+    const dependentOn = this.props.tags.length === 0 ? []
+        : this.props.tags[this.state.selectedTagIndex].dependentOn
 
-    render() {
+    return (
+        <div key={this.props.name} className="col-md-6">
 
-        const description = this.props.description.length === 0 ? <br/> : this.props.description
-        const tagName = this.props.tags.length === 0 ? "" : this.props.tags[this.state.selectedTagIndex].tagName
-        const tagList = this.props.tags.length === 0 ? [] : this.props.tags
-        const deployments = this.props.tags.length === 0 ? [] : this.props.tags[this.state.selectedTagIndex].deployments
-        const dependentToMe = this.props.tags.length === 0 ? [] : this.props.tags[this.state.selectedTagIndex].dependentToMe
-        const dependentOn =  this.props.tags.length === 0 ? [] : this.props.tags[this.state.selectedTagIndex].dependentOn
+          <div className="card p-1">
+            <h5 className=" card-header">{this.props.name}
+              <button className="outline-danger float-right btn-sm"
+                      onClick={this.removeProject}><i
+                  className=" far fa-trash-alt"></i></button>
+            </h5>
 
-
-        return (
-            <div key={this.props.name} className="col-md-6">
-
-                <div className="card p-1">
-                    <h5 className=" card-header">{this.props.name}
-                    <button className="outline-danger float-right btn-sm" onClick={this.removeProject}> <i className=" far fa-trash-alt"></i></button>
-                    </h5>
-
-                    <div className="card-body">
+            <div className="card-body">
 
                         <select className="form-control col-md-4"
                                 onChange={this.handleSelect}>
@@ -66,22 +74,23 @@ export class Project extends Component {
                         </div>
 
                         <div className="row">
-                            <div className="col-xs-6 col-md-6">
+                          <div className="col-xs-6 col-md-6">
 
-                                <Tag currentTagName = {tagName}
-                                     projectName={this.props.name}
-                                     projectId = {this.props.projectId}
-                                     tags={tagList} />
+                            <Tag currentTagName={tagName}
+                                 projectName={this.props.name}
+                                 projectId={this.props.projectId}
+                                 tags={tagList}
+                            />
 
-                                <Deployment deploymentStatus={deployments}
-                                            projectId = {this.props.projectId}/>
-                            </div>
-                            <div className="col-xs-6 col-md-6">
-                                <ShowDependency relationshipType="dependentToMe"
-                                                dependencies={dependentToMe}
-                                                projectName={this.props.name}
-                                                projectId = {this.props.projectId}
-                                />
+                            <Deployment deploymentStatus={deployments}
+                                        projectId={this.props.projectId}/>
+                          </div>
+                          <div className="col-xs-6 col-md-6">
+                            <ShowDependency relationshipType="dependentToMe"
+                                            dependencies={dependentToMe}
+                                            projectName={this.props.name}
+                                            projectId={this.props.projectId}
+                            />
                                 <ShowDependency relationshipType="dependentOn"
                                                 dependencies={dependentOn}
                                                 projectName={this.props.name}

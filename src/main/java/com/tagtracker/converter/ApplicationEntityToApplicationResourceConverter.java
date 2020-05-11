@@ -1,22 +1,20 @@
 package com.tagtracker.converter;
 
-import com.tagtracker.model.entity.Application;
+import com.tagtracker.model.entity.Project;
 import com.tagtracker.model.resource.ApplicationResource;
 import com.tagtracker.model.resource.DependencyResource;
-import com.tagtracker.model.resource.TagResource;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.stereotype.Component;
 
 //@Component
 public class ApplicationEntityToApplicationResourceConverter implements
-    Converter<Application, ApplicationResource> {
+    Converter<Project, ApplicationResource> {
 
   @Override
-  public ApplicationResource convert(Application source) {
+  public ApplicationResource convert(Project source) {
     ApplicationResource applicationResource = new ApplicationResource();
 
-    applicationResource.setApplicationName(source.getApplicationName());
-    applicationResource.setDeployedEnvironments(source.getDeployedEnvironments());
+    applicationResource.setApplicationName(source.getProjectName());
+    //applicationResource.setDeployedEnvironments(source.getDeployedEnvironments());
     applicationResource.setEncodedPath(source.getEncodedPath());
     applicationResource.setProjectId(source.getProjectId());
     applicationResource.setCreatedDate(source.getCreatedDate());
@@ -24,26 +22,31 @@ public class ApplicationEntityToApplicationResourceConverter implements
     applicationResource.setCreatedBy(source.getCreatedBy());
     applicationResource.setLastModifiedBy(source.getLastModifiedBy());
 
-    TagResource tagResource = new TagResource(source.getTag().getTagName(),
-        source.getTag().getMessage());
-    applicationResource.setTag(tagResource);
+    /*if(source.getTags() != null) {
+      TagResource tagResource = new TagResource(source.getTags().getTagName(),
+          source.getTags().getMessage());
+      applicationResource.setTag(tagResource);
+    }*/
 
-    source.getDependentTo().stream().forEach(application -> {
+
+    /*source.getDependentTo().stream().forEach(application -> {
       applicationResource.addDependency(convertDependency(application));
     });
 
     source.getDependentOnMe().stream().forEach(application -> {
       applicationResource.addDependentOnMe(convertDependency(application));
     });
-
+*/
     return applicationResource;
   }
 
-  private DependencyResource convertDependency(Application application) {
-    TagResource tagResource = new TagResource(application.getTag().getTagName(),
-        application.getTag().getMessage());
+  private DependencyResource convertDependency(Project project) {
+  /*  TagResource tagResource = new TagResource(application.getTags().getTagName(),
+        application.getTags().getMessage());
+*/
+  /*  return new DependencyResource(application.getProjectId(), application.getApplicationName(),
+        application.getEncodedPath(), tagResource);*/
 
-    return new DependencyResource(application.getProjectId(), application.getApplicationName(),
-        application.getEncodedPath(), tagResource);
+    return null;
   }
 }

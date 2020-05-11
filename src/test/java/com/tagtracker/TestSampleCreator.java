@@ -1,30 +1,31 @@
 package com.tagtracker;
 
-import com.tagtracker.model.entity.Application;
+import com.tagtracker.model.entity.Project;
 
 import com.tagtracker.model.entity.Tag;
 import java.util.Date;
 
 public class TestSampleCreator {
 
-  public static Application createApplication() throws Exception {
-    Application application = new Application();
-    application.setApplicationName("SampleApplication");
-    application.setProjectId("testId");
-    application.setEncodedPath("baris.bakla1/terraform");
+  public static Project createApplicationWithNoDependencies(boolean withTag) throws Exception {
+    Project project = new Project();
+    project.setProjectName("SampleApplication");
+    project.setProjectId("testId");
+    project.setEncodedPath("baris.bakla1/terraform");
 
-    application.setTag(createTag(application));
+    if (withTag) {
+      project.addTag(createTag("tagName", project));
+    }
 
-    return application;
+    return project;
   }
 
-  public static Tag createTag(Application application) {
+  public static Tag createTag(String tagName, Project project) {
     Tag tag = new Tag();
     tag.setCreatedDate(new Date());
-//    tag.setId(application.getProjectId());
     tag.setMessage("tag message");
-    tag.setTagName("tagName");
-    tag.setApplication(application);
+    tag.setTagName(tagName);
+    tag.setProject(project);
 
     return tag;
   }

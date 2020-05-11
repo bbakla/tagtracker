@@ -217,8 +217,6 @@ export default class ProjectDashboard extends Component {
 
     render() {
 
-        console.log(this.state.projects.length)
-
         return(
             <div className="container">
 

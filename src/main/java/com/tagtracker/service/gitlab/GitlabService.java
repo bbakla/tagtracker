@@ -24,7 +24,8 @@ public class GitlabService {
   @Autowired
   private WebClient client;
 
-  @Value("${PRIVATE_TOKEN}")
+  //@Value("${PRIVATE_TOKEN}")
+  @Autowired
   private String privateToken;
 
   public Project getProjectFromGitlab(String projectId) throws ProjectNotFoundException {
