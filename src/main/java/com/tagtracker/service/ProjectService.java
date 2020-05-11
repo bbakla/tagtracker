@@ -88,42 +88,6 @@ public class ProjectService {
     return applicationByProjectId;
   }
 
-/*  public Tag getLatestTagOfApplication(String id) throws ProjectNotFoundException {
-    Optional<Project> application = projectRepository.findProjectByProjectId(id);
-    if (application.isEmpty()) {
-      throw new ProjectNotFoundException(
-          "Project information is not saved in the application repository. Try first saving it before calling.");
-    }
-
-    Tag latestTag =
-        application.get().getTags().stream()
-            .sorted(Comparator.comparing(Tag::getCreatedDate))
-            .collect(Collectors.toList())
-            .get(0);
-
-    return latestTag;
-  }*/
-
-
-  private Set<Tag> getTag(String projectId) {
-    GitlabTag[] tags = gitService.getTagsOfAProject(projectId);
-
-    if (tags.length == 0) {
-      return null;
-    }
-
-    return
-        Arrays.stream(tags)
-            .map(gitlabTag -> {
-              Tag tag = conversionService.convert(gitlabTag, Tag.class);
-
-              return tag;
-            })
-            //.sorted(Comparator.comparing(GitlabTag::getCommitDate))
-            .collect(Collectors.toSet());
-
-  }
-
   public ProjectResource addDependency(String identifier, String tagName,
       DependencyDto dependentTo)
       throws ProjectNotFoundException {
@@ -233,6 +197,25 @@ public class ProjectService {
     projectInDatabase.addTag(savedTag);
 
     return projectRepository.save(projectInDatabase).findTag(savedTag.getTagName());
+
+  }
+
+  private Set<Tag> getTag(String projectId) {
+    GitlabTag[] tags = gitService.getTagsOfAProject(projectId);
+
+    if (tags.length == 0) {
+      return null;
+    }
+
+    return
+        Arrays.stream(tags)
+            .map(gitlabTag -> {
+              Tag tag = conversionService.convert(gitlabTag, Tag.class);
+
+              return tag;
+            })
+            //.sorted(Comparator.comparing(GitlabTag::getCommitDate))
+            .collect(Collectors.toSet());
 
   }
 }

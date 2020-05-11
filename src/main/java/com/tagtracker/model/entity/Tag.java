@@ -62,13 +62,13 @@ public class Tag implements Serializable {
 
   //@ManyToMany(fetch = FetchType.EAGER)
   //@JsonBackReference
-  @OneToMany
+  @OneToMany(fetch = FetchType.EAGER)
   private Set<Tag> dependentToMe = new HashSet();
 
   /*  @ManyToMany(mappedBy = "dependentToMe", fetch = FetchType.EAGER)
     @JsonManagedReference
     */
-  @OneToMany
+  @OneToMany(fetch = FetchType.EAGER)
   private Set<Tag> dependentOn = new HashSet();
 
 

@@ -33,7 +33,7 @@ public class ApplicationServiceTest {
   }
 
   @Test
-  public void canSaveTheApplicationAvailableInRemoteRepoById() throws Exception {
+  public void canSaveTheApplicationIntoDatabaseByFindingAtRemoteSideByProjectId() throws Exception {
     String applicationId = "102943";
     ProjectResource project = projectService.saveProject(applicationId);
 
@@ -50,7 +50,7 @@ public class ApplicationServiceTest {
   }
 
   @Test
-  public void canSaveTheApplicationAvailableInRemoteRepoByProjectPathWithNamespace()
+  public void canSaveTheApplicationIntoDatabaseByFindingAtRemoteSideByProjectNamespace()
       throws Exception {
     String projectNamespace = "baris.bakla1/terraform";
 
@@ -67,11 +67,36 @@ public class ApplicationServiceTest {
     projectInDatabase.get().getTags().forEach(t -> assertTrue(project.getTags().stream()
         .anyMatch(tagInProject -> tagInProject.getTagName().equals(t.getTagName()))));
   }
+
   @Test
   public void returnsExceptionWhenApplicationBeingSavedIsNotFoundInRemoteRepo() throws Exception {
     String projectId = "NoProject";
     assertThrows(
         ProjectNotFoundException.class, () -> projectService.saveProject(projectId));
   }
+
+  @Test
+  public void canGetProjectFromRemoteSideByProjectId() throws Exception {
+    String projectId = "102943";
+    ProjectResource project = projectService.saveProject(projectId);
+
+    ProjectResource projectResourceGetById = projectService.getByProjectIdOrPath(projectId);
+
+    assertEquals(project.getProjectId(), projectResourceGetById.getProjectId());
+    assertEquals(project.getTags().size(), projectResourceGetById.getTags().size());
+    assertEquals(project.getEncodedPath(), projectResourceGetById.getEncodedPath());
+  }
+
+  @Test
+  public void canATagBeDependentOnAnotherTagOfAProject() throws Exception {
+
+  }
+
+  @Test
+  public void canATagStoresTheTagsThatAreDependentOnThatTag() throws Exception {
+
+  }
+
+
 }
 
