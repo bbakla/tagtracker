@@ -13,7 +13,8 @@ public class TagToTagResourceConverter implements Converter<Tag, TagResource> {
   @Override
   public TagResource convert(Tag source) {
     var tagResource =
-        new TagResource(source.getTagName(), source.getMessage(), source.getReleaseMessage());
+        new TagResource(source.getProjectId(), source.getTagName(), source.getMessage(),
+            source.getReleaseMessage());
 
     tagResource.setDeployedEnvironments(source.getDeployedEnvironments());
     tagResource.setTagsDependentOn(convertDependencies(source.getDependentOn()));
@@ -24,7 +25,8 @@ public class TagToTagResourceConverter implements Converter<Tag, TagResource> {
 
   private Set<TagResource> convertDependencies(Set<Tag> dependencies) {
     return dependencies.stream()
-        .map(d -> new TagResource(d.getTagName(), d.getMessage(), d.getReleaseMessage()))
+        .map(d -> new TagResource(d.getProjectId(), d.getTagName(), d.getMessage(),
+            d.getReleaseMessage()))
         .collect(Collectors.toSet());
   }
 }

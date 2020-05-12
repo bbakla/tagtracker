@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -63,7 +62,7 @@ public class Tag implements Serializable {
   //@ManyToMany(fetch = FetchType.EAGER)
   //@JsonBackReference
   @OneToMany(fetch = FetchType.EAGER)
-  private Set<Tag> dependentToMe = new HashSet();
+  private Set<Tag> dependentOnMe = new HashSet();
 
   /*  @ManyToMany(mappedBy = "dependentToMe", fetch = FetchType.EAGER)
     @JsonManagedReference
@@ -140,20 +139,17 @@ public class Tag implements Serializable {
     this.deployedEnvironments.put(environment, true);
   }
 
-  public Set<Tag> getDependentOnMe() {
-    return dependentToMe;
+  public void setDependentOnMe(Set<Tag> dependentToMe) {
+    this.dependentOnMe = dependentToMe;
   }
 
-  public void setDependentToMe(Set<Tag> dependentToMe) {
-    this.dependentToMe = dependentToMe;
+  public void addDependentOnMe(Tag dependentOnMe) {
+
+    this.dependentOnMe.add(dependentOnMe);
   }
 
-  public void addDependencyToMe(Tag dependentToMe) {
-    this.dependentToMe.add(dependentToMe);
-  }
-
-  public void removeDependentTag(Tag dependentToMe) {
-    this.dependentToMe.remove(dependentToMe);
+  public void removeDependentOnMe(Tag dependentToMe) {
+    this.dependentOnMe.remove(dependentToMe);
   }
 
   public Set<Tag> getDependentOn() {
@@ -164,17 +160,17 @@ public class Tag implements Serializable {
     this.dependentOn = dependentTo;
   }
 
-  public void addDependentOn(Tag dependency) {
-    if (checkIfDependencyAddedToTheDependentService(dependency).get() == null) {
-      dependency.addDependencyToMe(this);
+  public void addDependency(Tag dependency) {
+    if (!isAddedDependentOnMeList(dependency)) {
+      dependency.addDependentOnMe(this);
     }
 
     this.dependentOn.add(dependency);
   }
 
-  public void removeDependentOn(Tag dependency) {
-    if (checkIfDependencyAddedToTheDependentService(dependency).get() == null) {
-      dependency.removeDependentTag(this);
+  public void removeDependency(Tag dependency) {
+    if (isAddedDependentOnMeList(dependency)) {
+      dependency.removeDependentOnMe(this);
     }
 
     this.dependentOn.remove(dependency);
@@ -188,16 +184,24 @@ public class Tag implements Serializable {
     this.commitMessage = commitMessage;
   }
 
-  public Set<Tag> getDependentToMe() {
-    return dependentToMe;
+  public Set<Tag> getDependentOnMe() {
+    return dependentOnMe;
   }
 
-  private Optional<Tag> checkIfDependencyAddedToTheDependentService(Tag dependency) {
+  private boolean isAddedDependentOnMeList(Tag dependency) {
     return dependency.getDependentOnMe().
         stream().
         filter(t -> t.getTagName().equals(this.getTagName())).
-        findAny();
+        findAny().isEmpty() ? false : true;
   }
+
+  private boolean isAddedDependentOnList(String dependentOnThatTagName) {
+    return this.getDependentOn()
+        .stream()
+        .filter(t -> t.getTagName().equals(dependentOnThatTagName))
+        .findAny().isEmpty() ? false : true;
+  }
+
 
   @Override
   public boolean equals(Object obj) {

@@ -6,6 +6,11 @@ public class DependencyDto {
 
   private String tagName;
 
+  public DependencyDto(String projectName, String tagName) {
+    this.projectName = projectName;
+    this.tagName = tagName;
+  }
+
   public String getProjectName() {
     return projectName;
   }

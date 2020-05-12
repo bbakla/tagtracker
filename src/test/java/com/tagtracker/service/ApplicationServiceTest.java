@@ -6,9 +6,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.tagtracker.controller.DependencyDto;
 import com.tagtracker.model.entity.Project;
+import com.tagtracker.model.entity.Tag;
 import com.tagtracker.model.resource.ProjectResource;
+import com.tagtracker.model.resource.TagResource;
 import com.tagtracker.repository.ProjectRepository;
+import com.tagtracker.repository.TagRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -27,15 +31,19 @@ public class ApplicationServiceTest {
   @Autowired
   private ProjectRepository projectRepository;
 
+  @Autowired
+  private TagRepository tagRepository;
+
   @AfterEach
   public void cleanup() {
     projectRepository.deleteAll();
+    tagRepository.deleteAll();
   }
 
   @Test
   public void canSaveTheApplicationIntoDatabaseByFindingAtRemoteSideByProjectId() throws Exception {
     String applicationId = "102943";
-    ProjectResource project = projectService.saveProject(applicationId);
+    ProjectResource project = projectService.saveRemoteProjectRepositoryInformation(applicationId);
 
     Optional<Project> projectInDatabase =
         projectRepository.findProjectByProjectId(applicationId);
@@ -54,7 +62,8 @@ public class ApplicationServiceTest {
       throws Exception {
     String projectNamespace = "baris.bakla1/terraform";
 
-    ProjectResource project = projectService.saveProject(projectNamespace);
+    ProjectResource project = projectService
+        .saveRemoteProjectRepositoryInformation(projectNamespace);
 
     Optional<Project> projectInDatabase =
         projectRepository.findProjectByEncodedPath(project.getEncodedPath());
@@ -72,13 +81,14 @@ public class ApplicationServiceTest {
   public void returnsExceptionWhenApplicationBeingSavedIsNotFoundInRemoteRepo() throws Exception {
     String projectId = "NoProject";
     assertThrows(
-        ProjectNotFoundException.class, () -> projectService.saveProject(projectId));
+        ProjectNotFoundException.class,
+        () -> projectService.saveRemoteProjectRepositoryInformation(projectId));
   }
 
   @Test
   public void canGetProjectFromRemoteSideByProjectId() throws Exception {
     String projectId = "102943";
-    ProjectResource project = projectService.saveProject(projectId);
+    ProjectResource project = projectService.saveRemoteProjectRepositoryInformation(projectId);
 
     ProjectResource projectResourceGetById = projectService.getByProjectIdOrPath(projectId);
 
@@ -87,15 +97,7 @@ public class ApplicationServiceTest {
     assertEquals(project.getEncodedPath(), projectResourceGetById.getEncodedPath());
   }
 
-  @Test
-  public void canATagBeDependentOnAnotherTagOfAProject() throws Exception {
 
-  }
-
-  @Test
-  public void canATagStoresTheTagsThatAreDependentOnThatTag() throws Exception {
-
-  }
 
 
 }

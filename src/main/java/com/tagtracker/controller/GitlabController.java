@@ -1,9 +1,9 @@
 package com.tagtracker.controller;
 
 import static com.tagtracker.controller.Constants.GITLAB_PROJECT_BASE_PATH;
-import static com.tagtracker.controller.Constants.GITLAB_PROJECT_BY_IDENTIFIER;
 import static com.tagtracker.controller.Constants.GITLAB_PROJECT_SPECIFIC_TAGS_BY_IDENTIFIER;
 import static com.tagtracker.controller.Constants.GITLAB_PROJECT_TAGS_BY_IDENTIFIER;
+import static com.tagtracker.controller.Constants.PROJECT_PATH_BY_ID;
 
 import com.tagtracker.model.entity.gitlab.GitlabProject;
 import com.tagtracker.model.entity.gitlab.GitlabTag;
@@ -24,7 +24,7 @@ public class GitlabController {
   @Autowired
   private GitlabService gitlabService;
 
-  @GetMapping(GITLAB_PROJECT_BY_IDENTIFIER)
+  @GetMapping(PROJECT_PATH_BY_ID)
   public ResponseEntity<GitlabProject> getProjectByIdentifier(@PathVariable String identifier)
       throws ProjectNotFoundException {
     GitlabProject project = gitlabService.getProjectFromGitlab(identifier);

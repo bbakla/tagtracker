@@ -8,6 +8,7 @@ import java.util.Set;
 
 public class TagResource {
 
+  private String projectId;
   private String message;
   private String tagName;
   private String releaseNotes;
@@ -16,7 +17,8 @@ public class TagResource {
   private Map<Environment, Boolean> deployedEnvironments = new EnumMap<>(Environment.class);
 
 
-  public TagResource(String tagName, String message, String releaseNotes) {
+  public TagResource(String projectId, String tagName, String message, String releaseNotes) {
+    this.projectId = projectId;
     this.message = message;
     this.tagName = tagName;
     this.releaseNotes = releaseNotes;
@@ -71,5 +73,13 @@ public class TagResource {
   public void setDeployedEnvironments(
       Map<Environment, Boolean> deployedEnvironments) {
     this.deployedEnvironments = deployedEnvironments;
+  }
+
+  public String getProjectId() {
+    return projectId;
+  }
+
+  public void setProjectId(String projectId) {
+    this.projectId = projectId;
   }
 }

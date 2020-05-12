@@ -200,7 +200,7 @@ public class ProjectRepositoryTests {
     Project savedProject2 = projectRepository.save(project2);
 
     Tag savedTagForApplication = savedProject.findTag(tagForApplication.getTagName());
-    savedTagForApplication.addDependentOn(savedProject2.findTag(tagForApplication2.getTagName()));
+    savedTagForApplication.addDependency(savedProject2.findTag(tagForApplication2.getTagName()));
 
     savedProject = projectRepository.save(savedProject);
 

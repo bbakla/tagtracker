@@ -10,4 +10,10 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
 
   List<Tag> findAllByProject_ProjectId(String projectId);
 
+  Tag findTagByTagNameAndProjectProjectName(String tagName, String projectName);
+
+  Tag findTagByTagNameAndProjectProjectId(String tagName, String projectId);
+
+  void deleteTagByTagNameAndProjectProjectId(String tagName, String projectId);
+
 }
