@@ -37,26 +37,25 @@ public class TagController {
 
   @PatchMapping(PROJECT_PATH_BY_ID_AND_DEPENDENCY_PATH)
   public ResponseEntity<TagResource> addDependency(
-      @PathVariable String identifier, @PathVariable String tagName,
+      @PathVariable String identifier,
+      @PathVariable String tagName,
       @RequestBody DependencyDto dependentTo)
-
       throws ProjectNotFoundException {
 
-    TagResource application = tagService
-        .addATagAsDependency(identifier, tagName, dependentTo);
+    TagResource tagResource = tagService.addATagAsDependency(identifier, tagName, dependentTo);
 
-    return ResponseEntity.ok().body(application);
+    return ResponseEntity.ok().body(tagResource);
   }
 
   @PatchMapping(PROJECT_PATH_TO_DEPLOY)
-  public ResponseEntity<ProjectResource> deployTo(
-      @PathVariable String identifier, @PathVariable String tagName,
+  public ResponseEntity<TagResource> deployTo(
+      @PathVariable String identifier,
+      @PathVariable String tagName,
       @PathVariable Environment environment)
       throws ProjectNotFoundException {
-    ProjectResource projectResource = tagService
-        .deploy(identifier, tagName, environment);
+    TagResource tagResource = tagService.deploy(identifier, tagName, environment);
 
-    return ResponseEntity.ok().body(projectResource);
+    return ResponseEntity.ok().body(tagResource);
   }
 
   @PostMapping(
@@ -86,5 +85,4 @@ public class TagController {
 
     return ResponseEntity.noContent().build();
   }
-
 }

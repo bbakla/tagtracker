@@ -1,22 +1,16 @@
-/*
+
 package com.tagtracker.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.tagtracker.TestSampleCreator;
-import com.tagtracker.model.dto.ApplicationDto;
-import com.tagtracker.model.dto.gitlab.TagDto;
-import com.tagtracker.model.entity.Application;
-import com.tagtracker.model.entity.Environment;
-import com.tagtracker.model.entity.Tag;
-import com.tagtracker.model.entity.gitlab.RemoteTag;
-import com.tagtracker.repository.ApplicationRepository;
+import com.tagtracker.model.dto.ProjectDto;
+import com.tagtracker.model.entity.Project;
+import com.tagtracker.repository.ProjectRepository;
 import com.tagtracker.repository.TagRepository;
 import com.tagtracker.service.gitlab.GitlabService;
-import com.tagtracker.service.gitlab.TagNotFoundException;
-import java.util.List;
-import org.hamcrest.Matchers;
+import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +19,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static com.tagtracker.controller.Constants.APPLICATION_BASE_PATH;
-import static com.tagtracker.controller.TestConstants.APPLICATION_CREATE_TAGS;
-import static com.tagtracker.controller.TestConstants.APPLICATION_DEPLOY_PATH_TEMPLATE;
-import static com.tagtracker.controller.TestConstants.APPLICATION_PATH_BY_ID;
-import static com.tagtracker.controller.TestConstants.APPLICATION_PATH_BY_ID_AND_DEPENDENCY_PATH_TEMPLATE;
-import static com.tagtracker.controller.TestConstants.APPLICATION_PATH_DELETE_TAG_BY_NAME;
+
+import static com.tagtracker.controller.TestConstants.PROJECT_PATH_BY_ID_AND_DEPENDENCY_PATH_TEMPLATE;
+import static com.tagtracker.controller.TestConstants.PROJECT_PATH_BY_ID_TO_BE_FORMATTED;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -41,17 +33,19 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+
+import static com.tagtracker.controller.Constants.PROJECT_BASE_PATH;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class ApplicationControllerTest {
+public class ProjectControllerTest {
 
   @Autowired
   private MockMvc mockMvc;
 
   @Autowired
-  private ApplicationRepository applicationRepository;
+  private ProjectRepository projectRepository;
 
   @Autowired
   private TagRepository tagRepository;
@@ -61,7 +55,8 @@ public class ApplicationControllerTest {
 
   @AfterEach
   public void clean() {
-    applicationRepository.deleteAll();
+    projectRepository.deleteAll();
+    tagRepository.deleteAll();
   }
 
   private static String testProjectId = "102943";
@@ -69,50 +64,56 @@ public class ApplicationControllerTest {
   private static String tagName = "v1.1.0";
 
   @Test
-  public void doesNotSaveAnApplicationWithInvalidId() throws Exception {
-    ApplicationDto application = new ApplicationDto();
-    application.setIdentifier("notAvailable");
+  public void doesNotSaveAProjecWithInvalidId() throws Exception {
+    ProjectDto project = new ProjectDto();
+    project.setIdentifier("notAvailable");
 
     mockMvc
         .perform(
-            post(APPLICATION_BASE_PATH)
-                .content(convertToJson(application))
+            post(PROJECT_BASE_PATH)
+                .content(convertToJson(project))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNotFound());
   }
 
   @Test
-  public void canSaveAnApplicationWhichExistsInRemoteRepository() throws Exception {
-    ApplicationDto application = new ApplicationDto();
-    application.setIdentifier("102943");
+  public void canSaveInformationOfRemoteRepoAsProject() throws Exception {
+    ProjectDto project = new ProjectDto();
+    project.setIdentifier("102943");
 
     mockMvc
         .perform(
-            post(APPLICATION_BASE_PATH)
-                .content(convertToJson(application))
+            post(PROJECT_BASE_PATH)
+                .content(convertToJson(project))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isCreated())
-        .andExpect(jsonPath("$.projectId").value(application.getIdentifier()));
+        .andExpect(jsonPath("$.projectId").value(project.getIdentifier()));
+
+    Optional<Project> projectInDatabase = projectRepository
+        .findProjectByProjectId(project.getIdentifier());
+
+    assertFalse(projectInDatabase.isEmpty());
+    assertEquals(project.getIdentifier(), projectInDatabase.get().getProjectId());
   }
 
   @Test
-  public void canGetAnApplicationByProjectId() throws Exception {
-    Application application = TestSampleCreator.createApplication();
-    Application savedApplication = applicationRepository.save(application);
+  public void canGetAProjectByProjectId() throws Exception {
+    Project project = TestSampleCreator.createAProjectWithNoDependencies(true);
+    Project savedProject = projectRepository.save(project);
 
-    java.lang.String path = APPLICATION_BASE_PATH + "/" + application.getProjectId();
+    String path = String.format(PROJECT_PATH_BY_ID_TO_BE_FORMATTED, project.getProjectId());
     mockMvc
         .perform(get(path))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.projectId").value(savedApplication.getProjectId()));
+        .andExpect(jsonPath("$.projectId").value(savedProject.getProjectId()));
   }
 
   @Test
-  public void canGetAnApplicationByProjectPath() throws Exception {
-    Application application = TestSampleCreator.createApplication();
-    Application savedApplication = applicationRepository.save(application);
+  public void canGetAProjectByProjectPath() throws Exception {
+    Project project = TestSampleCreator.createAProjectWithNoDependencies(true);
+    Project savedApplication = projectRepository.save(project);
 
-    java.lang.String path = APPLICATION_BASE_PATH + "/" + application.getEncodedPath();
+    var path = String.format(PROJECT_PATH_BY_ID_TO_BE_FORMATTED, project.getEncodedPath());
     mockMvc
         .perform(get(path))
         .andExpect(status().isOk())
@@ -120,45 +121,17 @@ public class ApplicationControllerTest {
         .andExpect(jsonPath("$.encodedPath").value(savedApplication.getEncodedPath()));
   }
 
-  @Test
-  public void canAddAnAppDependency() throws Exception {
-    Application application = TestSampleCreator.createApplication();
-    Application savedApplication = applicationRepository.save(application);
 
-    Application application2 = TestSampleCreator.createApplication();
-    application2.setProjectId("secondProject_ID");
-    application2.setApplicationName("secondProject");
-    application2.setEncodedPath("path/secondProject");
-    Application savedApplication2 = applicationRepository.save(application2);
 
-    String path = String
-        .format(APPLICATION_PATH_BY_ID_AND_DEPENDENCY_PATH_TEMPLATE, application.getProjectId(),
-            application2.getProjectId());
+/*
 
-    mockMvc
-        .perform(patch(path))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.projectId").value(savedApplication.getProjectId()))
-        .andExpect(jsonPath("$.dependentTo[0].projectId").value(application2.getProjectId()));
-  }
 
-  @Test
-  public void canDeployToAnEnvironment() throws Exception {
-    Application application = TestSampleCreator.createApplication();
-    Application savedApplication = applicationRepository.save(application);
 
-    String path = String
-        .format(APPLICATION_DEPLOY_PATH_TEMPLATE, application.getProjectId(),
-            Environment.DEV);
 
-    mockMvc
-        .perform(patch(path))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.projectId").value(savedApplication.getProjectId()))
-        .andExpect(jsonPath("$.deployedEnvironments", Matchers.aMapWithSize(1)))
-        .andExpect(
-            jsonPath("$.deployedEnvironments", Matchers.hasEntry(Environment.DEV.name(), true)));
-  }
+
+
+
+
 
 
   @Test
@@ -258,20 +231,22 @@ public class ApplicationControllerTest {
       gitlabService.deleteTag(testProjectId, tagDto.getTagName());
     }
   }
+ */
 
-
-  private String convertToJson(ApplicationDto application) throws Exception {
+  private String convertToJson(ProjectDto application) throws Exception {
     ObjectMapper mapper = new ObjectMapper();
     mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
     ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
     return ow.writeValueAsString(application);
   }
 
-  private String convertToJson(TagDto tagDto) throws Exception {
+/*  private String convertToJson(TagDto tagDto) throws Exception {
     ObjectMapper mapper = new ObjectMapper();
     mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
     ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
     return ow.writeValueAsString(tagDto);
-  }
+  }*/
+
+
 }
-*/
+

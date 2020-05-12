@@ -79,7 +79,7 @@ public class TagService {
     return conversionService.convert(mainTagSaved, TagResource.class);
   }
 
-  public ProjectResource deploy(String projectIdentifier, String tagName, Environment environment)
+  public TagResource deploy(String projectIdentifier, String tagName, Environment environment)
       throws ProjectNotFoundException {
     var project = projectService.getProject(projectIdentifier);
     Tag tag = project.findTag(tagName);
@@ -87,7 +87,7 @@ public class TagService {
 
     Tag savedTag = tagRepository.save(tag);
 
-    return conversionService.convert(savedTag, ProjectResource.class);
+    return conversionService.convert(savedTag, TagResource.class);
   }
 
   public TagResource createTag(String identifier, TagDto tagDto) throws ProjectNotFoundException {
