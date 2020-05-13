@@ -3,6 +3,7 @@ package com.tagtracker.controller;
 import static com.tagtracker.controller.Constants.GITLAB_PROJECT_TAGS_BY_IDENTIFIER;
 import static com.tagtracker.controller.Constants.PROJECT_BASE_PATH;
 import static com.tagtracker.controller.Constants.PROJECT_PATH_BY_ID_AND_DEPENDENCY_PATH;
+import static com.tagtracker.controller.Constants.PROJECT_PATH_BY_ID_AND_DEPENDENT_ON_ME_PATH;
 import static com.tagtracker.controller.Constants.PROJECT_PATH_DELETE_TAG_BY_NAME;
 import static com.tagtracker.controller.Constants.PROJECT_PATH_TO_DEPLOY;
 
@@ -43,6 +44,17 @@ public class TagController {
       throws ProjectNotFoundException {
 
     TagResource tagResource = tagService.addATagAsDependency(identifier, tagName, dependentTo);
+
+    return ResponseEntity.ok().body(tagResource);
+  }
+
+  @PatchMapping(PROJECT_PATH_BY_ID_AND_DEPENDENT_ON_ME_PATH)
+  public ResponseEntity<TagResource> dependentOnMe(
+      @PathVariable String identifier,
+      @PathVariable String tagName,
+      @RequestBody DependencyDto dependentOnMe)
+      throws ProjectNotFoundException {
+    TagResource tagResource = tagService.addATagAsDependentOnMe(identifier, tagName, dependentOnMe);
 
     return ResponseEntity.ok().body(tagResource);
   }

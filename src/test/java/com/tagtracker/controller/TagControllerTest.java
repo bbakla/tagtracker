@@ -114,6 +114,11 @@ public class TagControllerTest {
   }
 
   @Test
+  public void canATagKeepsTheTrackOfTheTagsThatAreDependentOnIt() {
+
+  }
+
+  @Test
   public void canDeployATagToAnEnvironment() throws Exception {
     Project project = TestSampleCreator.createAProjectWithNoDependencies(true);
     Project savedProject = projectRepository.save(project);
