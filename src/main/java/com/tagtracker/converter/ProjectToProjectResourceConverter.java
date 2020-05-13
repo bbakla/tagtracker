@@ -1,9 +1,7 @@
 package com.tagtracker.converter;
 
 import com.tagtracker.model.entity.Project;
-import com.tagtracker.model.entity.Tag;
 import com.tagtracker.model.resource.ProjectResource;
-import com.tagtracker.model.resource.DependencyResource;
 import com.tagtracker.model.resource.TagResource;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -27,7 +25,7 @@ public class ProjectToProjectResourceConverter implements
     projectResource.setProjectName(source.getProjectName());
     //applicationResource.setDeployedEnvironments(source.getDeployedEnvironments());
     projectResource.setEncodedPath(source.getEncodedPath());
-    projectResource.setProjectId(source.getProjectId());
+    projectResource.setProjectId(source.getRemoteProjectId());
     projectResource.setCreatedDate(source.getCreatedDate());
     projectResource.setLastModifiedDate(source.getLastModifiedDate());
     projectResource.setCreatedBy(source.getCreatedBy());

@@ -1,17 +1,14 @@
 package com.tagtracker.service;
 
-import com.tagtracker.model.dto.gitlab.TagDto;
 import com.tagtracker.model.entity.Project;
 import com.tagtracker.model.entity.Tag;
 import com.tagtracker.model.entity.gitlab.GitlabProject;
 import com.tagtracker.model.entity.gitlab.GitlabTag;
 import com.tagtracker.model.resource.ProjectResource;
-import com.tagtracker.model.resource.TagResource;
 import com.tagtracker.repository.ProjectRepository;
 import com.tagtracker.repository.TagRepository;
 import com.tagtracker.service.gitlab.GitlabService;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -46,11 +43,11 @@ public class ProjectService {
               appIdentifier));
     }
     Project projectEntity = new Project();
-    projectEntity.setProjectId(project.getId());
+    projectEntity.setRemoteProjectId(project.getId());
     projectEntity.setProjectName(project.getName());
     projectEntity.setEncodedPath(project.getPath_with_namespace());
 
-    Set<Tag> projectTags = getTagsOfRemoteRepository(projectEntity.getProjectId());
+    Set<Tag> projectTags = getTagsOfRemoteRepository(projectEntity.getRemoteProjectId());
 
     projectTags.forEach(t -> t.setProject(projectEntity));
     projectEntity.setTags(projectTags);
@@ -73,7 +70,8 @@ public class ProjectService {
   }
 
   public Optional<Project> getProjectByProjectIdOrPath(String identifier) {
-    Optional<Project> applicationByProjectId = projectRepository.findProjectByProjectId(identifier);
+    Optional<Project> applicationByProjectId = projectRepository
+        .findProjectByRemoteProjectId(identifier);
     if (applicationByProjectId.isEmpty()) {
       return projectRepository.findProjectByEncodedPath(identifier);
     }
@@ -90,7 +88,7 @@ public class ProjectService {
               identifier));
     }
 
-    projectRepository.deleteByProjectId(projectFound.get().getProjectId());
+    projectRepository.deleteByRemoteProjectId(projectFound.get().getRemoteProjectId());
   }
 
   public Set<Tag> getTagsOfRemoteRepository(String projectId) {

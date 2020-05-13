@@ -17,11 +17,11 @@ public class Project extends Auditable<String> implements Serializable {
   private Long id;
 
   // @NaturalId
-  @Column(name = "project_id", nullable = false, unique = true)
-  private String projectId;
+  @Column(name = "remote_project_id", nullable = false, unique = true)
+  private String remoteProjectId;
 
   @NotNull
-  @Column(name = "application_name")
+  @Column(name = "project_name")
   private java.lang.String projectName;
 
   @Column(name = "encoded_path", nullable = true)
@@ -31,6 +31,7 @@ public class Project extends Auditable<String> implements Serializable {
       orphanRemoval = true,
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER)
+
   @JsonManagedReference
   private Set<Tag> tags = new HashSet<>();
 
@@ -42,7 +43,7 @@ public class Project extends Auditable<String> implements Serializable {
   }
 
   public Project(String id, String projectName) {
-    this.projectId = id;
+    this.remoteProjectId = id;
     this.projectName = projectName;
   }
 
@@ -72,12 +73,12 @@ public class Project extends Auditable<String> implements Serializable {
     this.projectName = serviceName;
   }
 
-  public String getProjectId() {
-    return projectId;
+  public String getRemoteProjectId() {
+    return remoteProjectId;
   }
 
-  public void setProjectId(java.lang.String id) {
-    this.projectId = id;
+  public void setRemoteProjectId(java.lang.String id) {
+    this.remoteProjectId = id;
   }
 
   public Set<Tag> getTags() {

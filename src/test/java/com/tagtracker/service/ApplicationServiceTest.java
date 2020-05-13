@@ -6,11 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.tagtracker.controller.DependencyDto;
 import com.tagtracker.model.entity.Project;
-import com.tagtracker.model.entity.Tag;
 import com.tagtracker.model.resource.ProjectResource;
-import com.tagtracker.model.resource.TagResource;
 import com.tagtracker.repository.ProjectRepository;
 import com.tagtracker.repository.TagRepository;
 import java.util.Optional;
@@ -46,9 +43,9 @@ public class ApplicationServiceTest {
     ProjectResource project = projectService.saveRemoteProjectRepositoryInformation(applicationId);
 
     Optional<Project> projectInDatabase =
-        projectRepository.findProjectByProjectId(applicationId);
+        projectRepository.findProjectByRemoteProjectId(applicationId);
 
-    assertEquals(applicationId, projectInDatabase.get().getProjectId());
+    assertEquals(applicationId, projectInDatabase.get().getRemoteProjectId());
     assertEquals(project.getEncodedPath(), projectInDatabase.get().getEncodedPath());
     assertEquals(
         projectInDatabase.get().getTags().size(), project.getTags().size());
@@ -68,7 +65,7 @@ public class ApplicationServiceTest {
     Optional<Project> projectInDatabase =
         projectRepository.findProjectByEncodedPath(project.getEncodedPath());
 
-    assertEquals(project.getProjectId(), projectInDatabase.get().getProjectId());
+    assertEquals(project.getProjectId(), projectInDatabase.get().getRemoteProjectId());
     assertEquals(project.getEncodedPath(), projectInDatabase.get().getEncodedPath());
     assertEquals(
         projectInDatabase.get().getTags().size(), project.getTags().size());

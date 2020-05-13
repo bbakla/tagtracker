@@ -37,7 +37,7 @@ public class ProjectRepositoryTests {
     Project project = TestSampleCreator.createAProjectWithNoDependencies(true);
     Project savedProject = projectRepository.save(project);
 
-    assertNotNull(savedProject.getProjectId());
+    assertNotNull(savedProject.getRemoteProjectId());
     assertEquals(project.getProjectName(), savedProject.getProjectName());
     assertNotNull(savedProject.getCreatedDate());
     assertNotNull(savedProject.getLastModifiedDate());
@@ -53,7 +53,7 @@ public class ProjectRepositoryTests {
     assertEquals(project.getProjectName(), savedProject.getProjectName());
     assertEquals(project.getTags(), savedProject.getTags());
 
-    Project project1 = new Project(project.getProjectId(), project.getProjectName());
+    Project project1 = new Project(project.getRemoteProjectId(), project.getProjectName());
     assertThrows(DataIntegrityViolationException.class, () -> projectRepository.save(project1));
   }
 
@@ -63,11 +63,11 @@ public class ProjectRepositoryTests {
     Project savedProject = projectRepository.save(project);
 
     Optional<Project> applicationInDatabase =
-        projectRepository.findProjectByProjectId(savedProject.getProjectId());
+        projectRepository.findProjectByRemoteProjectId(savedProject.getRemoteProjectId());
 
-    assertNotNull(applicationInDatabase.get().getProjectId());
+    assertNotNull(applicationInDatabase.get().getRemoteProjectId());
     assertEquals(project.getProjectName(), applicationInDatabase.get().getProjectName());
-    assertEquals(project.getProjectId(), applicationInDatabase.get().getProjectId());
+    assertEquals(project.getRemoteProjectId(), applicationInDatabase.get().getRemoteProjectId());
     assertNotNull(savedProject.getLastModifiedDate());
     project.getTags().forEach(t -> assertNotNull(t.getId()));
     assertEquals(project.getTags().size(), applicationInDatabase.get().getTags().size());
@@ -79,16 +79,17 @@ public class ProjectRepositoryTests {
     projectRepository.save(project);
 
     Project project2 = TestSampleCreator.createAProjectWithNoDependencies(true);
-    project2.setProjectId("secondAppId");
+    project2.setRemoteProjectId("secondAppId");
     project2.setProjectName("secondApplicationName");
 
     Project savedProject2 = projectRepository.save(project2);
 
     Project getProjectByIdandTag =
-        projectRepository.findProjectByProjectIdAndTagsTagName(
-            savedProject2.getProjectId(), savedProject2.getTags().iterator().next().getTagName());
+        projectRepository.findProjectByRemoteProjectIdAndTagsTagName(
+            savedProject2.getRemoteProjectId(),
+            savedProject2.getTags().iterator().next().getTagName());
 
-    assertNotNull(getProjectByIdandTag.getProjectId());
+    assertNotNull(getProjectByIdandTag.getRemoteProjectId());
     assertEquals(project2.getProjectName(), getProjectByIdandTag.getProjectName());
     assertEquals(
         project2.getTags().iterator().next().getTagName(),
@@ -116,7 +117,7 @@ public class ProjectRepositoryTests {
     Project savedProject = projectRepository.save(project);
 
     Project project2 = TestSampleCreator.createAProjectWithNoDependencies(true);
-    project2.setProjectId("projectId2");
+    project2.setRemoteProjectId("projectId2");
 
     String secondTagName = "secondTag";
     Tag sampleTag = TestSampleCreator.createTag(secondTagName, project2);
@@ -126,7 +127,7 @@ public class ProjectRepositoryTests {
     List<Project> projectList = projectRepository.findAll();
     assertEquals(2, projectList.size());
 
-    projectRepository.deleteByProjectId(savedProject.getProjectId());
+    projectRepository.deleteByRemoteProjectId(savedProject.getRemoteProjectId());
 
     assertEquals(1, projectRepository.findAll().size());
   }
@@ -155,7 +156,8 @@ public class ProjectRepositoryTests {
     project.addTag(sampleTag);
     projectRepository.save(project);
 
-    Project savedProject = projectRepository.findProjectByProjectId(project.getProjectId()).get();
+    Project savedProject = projectRepository
+        .findProjectByRemoteProjectId(project.getRemoteProjectId()).get();
 
     String firstExpectedTagName = project.getTags().iterator().next().getTagName();
 
@@ -172,7 +174,8 @@ public class ProjectRepositoryTests {
 
     String secondTagName = "secondTag";
     Tag secondTag = TestSampleCreator.createTag(secondTagName, project);
-    Project savedProject = projectRepository.findProjectByProjectId(project.getProjectId()).get();
+    Project savedProject = projectRepository
+        .findProjectByRemoteProjectId(project.getRemoteProjectId()).get();
     savedProject.addTag(secondTag);
     Project updatedProject = projectRepository.save(savedProject);
 
@@ -192,7 +195,7 @@ public class ProjectRepositoryTests {
     Project savedProject = projectRepository.save(project);
 
     Project project2 = TestSampleCreator.createAProjectWithNoDependencies(false);
-    project2.setProjectId("Independent");
+    project2.setRemoteProjectId("Independent");
     project2.setProjectName("independentProject");
     project2.setEncodedPath("/independent");
     Tag tagForApplication2 = TestSampleCreator.createTag("tagForSecondApp", project2);
@@ -219,7 +222,7 @@ public class ProjectRepositoryTests {
 
     projectRepository.save(project);
     Optional<Project> savedProject =
-        projectRepository.findProjectByProjectId(project.getProjectId());
+        projectRepository.findProjectByRemoteProjectId(project.getRemoteProjectId());
 
     assertTrue(
         savedProject.get().getTags().iterator().next().getDeployedEnvironments().size() == 1);

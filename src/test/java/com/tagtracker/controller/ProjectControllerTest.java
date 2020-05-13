@@ -20,7 +20,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 
-import static com.tagtracker.controller.TestConstants.PROJECT_PATH_BY_ID_AND_DEPENDENCY_PATH_TEMPLATE;
 import static com.tagtracker.controller.TestConstants.PROJECT_PATH_BY_ID_TO_BE_FORMATTED;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -90,10 +89,10 @@ public class ProjectControllerTest {
         .andExpect(jsonPath("$.projectId").value(project.getIdentifier()));
 
     Optional<Project> projectInDatabase = projectRepository
-        .findProjectByProjectId(project.getIdentifier());
+        .findProjectByRemoteProjectId(project.getIdentifier());
 
     assertFalse(projectInDatabase.isEmpty());
-    assertEquals(project.getIdentifier(), projectInDatabase.get().getProjectId());
+    assertEquals(project.getIdentifier(), projectInDatabase.get().getRemoteProjectId());
   }
 
   @Test
@@ -101,11 +100,11 @@ public class ProjectControllerTest {
     Project project = TestSampleCreator.createAProjectWithNoDependencies(true);
     Project savedProject = projectRepository.save(project);
 
-    String path = String.format(PROJECT_PATH_BY_ID_TO_BE_FORMATTED, project.getProjectId());
+    String path = String.format(PROJECT_PATH_BY_ID_TO_BE_FORMATTED, project.getRemoteProjectId());
     mockMvc
         .perform(get(path))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.projectId").value(savedProject.getProjectId()));
+        .andExpect(jsonPath("$.projectId").value(savedProject.getRemoteProjectId()));
   }
 
   @Test
@@ -117,8 +116,21 @@ public class ProjectControllerTest {
     mockMvc
         .perform(get(path))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.projectId").value(savedApplication.getProjectId()))
+        .andExpect(jsonPath("$.projectId").value(savedApplication.getRemoteProjectId()))
         .andExpect(jsonPath("$.encodedPath").value(savedApplication.getEncodedPath()));
+  }
+
+  @Test
+  public void canDeleteAProject() throws Exception {
+    Project project = TestSampleCreator.createAProjectWithNoDependencies(true);
+    Project savedProject = projectRepository.save(project);
+
+    Thread.sleep(1000);
+    String path = String.format(PROJECT_PATH_BY_ID_TO_BE_FORMATTED, project.getRemoteProjectId());
+
+    mockMvc
+        .perform(delete(String.format(path, savedProject.getRemoteProjectId())))
+        .andExpect(status().isNoContent());
   }
 
 
@@ -128,48 +140,6 @@ public class ProjectControllerTest {
 
 
 
-
-
-
-
-
-
-  @Test
-  public void canDeleteAnApplication() throws Exception {
-    Application application = TestSampleCreator.createApplication();
-    Application savedApplication = applicationRepository.save(application);
-
-    Thread.sleep(1000);
-
-    mockMvc
-        .perform(delete(String.format(APPLICATION_PATH_BY_ID, savedApplication.getProjectId())))
-        .andExpect(status().isNoContent());
-  }
-
-  @Test
-  public void canDeleteTagOfAnApplicationFromDatabase() throws Exception {
-    String testProjectId = "102943";
-    String testProjectPath = "baris.bakla1/terraform";
-    String tagName = "testTag";
-
-    //Tag newTag = gitlabService.createTag("102943", new TagDto(tagName, "message for testTag", "* release note"));
-
-    Application application = TestSampleCreator.createApplication();
-    application.setProjectId(testProjectId);
-    application.setEncodedPath(testProjectPath);
-    application.getTags().setTagName(tagName);
-    Application savedApplication = applicationRepository.save(application);
-
-    mockMvc
-        .perform(delete(String
-            .format(APPLICATION_PATH_DELETE_TAG_BY_NAME, savedApplication.getProjectId(),
-                savedApplication.getTags().getTagName(), false)))
-        .andExpect(status().isNoContent());
-
-    assertNull(applicationRepository
-        .findApplicationByProjectIdAndTagTagName(savedApplication.getProjectId(),
-            savedApplication.getTags().getTagName()));
-  }
 
   @Test
   public void canDeleteTagOfAnApplicationFromDatabaseAndRemoteRepository() throws Exception {

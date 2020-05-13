@@ -1,5 +1,6 @@
 package com.tagtracker.repository;
 
+import com.google.common.collect.Iterables;
 import com.tagtracker.TestSampleCreator;
 import com.tagtracker.model.entity.Project;
 import com.tagtracker.model.entity.Tag;
@@ -41,12 +42,38 @@ public class TagRepositoryTests {
     Tag savedTag = tagRepository.save(tag);
 
     Project savedProjectWithTag = projectRepository
-        .findProjectByProjectId(savedProject.getProjectId()).get();
+        .findProjectByRemoteProjectId(savedProject.getRemoteProjectId()).get();
 
     assertEquals(0, savedProject.getTags().size());
     assertEquals(1, savedProjectWithTag.getTags().size());
     assertEquals(tag.getId(), savedProjectWithTag.getTags().iterator().next().getId());
     assertEquals(tag.getTagName(), savedProjectWithTag.getTags().iterator().next().getTagName());
+  }
+
+  @Test
+  // @Transactional
+  public void canDeleteTagOfAProject() throws Exception {
+    Project project = TestSampleCreator.createAProjectWithNoDependencies(true);
+    projectRepository.save(project);
+
+    String secondTagName = "secondTag";
+    Tag secondTag = TestSampleCreator.createTag(secondTagName, project);
+    Project savedProject = projectRepository
+        .findProjectByRemoteProjectId(project.getRemoteProjectId()).get();
+    savedProject.addTag(secondTag);
+    Project updatedProject = projectRepository.save(savedProject);
+    assertEquals(2, updatedProject.getTags().size());
+
+    tagRepository.deleteByTagName(secondTag.getTagName());
+
+    assertEquals(1, tagRepository.count());
+
+    tagRepository
+        .deleteByTagNameAndProject_RemoteProjectId(project.getTags().iterator().next().getTagName(),
+            savedProject.getRemoteProjectId());
+    assertEquals(0,
+        projectRepository.findProjectByRemoteProjectId(project.getRemoteProjectId()).get().getTags()
+            .size());
   }
 
 }

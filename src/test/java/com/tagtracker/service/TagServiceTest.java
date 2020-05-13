@@ -1,10 +1,13 @@
 package com.tagtracker.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.tagtracker.controller.DependencyDto;
 import com.tagtracker.model.dto.gitlab.TagDto;
+import com.tagtracker.model.entity.Project;
 import com.tagtracker.model.entity.Tag;
 import com.tagtracker.model.resource.ProjectResource;
 import com.tagtracker.model.resource.TagResource;
@@ -100,7 +103,7 @@ public class TagServiceTest {
             dependentOnMeDto);
 
     Tag getMainTagFromRepo = tagRepository
-        .findTagByTagNameAndProjectProjectId(savedMainTag.getTagName(),
+        .findTagByTagNameAndProject_RemoteProjectId(savedMainTag.getTagName(),
             savedMainTag.getProjectId());
 
     assertTrue(1 == getMainTagFromRepo.getDependentOnMe().size());
@@ -126,5 +129,39 @@ public class TagServiceTest {
             .equals(createdTag.getMessage())));
 
     tagService.deleteTag(project.getProjectId(), tagDto.getTagName(), true);
+  }
+
+  @Test
+  public void canDeleteARemoteTagAndItsTrackInTheDatabase() throws Exception {
+    String tenant1ProjectId = "116955";
+    ProjectResource project = projectService
+        .saveRemoteProjectRepositoryInformation(tenant1ProjectId); // has only one tag
+
+    TagDto tagDto = new TagDto("testTag", "testTagMessage", "testTagReleaseMessage");
+    TagResource createdTag = tagService.createTag(project.getProjectId(), tagDto);
+
+    Tag tagInDatabase = tagRepository
+        .findTagByTagNameAndProjectProjectName(tagDto.getTagName(), project.getProjectName());
+    assertEquals(tagDto.getTagName(), tagInDatabase.getTagName());
+    assertEquals(tagDto.getMessage(), tagInDatabase.getMessage());
+
+    Set<Tag> remoteTags = projectService.getTagsOfRemoteRepository(project.getProjectId());
+    assertTrue(remoteTags.stream().anyMatch(
+        t -> t.getTagName().equals(createdTag.getTagName()) && t.getMessage()
+            .equals(createdTag.getMessage())));
+
+    tagService.deleteTag(project.getProjectId(), tagDto.getTagName(), true);
+
+    Tag deletedTag = tagRepository
+        .findTagByTagNameAndProject_RemoteProjectId(tagDto.getTagName(), project.getProjectId());
+    assertNull(deletedTag);
+
+    Project savedProjectAfterTagDeletion = projectService.getProject(project.getProjectId());
+    assertEquals(0, savedProjectAfterTagDeletion.getTags().size());
+
+    assertFalse(remoteTags.stream().anyMatch(
+        t -> t.getTagName().equals(createdTag.getTagName()) && t.getMessage()
+            .equals(createdTag.getMessage())));
+
   }
 }

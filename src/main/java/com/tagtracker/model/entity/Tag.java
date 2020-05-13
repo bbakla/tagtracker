@@ -15,6 +15,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyColumn;
 import javax.persistence.MapKeyEnumerated;
@@ -45,10 +46,8 @@ public class Tag implements Serializable {
   @CreatedDate
   private Date createdDate;
 
-  /*@OneToOne
-  @MapsId
-  @JoinColumn(name = "project_id", referencedColumnName = "project_id")
-  @JsonBackReference*/
+
+  @JoinColumn(name = "remote_project_id", referencedColumnName = "remote_project_id")
   @ManyToOne
   private Project project;
 
@@ -124,7 +123,7 @@ public class Tag implements Serializable {
   }
 
   public String getProjectId() {
-    return this.project.getProjectId();
+    return this.project.getRemoteProjectId();
   }
 
   public Map<Environment, Boolean> getDeployedEnvironments() {

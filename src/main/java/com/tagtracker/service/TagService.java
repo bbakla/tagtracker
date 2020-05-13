@@ -1,12 +1,12 @@
 package com.tagtracker.service;
 
+import com.google.common.collect.Iterables;
 import com.tagtracker.controller.DependencyDto;
 import com.tagtracker.model.dto.gitlab.TagDto;
 import com.tagtracker.model.entity.Environment;
 import com.tagtracker.model.entity.Project;
 import com.tagtracker.model.entity.Tag;
 import com.tagtracker.model.entity.gitlab.GitlabTag;
-import com.tagtracker.model.resource.ProjectResource;
 import com.tagtracker.model.resource.TagResource;
 import com.tagtracker.repository.ProjectRepository;
 import com.tagtracker.repository.TagRepository;
@@ -94,9 +94,9 @@ public class TagService {
     Project project = projectService.getProject(identifier);
 
     Project projectInDatabase = project;
-    GitlabTag tagInRemote = gitlabService.createTag(projectInDatabase.getProjectId(), tagDto);
+    GitlabTag tagInRemote = gitlabService.createTag(projectInDatabase.getRemoteProjectId(), tagDto);
 
-    List<Tag> tags = tagRepository.findAll();
+    Iterable<Tag> tags = tagRepository.findAll();
 
     Tag newTag = new Tag();
     newTag.setTagName(tagInRemote.getName());
@@ -125,8 +125,11 @@ public class TagService {
       gitlabService.deleteTag(identifier, tagName);
     }
 
-    tagRepository.deleteTagByTagNameAndProjectProjectId(tagName, project.getProjectId());
+    tagRepository.deleteByTagNameAndProject_RemoteProjectId(tagName, project.getRemoteProjectId());
     //project.removeTag(tagName);
+
+    var tags = tagRepository.findAll();
+    System.out.println(Iterables.size(tags));
 
   }
 

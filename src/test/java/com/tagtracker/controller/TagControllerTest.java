@@ -1,11 +1,13 @@
 package com.tagtracker.controller;
 
+import static com.tagtracker.controller.TestConstants.APPLICATION_PATH_DELETE_TAG_BY_NAME;
 import static com.tagtracker.controller.TestConstants.PROJECT_DEPLOY_PATH_TEMPLATE;
 import static com.tagtracker.controller.TestConstants.PROJECT_PATH_BY_ID_AND_DEPENDENCY_PATH_TEMPLATE;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -14,11 +16,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.tagtracker.TestSampleCreator;
-import com.tagtracker.model.dto.ProjectDto;
 import com.tagtracker.model.entity.Environment;
 import com.tagtracker.model.entity.Project;
 import com.tagtracker.model.entity.Tag;
-import com.tagtracker.model.resource.TagResource;
 import com.tagtracker.repository.ProjectRepository;
 import com.tagtracker.repository.TagRepository;
 import org.hamcrest.Matchers;
@@ -59,7 +59,7 @@ public class TagControllerTest {
     Project savedDependentProject = projectRepository.save(dependentProject);
 
     Project notDependentProject = TestSampleCreator.createAProjectWithNoDependencies(true);
-    notDependentProject.setProjectId("secondProject_ID");
+    notDependentProject.setRemoteProjectId("secondProject_ID");
     notDependentProject.setProjectName("secondProject");
     notDependentProject.setEncodedPath("path/secondProject");
     Project savedApplication2 = projectRepository.save(notDependentProject);
@@ -67,7 +67,7 @@ public class TagControllerTest {
     String path =
         String.format(
             PROJECT_PATH_BY_ID_AND_DEPENDENCY_PATH_TEMPLATE,
-            dependentProject.getProjectId(),
+            dependentProject.getRemoteProjectId(),
             savedDependentProject.getTags().iterator().next().getTagName());
 
     DependencyDto dependencyDto =
@@ -82,9 +82,10 @@ public class TagControllerTest {
                 .content(convertTDependencyDtoToJson(dependencyDto))
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.projectId").value(savedDependentProject.getProjectId()))
+        .andExpect(jsonPath("$.projectId").value(savedDependentProject.getRemoteProjectId()))
         .andExpect(
-            jsonPath("$.tagsDependentOn[0].projectId").value(notDependentProject.getProjectId()));
+            jsonPath("$.tagsDependentOn[0].projectId")
+                .value(notDependentProject.getRemoteProjectId()));
 
     // THEN
     Tag dependentTag =
@@ -106,14 +107,14 @@ public class TagControllerTest {
     Project savedProject = projectRepository.save(project);
 
     String path = String
-        .format(PROJECT_DEPLOY_PATH_TEMPLATE, project.getProjectId(),
+        .format(PROJECT_DEPLOY_PATH_TEMPLATE, project.getRemoteProjectId(),
             savedProject.getTags().iterator().next().getTagName(),
             Environment.DEV);
 
     mockMvc
         .perform(patch(path))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.projectId").value(savedProject.getProjectId()))
+        .andExpect(jsonPath("$.projectId").value(savedProject.getRemoteProjectId()))
         .andExpect(jsonPath("$.deployedEnvironments", Matchers.aMapWithSize(1)))
         .andExpect(
             jsonPath("$.deployedEnvironments", Matchers.hasEntry(Environment.DEV.name(), true)));
@@ -125,6 +126,33 @@ public class TagControllerTest {
     assertTrue(tag.getDeployedEnvironments().get(Environment.DEV));
     assertNull(tag.getDeployedEnvironments().get(Environment.INT));
     assertNull(tag.getDeployedEnvironments().get(Environment.PROD));
+  }
+
+  @Test
+  public void canDeleteTagOfAProjectFromDatabase() throws Exception {
+    String testProjectId = "102943";
+    String testProjectPath = "baris.bakla1/terraform";
+
+    //Tag newTag = gitlabService.createTag("102943", new TagDto(tagName, "message for testTag", "* release note"));
+
+    Project project = TestSampleCreator.createAProjectWithNoDependencies(true);
+    project.setRemoteProjectId(testProjectId);
+    project.setEncodedPath(testProjectPath);
+    Project savedProject = projectRepository.save(project);
+
+    String tagName = savedProject.getTags().iterator().next().getTagName();
+    String path = String
+        .format(APPLICATION_PATH_DELETE_TAG_BY_NAME, savedProject.getRemoteProjectId(),
+            tagName, false);
+
+    mockMvc
+        .perform(delete(String
+            .format(path)))
+        .andExpect(status().isNoContent());
+
+    assertNull(
+        tagRepository.findTagByTagNameAndProjectProjectName(tagName, project.getProjectName()));
+
   }
 
   private String convertTDependencyDtoToJson(DependencyDto dependencyDto) throws Exception {

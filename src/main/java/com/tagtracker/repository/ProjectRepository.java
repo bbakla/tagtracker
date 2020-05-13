@@ -9,20 +9,20 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProjectRepository extends JpaRepository<Project, Long> {
 
-  Project findProjectByProjectIdAndTagsTagName(String id, String tagName);
+  Project findProjectByRemoteProjectIdAndTagsTagName(String id, String tagName);
 
   Optional<Project> findProjectByProjectName(String projectName);
 
   // Application findApplicationById(String id);
-  Optional<Project> findProjectByProjectId(String projectId);
+  Optional<Project> findProjectByRemoteProjectId(String projectId);
 
   Optional<Project> findProjectByEncodedPath(String path);
 
   @Transactional
-  void deleteByProjectId(String projectId);
+  void deleteByRemoteProjectId(String projectId);
 
   @Transactional
-  void deleteByProjectIdAndTagsTagName(String id, String tagName);
+  void deleteByRemoteProjectIdAndTagsTagName(String id, String tagName);
 
 
 }

@@ -13,9 +13,7 @@ public class TestConstants {
       PROJECT_PATH_BY_ID_TO_BE_FORMATTED + "tags/%s/deploy/%s";
 
   public static final String APPLICATION_PATH_DELETE_TAG_BY_NAME =
-      PROJECT_PATH_BY_ID_TO_BE_FORMATTED
-          +
-          "/tags/%s?deleteRemoteTag=%b";
+      PROJECT_PATH_BY_ID_TO_BE_FORMATTED + "/tags/%s?deleteRemoteTag=%b";
 
   public static final String APPLICATION_CREATE_TAGS = PROJECT_PATH_BY_ID_TO_BE_FORMATTED + "/tags";
 
