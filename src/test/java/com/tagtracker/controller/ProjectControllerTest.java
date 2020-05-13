@@ -133,89 +133,12 @@ public class ProjectControllerTest {
         .andExpect(status().isNoContent());
   }
 
-
-
-/*
-
-
-
-
-
-  @Test
-  public void canDeleteTagOfAnApplicationFromDatabaseAndRemoteRepository() throws Exception {
-    String testProjectId = "102943";
-    String testProjectPath = "baris.bakla1/terraform";
-    String tagName = "testTag";
-
-    RemoteTag newTag = gitlabService
-        .createTag(testProjectId, new TagDto(tagName, "message for testTag", "* release note"));
-
-    Application application = TestSampleCreator.createApplication();
-    application.setProjectId(testProjectId);
-    application.setEncodedPath(testProjectPath);
-    application.getTags().setTagName(tagName);
-    Application savedApplication = applicationRepository.save(application);
-
-    mockMvc
-        .perform(delete(String
-            .format(APPLICATION_PATH_DELETE_TAG_BY_NAME, savedApplication.getProjectId(),
-                savedApplication.getTags().getTagName(), true)))
-        .andExpect(status().isNoContent());
-
-    assertNull(applicationRepository
-        .findApplicationByProjectIdAndTagTagName(savedApplication.getProjectId(),
-            savedApplication.getTags().getTagName()));
-
-    assertThrows(TagNotFoundException.class,
-        () -> gitlabService.getTagOfARepo(testProjectId, tagName));
-  }
-
-
-  @Test
-  public void canTagARepository() throws Exception {
-    Application application = TestSampleCreator.createApplication();
-    application.setProjectId(testProjectId);
-    application.setEncodedPath(testProjectPath);
-    application.getTags().setTagName(tagName);
-    Application savedApplication = applicationRepository.save(application);
-
-    TagDto tagDto = new TagDto("controllerTestTag", "controllerTestMessage", "releaseNotes");
-    try {
-      mockMvc
-          .perform(
-              post(String.format(APPLICATION_CREATE_TAGS, testProjectId))
-                  .content(convertToJson(tagDto))
-                  .contentType(MediaType.APPLICATION_JSON))
-          .andExpect(status().isCreated())
-          .andExpect(jsonPath("$.tagName", is(tagDto.getTagName())))
-          .andExpect(jsonPath("$.message", is(tagDto.getMessage())));
-
-      List<Tag> tags = tagRepository.findAllByApplication_ProjectId(testProjectId);
-
-      assertEquals(2, tags.size());
-      assertTrue(tags.stream().anyMatch(t -> t.getTagName().equals(tagDto.getTagName())));
-
-      Thread.sleep(1000);
-
-    } finally {
-      gitlabService.deleteTag(testProjectId, tagDto.getTagName());
-    }
-  }
- */
-
   private String convertToJson(ProjectDto application) throws Exception {
     ObjectMapper mapper = new ObjectMapper();
     mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
     ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
     return ow.writeValueAsString(application);
   }
-
-/*  private String convertToJson(TagDto tagDto) throws Exception {
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-    ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-    return ow.writeValueAsString(tagDto);
-  }*/
 
 
 }

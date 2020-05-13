@@ -40,7 +40,7 @@ public class GitlabService {
     }
   }
 
-  public GitlabTag[] getTagsOfAProject(String projectId) {
+  public GitlabTag[] getTagsOfARemoteRepository(String projectId) {
     WebClient.RequestBodySpec request =
         (RequestBodySpec) client.get().uri("/projects/" + projectId + "/repository/tags");
 
@@ -50,7 +50,7 @@ public class GitlabService {
   }
 
   // should be refactored
-  public GitlabTag getTagOfAProject(String projectId, String tagName)
+  public GitlabTag getTagOfARemoteRepository(String projectId, String tagName)
       throws TagNotFoundException {
     WebClient.RequestBodySpec request =
         (RequestBodySpec)

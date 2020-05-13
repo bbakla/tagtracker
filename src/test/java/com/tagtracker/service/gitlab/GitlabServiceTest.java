@@ -34,7 +34,7 @@ public class GitlabServiceTest {
 
   @Test
   public void canGetTagsOfAnProject() throws Exception {
-    GitlabTag[] tags = gitlabService.getTagsOfAProject("102943");
+    GitlabTag[] tags = gitlabService.getTagsOfARemoteRepository("102943");
 
     assertNotNull(tags);
     assertNotEquals(0, tags.length);
@@ -43,7 +43,7 @@ public class GitlabServiceTest {
 
   @Test
   public void canGetASpecificTagOfAnProject() throws Exception {
-    GitlabTag tag = gitlabService.getTagOfAProject("102943", "v1.1.0");
+    GitlabTag tag = gitlabService.getTagOfARemoteRepository("102943", "v1.1.0");
 
     assertNotNull(tag);
     assertEquals("v1.1.0", tag.getName());

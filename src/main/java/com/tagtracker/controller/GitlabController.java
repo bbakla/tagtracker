@@ -35,7 +35,7 @@ public class GitlabController {
   @GetMapping(GITLAB_PROJECT_TAGS_BY_IDENTIFIER)
   public ResponseEntity<GitlabTag[]> getProjectTags(@PathVariable String identifier)
       throws ProjectNotFoundException {
-    GitlabTag[] tags = gitlabService.getTagsOfAProject(identifier);
+    GitlabTag[] tags = gitlabService.getTagsOfARemoteRepository(identifier);
 
     return ResponseEntity.ok(tags);
   }
@@ -44,7 +44,7 @@ public class GitlabController {
   public ResponseEntity<GitlabTag> getProjectTagById(
       @PathVariable String identifier, @PathVariable String tagName)
       throws ProjectNotFoundException, TagNotFoundException {
-    GitlabTag tag = gitlabService.getTagOfAProject(identifier, tagName);
+    GitlabTag tag = gitlabService.getTagOfARemoteRepository(identifier, tagName);
 
     return ResponseEntity.ok(tag);
   }

@@ -92,7 +92,7 @@ public class ProjectService {
   }
 
   public Set<Tag> getTagsOfRemoteRepository(String projectId) {
-    GitlabTag[] tags = gitService.getTagsOfAProject(projectId);
+    GitlabTag[] tags = gitService.getTagsOfARemoteRepository(projectId);
 
     if (tags.length == 0) {
       return null;
