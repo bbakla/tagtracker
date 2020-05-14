@@ -53,7 +53,7 @@ export class DependencyModal extends Component {
         return (
             <div>
                 {button}
-                <Modal show={this.state.showModal}>
+                <Modal show={this.state.showModal} onHide={this.close}>
                     <Modal.Header>Dependency</Modal.Header>
                     <Modal.Body>
                         <form>

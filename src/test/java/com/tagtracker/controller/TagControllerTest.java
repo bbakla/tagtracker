@@ -5,8 +5,6 @@ import static com.tagtracker.controller.TestConstants.PROJECT_PATH_BY_ID_AND_DEP
 import static com.tagtracker.controller.TestConstants.PROJECT_PATH_DELETE_TAG_BY_NAME;
 import static com.tagtracker.controller.TestConstants.PROJECT_DEPLOY_PATH_TEMPLATE;
 import static com.tagtracker.controller.TestConstants.PROJECT_PATH_BY_ID_AND_DEPENDENCY_PATH_TEMPLATE;
-import static net.bytebuddy.matcher.ElementMatchers.is;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;

@@ -56,7 +56,7 @@ export class Deployment extends Component {
           </button>
 
           <div>
-            <Modal show={this.state.showDeployStatus}>
+            <Modal show={this.state.showDeployStatus} onHide={this.close}>
               <Modal.Header>Deployment status</Modal.Header>
               <Modal.Body>
 

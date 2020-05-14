@@ -59,7 +59,7 @@ this.props.saveTag({
     return (
         <div>
           {button}
-          <Modal show={this.state.showModal}>
+          <Modal show={this.state.showModal} onHide={this.close}>
             <Modal.Header>{title}</Modal.Header>
             <Modal.Body>
 

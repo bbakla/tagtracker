@@ -1,14 +1,16 @@
 @startuml
 
-class Application {
+class Project {
 - link
-- tag
+- Tag
 }
 
 enum Environment
 
-Application "many" o-- "many" Application : dependentTo
-Application -- Environment : deployedEnvironments
+Project "1" o-- "0..*" Tag : dependentTo
+Tag "1" -- "0..*" Environment : deployedEnvironments
+Tag "1" -- "0..*" Tag : dependentTags
+Tag "1" -- "0..*" Tag : dependentOnMeTags
 
 
 
