@@ -122,7 +122,7 @@ public class Tag implements Serializable {
     this.project = project;
   }
 
-  public String getProjectId() {
+  public String getRemoteProjectId() {
     return this.project.getRemoteProjectId();
   }
 

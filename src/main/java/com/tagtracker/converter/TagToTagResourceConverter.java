@@ -1,8 +1,6 @@
 package com.tagtracker.converter;
 
-import com.tagtracker.model.entity.Project;
 import com.tagtracker.model.entity.Tag;
-import com.tagtracker.model.resource.ProjectResource;
 import com.tagtracker.model.resource.TagResource;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -13,7 +11,7 @@ public class TagToTagResourceConverter implements Converter<Tag, TagResource> {
   @Override
   public TagResource convert(Tag source) {
     var tagResource =
-        new TagResource(source.getProjectId(), source.getTagName(), source.getMessage(),
+        new TagResource(source.getRemoteProjectId(), source.getTagName(), source.getMessage(),
             source.getReleaseMessage());
 
     tagResource.setDeployedEnvironments(source.getDeployedEnvironments());
@@ -25,7 +23,7 @@ public class TagToTagResourceConverter implements Converter<Tag, TagResource> {
 
   private Set<TagResource> convertDependencies(Set<Tag> dependencies) {
     return dependencies.stream()
-        .map(d -> new TagResource(d.getProjectId(), d.getTagName(), d.getMessage(),
+        .map(d -> new TagResource(d.getRemoteProjectId(), d.getTagName(), d.getMessage(),
             d.getReleaseMessage()))
         .collect(Collectors.toSet());
   }

@@ -10,8 +10,7 @@ public class TestConstants {
       PROJECT_PATH_BY_ID_TO_BE_FORMATTED + "/tags/%s/dependent-on";
   public static final String PROJECT_PATH_BY_ID_AND_DEPENDENT_TO_ME_TO_BE_FORMATTED =
       PROJECT_PATH_BY_ID_TO_BE_FORMATTED +
-          "/tags/{tagName}/dependent-on-me/{dependentToMe}";
-
+          "/tags/%s/dependent-on-me";
 
   public static final String PROJECT_DEPLOY_PATH_TEMPLATE =
       PROJECT_PATH_BY_ID_TO_BE_FORMATTED + "tags/%s/deploy/%s";

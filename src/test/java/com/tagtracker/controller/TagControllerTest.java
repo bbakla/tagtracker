@@ -1,6 +1,7 @@
 package com.tagtracker.controller;
 
 import static com.tagtracker.controller.TestConstants.PROJECT_CREATE_TAGS;
+import static com.tagtracker.controller.TestConstants.PROJECT_PATH_BY_ID_AND_DEPENDENT_TO_ME_TO_BE_FORMATTED;
 import static com.tagtracker.controller.TestConstants.PROJECT_PATH_DELETE_TAG_BY_NAME;
 import static com.tagtracker.controller.TestConstants.PROJECT_DEPLOY_PATH_TEMPLATE;
 import static com.tagtracker.controller.TestConstants.PROJECT_PATH_BY_ID_AND_DEPENDENCY_PATH_TEMPLATE;
@@ -65,7 +66,6 @@ public class TagControllerTest {
 
   @Test
   public void canAddDependencyToTheTagOfAProject() throws Exception {
-
     // GIVEN
     Project dependentProject = TestSampleCreator.createAProjectWithNoDependencies(true);
     Project savedDependentProject = projectRepository.save(dependentProject);
@@ -114,8 +114,57 @@ public class TagControllerTest {
   }
 
   @Test
-  public void canATagKeepsTheTrackOfTheTagsThatAreDependentOnIt() {
+  public void canATagKeepsTheTrackOfTheTagsThatAreDependentOnIt() throws Exception {
+    // GIVEN
+    Project dependentProject = TestSampleCreator.createAProjectWithNoDependencies(true);
+    Project savedDependentProject = projectRepository.save(dependentProject);
 
+    Project notDependentProject = TestSampleCreator.createAProjectWithNoDependencies(false);
+    notDependentProject.setRemoteProjectId("secondProject_ID");
+    notDependentProject.setProjectName("secondProject");
+    notDependentProject.setEncodedPath("path/secondProject");
+    Tag notDependentTag = TestSampleCreator
+        .createTag("OtherIneIsDependentOnMe", notDependentProject);
+    notDependentProject.addTag(notDependentTag);
+
+    Project savedNotDependentProject = projectRepository.save(notDependentProject);
+
+    String path =
+        String.format(
+            PROJECT_PATH_BY_ID_AND_DEPENDENT_TO_ME_TO_BE_FORMATTED,
+            notDependentProject.getRemoteProjectId(),
+            savedNotDependentProject.getTags().iterator().next().getTagName());
+
+    DependencyDto dependencyDto =
+        new DependencyDto(
+            dependentProject.getProjectName(),
+            dependentProject.getTags().iterator().next().getTagName());
+
+    // WHEN
+    mockMvc
+        .perform(
+            patch(path)
+                .content(convertTDependencyDtoToJson(dependencyDto))
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.projectId").value(notDependentProject.getRemoteProjectId()))
+        .andExpect(
+            jsonPath("$.tagsDependentOnMe[0].projectId")
+                .value(dependentProject.getRemoteProjectId()));
+
+    // THEN
+    Tag dependentTag =
+        tagRepository.findTagByTagNameAndProjectProjectName(
+            savedDependentProject.getTags().iterator().next().getTagName(),
+            savedDependentProject.getProjectName());
+    assertNotNull(dependentTag.getTagName());
+    assertEquals(1, dependentTag.getDependentOn().size());
+
+    Tag notDependentTagInDatabase =
+        tagRepository.findTagByTagNameAndProjectProjectName(
+            notDependentTag.getTagName(),
+            notDependentTag.getProject().getProjectName());
+    assertEquals(1, notDependentTagInDatabase.getDependentOnMe().size());
   }
 
   @Test
