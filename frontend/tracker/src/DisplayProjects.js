@@ -1,8 +1,10 @@
-import React, {Component} from "react";
+import React, {useContext} from "react";
 import {Project} from "./Project";
+import {ProjectContext} from "./ProjectDashboard";
 
+export default function DisplayProjects({removeProjectFromTheList}) {
 
-export class DisplayProjects extends Component {
+    const {projects} = useContext(ProjectContext);
 
 /*    sortTag = (tags) => {
 
@@ -11,16 +13,16 @@ export class DisplayProjects extends Component {
         return sorted;
     }*/
 
-    removeProject = (projectName) => {
-        this.props.removeProjectFromTheList(projectName)
+    const removeProject = (projectName) => {
+        removeProjectFromTheList(projectName)
     }
 
-  render = () =>
+  return(
 
       <div id="project-list" className="row col-md-12">
 
           {
-              this.props.projects.map(project => (
+              projects.map(project => (
                   <Project key={project.projectName}
                            name = {project.projectName}
                            projectId = {project.projectId}
@@ -29,11 +31,11 @@ export class DisplayProjects extends Component {
                            dependentToMe = {project.dependentToMe}
                            dependentOn = {project.dependentOn}
                            deployments = {project.deployments}
-                           removeProjectFromList = {this.removeProject}
+                           removeProjectFromList = {removeProject}
                   />
               ))
           }
-      </div>
+      </div>)
 
 }
 

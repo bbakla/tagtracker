@@ -11,14 +11,14 @@ import ProjectDashboard from "./ProjectDashboard";
 import Navbar from "./navigation/Navbar";
 import {RelatedProjects} from "./dependencies/RelatedProjects";
 
-export default class App extends Component {
-   /* state = {
-        groups: [],
-        applications: [{
-            projectId: "", encodedPath: "", tag: {},
-            applicationName: "", dependentToMe: [], dependentTo: []
-        }]
-    };*/
+export default function App() {
+    /* state = {
+         groups: [],
+         applications: [{
+             projectId: "", encodedPath: "", tag: {},
+             applicationName: "", dependentToMe: [], dependentTo: []
+         }]
+     };*/
 
     /*    async componentDidMount() {
             const response = await fetch('/api/example');
@@ -38,25 +38,25 @@ export default class App extends Component {
         }*/
 
 
-
-    render = () =>
+    return (
 
         <div>
-        <div>
-               <Navbar/>
-              </div>
-                <Switch>
-                    {/*<Route exact path="/projects" render={ (props) => <ProjectDashboard {...props} projects = {this.state.projects}/>}/>*/}
-                    <Route exact path="/projects" component={ProjectDashboard}/>
-                    <Route exact path="/projects/:projectId/tags" component={DisplayTags}/>
-                    <Route exact path="/projects/:projectId/dependentOn" component={RelatedProjects}/>
-                    <Route exact path="/projects/:projectId/dependentToMe" component={RelatedProjects}/>
-                    }
+            <div>
+                <Navbar/>
+            </div>
+            <Switch>
+                {/*<Route exact path="/projects" render={ (props) => <ProjectDashboard {...props} projects = {this.state.projects}/>}/>*/}
+                <Route exact path="/projects" component={ProjectDashboard}/>
+                <Route exact path="/projects/:projectId/tags" component={DisplayTags}/>
+                <Route exact path="/projects/:projectId/dependentOn" component={RelatedProjects}/>
+                <Route exact path="/projects/:projectId/dependentToMe" component={RelatedProjects}/>
+                }
 
-                </Switch>
-    </div>
+            </Switch>
+        </div>
 //            </Router>
 
 
+    )
 }
 

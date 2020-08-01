@@ -1,12 +1,9 @@
-import React, {Component} from "react";
+import React, {Component, createContext, useState} from "react";
 import {AddProject} from "./AddProject";
-import {DisplayProjects} from "./DisplayProjects";
+import DisplayProjects from "./DisplayProjects";
 
-export default class ProjectDashboard extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
+export default function  ProjectDashboard() {
+   const initialState = {
             projects: [
                 {
                     projectName: "TicketService",
@@ -182,57 +179,62 @@ export default class ProjectDashboard extends Component {
                 }
             ]
         }
-    }
 
-    createProject = (projectData) => {
+
+        const [projects, setProjects] = useState(initialState.projects);
+
+    const createProject = (projectData) => {
 
         const project = {
             projectName: projectData.projectName,
             projectId: projectData.projectId,
             description: "",
             tags: [
-         /*       {
-                tagName: "",
-                message: "",
-                releaseNotes: "",
-                createdDate: "",
-                dependentToMe: [],
-                dependentOn: [],
-                deployments:
-                    {
-                        dev: "",
-                        int: "",
-                        prod: ""
-                    }
-            }*/
+                /*       {
+                       tagName: "",
+                       message: "",
+                       releaseNotes: "",
+                       createdDate: "",
+                       dependentToMe: [],
+                       dependentOn: [],
+                       deployments:
+                           {
+                               dev: "",
+                               int: "",
+                               prod: ""
+                           }
+                   }*/
             ]
         };
 
-        this.setState({projects: this.state.projects.concat(project)});
+       setProjects(projectList => [...projectList, project])
     }
 
-    deleteProject = (projectName) => {
-        this.setState({projects: this.state.projects.filter(p => p.projectName !== projectName)})
+    const deleteProject = (projectName) => {
+        setProjects(projects.filter(project => project.projectName !== projectName))
     }
 
-    render() {
+    return(
+        <div className="container">
 
-        return(
-            <div className="container">
+            <div className="row mt-3">
+                <AddProject addProject={createProject}/>
+            </div>
+            <div className="row mt-5">
+                <ProjectContext.Provider
+                    value={{projects}}>
 
-                <div className="row mt-3">
-                    <AddProject addProject={this.createProject}/>
-                </div>
-                <div className="row mt-5">
                     <DisplayProjects
-                        projects={this.state.projects}
-                        removeProjectFromTheList={this.deleteProject}
+                        removeProjectFromTheList={deleteProject}
                     />
-                </div>
+
+                </ProjectContext.Provider>
 
             </div>
-        );
-    }
 
-
+        </div>
+    );
 }
+
+export const ProjectContext = createContext({});
+

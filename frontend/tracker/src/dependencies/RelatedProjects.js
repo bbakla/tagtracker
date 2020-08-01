@@ -40,7 +40,7 @@ export class RelatedProjects extends Component {
 
         let newDependencies = this.state.dependencies.map(d => {
             if (d.projectName === updated.projectName) {
-                console.log("updating")
+
                 return Object.assign({}, d,
                     {
                         projectName: updated.projectName,
@@ -110,5 +110,4 @@ export class RelatedProjects extends Component {
             </div>
         );
     }
-
 }
