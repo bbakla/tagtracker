@@ -35,6 +35,7 @@ export class Deployment extends Component {
     const inProgress = "pipelineRunning spinner-border  text-primary";
 
 
+    debugger;
     const status = Object.keys(this.props.deploymentStatus).map((key, value) =>
 
         <div key={key} className="row">

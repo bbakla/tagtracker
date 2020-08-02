@@ -5,10 +5,6 @@
 
 
 # Getting Started
-
-### Reference Documentation
-For further reference, please consider the following sections:
-* [Spring Boot DevTools](https://docs.spring.io/spring-boot/docs/2.2.1.RELEASE/reference/htmlsingle/#using-boot-devtools)
-
-### Additional Links
-* [Gitlab documentation](https://docs.gitlab.com/ce/api/tags.html#create-a-new-tag)
+## Swagger endpoints
+* http://localhost:8080/v2/api-docs
+* http://localhost:8080/swagger-ui.html

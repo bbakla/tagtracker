@@ -82,8 +82,8 @@ export class Project extends Component {
                                  tags={tagList}
                             />
 
-                            <Deployment deploymentStatus={deployments}
-                                        projectId={this.props.projectId}/>
+                          {/*  <Deployment deploymentStatus={deployments}
+                                        projectId={this.props.projectId}/>*/}
                           </div>
                           <div className="col-xs-6 col-md-6">
                             <ShowDependency relationshipType="dependentToMe"

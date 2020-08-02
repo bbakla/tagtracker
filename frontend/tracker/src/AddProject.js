@@ -1,14 +1,9 @@
-import React, {Component} from "react";
+import React, {Component, useState} from "react";
+import {basePathForProjects} from "./paths";
+import axios from 'axios';
 
-export class AddProject extends Component {
-
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            projectIdentifier: ""
-        }
-    }
+export default function AddProject({addProject}){
+    const [projectIdentifier, setProjectIdentifier] = useState("");
 
   /*constructor(props) {
       super(props);
@@ -47,24 +42,26 @@ export class AddProject extends Component {
       </div>
    */
 
-    saveIdentifier = (event) => {
-        this.setState({[event.target.name] : event.target.value});
+    const  saveIdentifier = (event) => {
+        setProjectIdentifier(event.target.value);
     }
 
-    addProject = () => {
-        this.props.addProject({
-            projectName: this.state.projectIdentifier,
-            projectId: Math.floor(Math.random() * 10)
-        })
+    const handleAddProject = () => {
+
+        axios.post(basePathForProjects, {
+               "identifier": projectIdentifier
+           }).then(response => addProject(response.data))
+
+        setProjectIdentifier("");
     }
 
-  render = () =>
+  return (
       <div className="input-group mb-2 ">
-        <input type="text" name="projectIdentifier" className="form-control" defaultValue={this.state.projectIdentifier} onChange={this.saveIdentifier}/>
-        <button className="btn-md btn-outline-secondary" type="submit" onClick={this.addProject}>Add
+        <input type="text" name="projectIdentifier" className="form-control" defaultValue={projectIdentifier} onChange={saveIdentifier}/>
+        <button className="btn-md btn-outline-secondary" type="submit" onClick={handleAddProject}>Add
           repository
         </button>
 
-      </div>
+      </div>);
 
 }

@@ -18,7 +18,6 @@ export default function DisplayProjects({removeProjectFromTheList}) {
     }
 
   return(
-
       <div id="project-list" className="row col-md-12">
 
           {

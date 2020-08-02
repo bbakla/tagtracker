@@ -9,6 +9,7 @@ import com.tagtracker.repository.ProjectRepository;
 import com.tagtracker.repository.TagRepository;
 import com.tagtracker.service.gitlab.GitlabService;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -46,11 +47,15 @@ public class ProjectService {
     projectEntity.setRemoteProjectId(project.getId());
     projectEntity.setProjectName(project.getName());
     projectEntity.setEncodedPath(project.getPath_with_namespace());
+    projectEntity.setDescription(project.getDescription());
 
     Set<Tag> projectTags = getTagsOfRemoteRepository(projectEntity.getRemoteProjectId());
+    if (projectTags != null) {
+      projectTags.forEach(t -> t.setProject(projectEntity));
+      projectEntity.setTags(projectTags);
+    }
 
-    projectTags.forEach(t -> t.setProject(projectEntity));
-    projectEntity.setTags(projectTags);
+
 
     Project savedProject = projectRepository.save(projectEntity);
 
@@ -114,6 +119,16 @@ public class ProjectService {
     throwProjectNotFoundIfProjectNotAvailable(project, projectIdentifier);
 
     return project.get();
+  }
+
+  public List<ProjectResource> getProjects() {
+    List<Project> projects = projectRepository.findAll();
+
+    List <ProjectResource> projectsResources = projects.stream().
+        map(project -> conversionService.convert(project, ProjectResource.class)).
+        collect(Collectors.toList());
+
+    return projectsResources;
   }
 
   public void throwProjectNotFoundIfProjectNotAvailable(Optional<Project> project,

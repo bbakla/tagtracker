@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 
 import './App.css';
 
@@ -12,31 +12,6 @@ import Navbar from "./navigation/Navbar";
 import {RelatedProjects} from "./dependencies/RelatedProjects";
 
 export default function App() {
-    /* state = {
-         groups: [],
-         applications: [{
-             projectId: "", encodedPath: "", tag: {},
-             applicationName: "", dependentToMe: [], dependentTo: []
-         }]
-     };*/
-
-    /*    async componentDidMount() {
-            const response = await fetch('/api/example');
-            const body = await response.json();
-            this.setState({groups: body});
-        }
-
-        listExamples = () =>
-            this.state.groups.map(example =>
-                <div key={example.id}>
-                    {example.name}
-                </div>
-            );
-
-        addApplication = (application) => {
-          console.log("this part will display the application")
-        }*/
-
 
     return (
 

@@ -13,6 +13,7 @@ import com.tagtracker.service.ProjectService;
 import com.tagtracker.service.ProjectNotFoundException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -39,6 +40,13 @@ public class ProjectRepositoryController {
     ProjectResource project = projectService.getByProjectIdOrPath(identifier);
 
     return ResponseEntity.ok().body(project);
+  }
+
+  @GetMapping
+  public ResponseEntity<List<ProjectResource>> getProjects() {
+    List<ProjectResource> projects = projectService.getProjects();
+
+    return ResponseEntity.ok().body(projects);
   }
 
   @PostMapping()
