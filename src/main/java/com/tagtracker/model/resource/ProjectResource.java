@@ -8,12 +8,11 @@ import java.util.Set;
 public class ProjectResource extends Auditable<String> implements Serializable {
 
   private String projectId;
-
+  private String projectName;
   private String encodedPath;
-
+  private String description;
   private Set<TagResource> tags = new HashSet<>();
 
-  private String projectName;
 
   public ProjectResource() {
   }
@@ -37,6 +36,14 @@ public class ProjectResource extends Auditable<String> implements Serializable {
 
   public void setProjectId(String id) {
     this.projectId = id;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
   }
 
   public String getEncodedPath() {

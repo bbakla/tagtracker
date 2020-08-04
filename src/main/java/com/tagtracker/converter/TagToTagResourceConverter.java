@@ -1,7 +1,9 @@
 package com.tagtracker.converter;
 
+import com.tagtracker.model.entity.Environment;
 import com.tagtracker.model.entity.Tag;
 import com.tagtracker.model.resource.TagResource;
+import java.util.EnumMap;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.core.convert.converter.Converter;
@@ -14,7 +16,7 @@ public class TagToTagResourceConverter implements Converter<Tag, TagResource> {
         new TagResource(source.getRemoteProjectId(), source.getTagName(), source.getMessage(),
             source.getReleaseMessage());
 
-    tagResource.setDeployedEnvironments(source.getDeployedEnvironments());
+    tagResource.setDeployedEnvironments(source.getDeployedEnvironments() == null ? new EnumMap<>(Environment.class) : source.getDeployedEnvironments() );
     tagResource.setTagsDependentOn(convertDependencies(source.getDependentOn()));
     tagResource.setTagsDependentOnMe(convertDependencies(source.getDependentOnMe()));
 

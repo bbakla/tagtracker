@@ -22,9 +22,12 @@ public class Project extends Auditable<String> implements Serializable {
 
   @NotNull
   @Column(name = "project_name")
-  private java.lang.String projectName;
+  private String projectName;
 
-  @Column(name = "encoded_path", nullable = true)
+  @Column
+  private String description;
+
+  @Column(name = "encoded_path")
   private String encodedPath;
 
   @OneToMany(mappedBy = "project",
@@ -71,6 +74,14 @@ public class Project extends Auditable<String> implements Serializable {
 
   public void setProjectName(java.lang.String serviceName) {
     this.projectName = serviceName;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
   }
 
   public String getRemoteProjectId() {

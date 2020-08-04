@@ -1,5 +1,5 @@
 import React, {useContext} from "react";
-import {Project} from "./Project";
+import Project from "./Project";
 import {ProjectContext} from "./ProjectDashboard";
 
 export default function DisplayProjects({removeProjectFromTheList}) {
@@ -22,7 +22,7 @@ export default function DisplayProjects({removeProjectFromTheList}) {
 
           {
               projects.map(project => (
-                  <Project key={project.projectName}
+                 /* <Project key={project.projectName}
                            name = {project.projectName}
                            projectId = {project.projectId}
                            description = {project.description}
@@ -31,7 +31,11 @@ export default function DisplayProjects({removeProjectFromTheList}) {
                            dependentOn = {project.dependentOn}
                            deployments = {project.deployments}
                            removeProjectFromList = {removeProject}
-                  />
+                  />*/
+
+                  <Project key={project.projectName}
+                           project = {project}
+                           removeProject = {removeProject}/>
               ))
           }
       </div>)

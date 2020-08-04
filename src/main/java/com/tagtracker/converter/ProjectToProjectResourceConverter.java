@@ -23,6 +23,7 @@ public class ProjectToProjectResourceConverter implements
     ProjectResource projectResource = new ProjectResource();
 
     projectResource.setProjectName(source.getProjectName());
+    projectResource.setDescription(source.getDescription() == null ? "" : source.getDescription());
     //applicationResource.setDeployedEnvironments(source.getDeployedEnvironments());
     projectResource.setEncodedPath(source.getEncodedPath());
     projectResource.setProjectId(source.getRemoteProjectId());

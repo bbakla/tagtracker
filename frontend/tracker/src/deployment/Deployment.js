@@ -1,80 +1,77 @@
-import React, {Component} from "react";
+import React, {useState} from "react";
 
 import {Modal} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 
-export class Deployment extends Component {
-  constructor(props) {
-    super(props);
+export default function Deployment({deploymentStatus, projectId}){
 
-    this.state = {
-      showDeployStatus: false,
-    }
+    const[showDeployStatus, setShowDeployStatus] = useState(false);
+
+
+  const close = () => {
+    setShowDeployStatus(false);
   }
 
-  close = () => {
-    this.setState({showDeployStatus: false});
-  }
+  const showDeploymentStatus = () => {
 
-  showDeploymentStatus = () => {
-
-    if (this.state.showDeployStatus) {
-      this.setState({showDeployStatus: false});
+    if (showDeployStatus) {
+      setShowDeployStatus(false);
 
     } else {
-      this.setState({showDeployStatus: true});
+      setShowDeployStatus(true);
     }
   }
 
-  deploy = (event) => {
+  const deploy = (event) => {
     console.log(event.target.value);
 
   }
 
-  render() {
     const inProgress = "pipelineRunning spinner-border  text-primary";
 
+    const status = () => {
+        if (!Object.hasOwnProperty(deploymentStatus)) {
+            Object.keys(deploymentStatus).map((key, value) =>
 
-    debugger;
-    const status = Object.keys(this.props.deploymentStatus).map((key, value) =>
+                <div key={key} className="row">
+                    <i className={deploymentStatus[key] === "true" ? "far fa-check-circle pipelinePass text-success pr-2" : "far fa-times-circle pipelineFails text-danger pr-2"}/>
+                    <label className="switch">
+                        <input type="checkbox" checked={deploymentStatus[key] === "true"} onChange={deploy}/>
+                        <span className="slider round"></span>
+                    </label>
+                    <label className="pl-2">{key}</label>
+                </div>
+            );
+        }
+    }
 
-        <div key={key} className="row">
-            <i className={this.props.deploymentStatus[key] === "true" ? "far fa-check-circle pipelinePass text-success pr-2" : "far fa-times-circle pipelineFails text-danger pr-2"}/>
-            <label className="switch">
-                <input type="checkbox" checked={this.props.deploymentStatus[key] === "true"} onChange={this.deploy}/>
-                <span className="slider round"></span>
-            </label>
-            <label className="pl-2">{key}</label>
-        </div>
-    );
 
     return (
         <div>
           <button className="btn btn-outline-warning btn-lg btn-block mb-2"
-                  onClick={this.showDeploymentStatus}>
+                  onClick={showDeploymentStatus}>
             <span className="fa fa-plug p-2"></span>
             <br/>Deployments
           </button>
 
           <div>
-            <Modal show={this.state.showDeployStatus} onHide={this.close}>
+            <Modal show={showDeployStatus} onHide={close}>
               <Modal.Header>Deployment status</Modal.Header>
               <Modal.Body>
 
                 <div className="custom-control custom-switch">
-                  {status}
+                    {Object.hasOwnProperty(deploymentStatus)} && {status}
 
                 </div>
               </Modal.Body>
               <Modal.Footer>
-                <Button onClick={this.close}>Close</Button>
+                <Button onClick={close}>Close</Button>
               </Modal.Footer>
 
             </Modal>
         </div>
         </div>
     );
-  }
 
 }
 
