@@ -1,28 +1,34 @@
-import React, {Component} from "react";
+import React, {Component, useContext} from "react";
 import {Link} from "react-router-dom";
+import {ProjectContext} from "../ProjectDashboard";
+import {DEPENDENT_ON} from "./dependency";
 
-export class ShowDependency extends Component {
+export default function ShowDependency({relationshipType, projectName, projectId, dependencies}) {
+    const {projects} = useContext(ProjectContext);
 
-    render() {
-        const buttonName = this.props.relationshipType === "dependentOn" ? "DependentOn" : "DependentToMe";
-        const dependencyType = this.props.relationshipType === "dependentOn" ? "Depends on " + this.props.projectName : "Projects dependent on " + this.props.projectName
-        const pathName = (projectId) => `/projects/${projectId}/${this.props.relationshipType}`;
+    const buttonName = relationshipType === DEPENDENT_ON ? "DependentOn" : "DependentToMe";
+    const dependencyType = relationshipType === DEPENDENT_ON ? "Depends on " + projectName : "Projects dependent on " + projectName
+    const pathName = (projectId) => `/projects/${projectId}/${relationshipType}`;
 
-        return (
-            <div>
-                <Link className="btn btn-outline-info btn-lg btn-block mb-2" to={{
-                    pathname: pathName(this.props.projectId),
-                    state: {
-                        dependencies: this.props.dependencies,
-                        dependencyType: dependencyType
-                    }
-                }}>
+    return (
+        <div>
 
-                    <span className="fa fa-caret-right p-2"></span>
-                    <br/>{buttonName}
-                </Link>
-            </div>);
-    }
+            <Link className="btn btn-outline-info btn-lg btn-block mb-2" to={{
+                pathname: pathName(projectId),
+                state: {
+                    dependencies: dependencies,
+                    dependencyTitle: dependencyType,
+                    projects: projects,
+                    projectName: projectName,
+                    relationshipType: relationshipType
+
+                }
+            }}>
+
+                <span className="fa fa-caret-right p-2"></span>
+                <br/>{buttonName}
+            </Link>
+        </div>);
 
 
 }

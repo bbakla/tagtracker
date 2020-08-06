@@ -22,17 +22,6 @@ export default function DisplayProjects({removeProjectFromTheList}) {
 
           {
               projects.map(project => (
-                 /* <Project key={project.projectName}
-                           name = {project.projectName}
-                           projectId = {project.projectId}
-                           description = {project.description}
-                           tags = {project.tags.sort((tag1, tag2) => new Date(tag2.createdDate) - new Date(tag1.createdDate))}
-                           dependentToMe = {project.dependentToMe}
-                           dependentOn = {project.dependentOn}
-                           deployments = {project.deployments}
-                           removeProjectFromList = {removeProject}
-                  />*/
-
                   <Project key={project.projectName}
                            project = {project}
                            removeProject = {removeProject}/>

@@ -1,10 +1,13 @@
 import React, {useState} from "react";
 import Tag from "./tags/Tag";
 import Deployment from "./deployment/Deployment";
-import {ShowDependency} from "./dependencies/ShowDependency";
+import ShowDependency from "./dependencies/ShowDependency";
+import {DEPENDENT_ON, DEPENDENT_ON_ME} from "./dependencies/dependency";
 
 export default function Project({project, removeProject}) {
     const [selectedTagIndex, setSelectedTagIndex] = useState(0);
+
+
 
     const handleSelect = (event) => {
         let selectedTagName = event.target.value
@@ -21,18 +24,18 @@ export default function Project({project, removeProject}) {
         }
     }
 
-
     const description = project.description.length === 0 ? <br/>
         : project.description
     const tagName = project.tags.length === 0 ? ""
         : project.tags[selectedTagIndex].tagName
     const tagList = project.tags.length === 0 ? [] : project.tags
+
     const deployments = project.tags.length === 0 ? []
         : project.tags[selectedTagIndex].deployments
     const dependentToMe = project.tags.length === 0 ? []
-        : project.tags[selectedTagIndex].dependentToMe
+        : project.tags[selectedTagIndex].tagsDependentOnMe
     const dependentOn = project.tags.length === 0 ? []
-        : project.tags[selectedTagIndex].dependentOn
+        : project.tags[selectedTagIndex].tagsDependentOn
 
     return (
         <div key={project.projectName} className="col-md-6">
@@ -75,14 +78,14 @@ export default function Project({project, removeProject}) {
                                         projectId={project.projectId}/>
                         </div>
                         <div className="col-xs-6 col-md-6">
-                            <ShowDependency relationshipType="dependentToMe"
+                            <ShowDependency relationshipType={DEPENDENT_ON_ME}
                                             dependencies={dependentToMe}
-                                            projectName={project.name}
+                                            projectName={project.projectName}
                                             projectId={project.projectId}
                             />
-                            <ShowDependency relationshipType="dependentOn"
+                            <ShowDependency relationshipType= {DEPENDENT_ON}
                                             dependencies={dependentOn}
-                                            projectName={project.name}
+                                            projectName={project.projectName}
                                             projectId={project.projectId}
                             />
                         </div>

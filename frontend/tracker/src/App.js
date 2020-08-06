@@ -9,7 +9,7 @@ import {Route, Switch} from "react-router-dom";
 import DisplayTags from "./tags/DisplayTags";
 import ProjectDashboard from "./ProjectDashboard";
 import Navbar from "./navigation/Navbar";
-import {RelatedProjects} from "./dependencies/RelatedProjects";
+import RelatedProjects from "./dependencies/RelatedProjects";
 
 export default function App() {
 

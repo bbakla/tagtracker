@@ -2,7 +2,7 @@ import React, {createContext, useEffect, useState} from "react";
 import AddProject from "./AddProject";
 import DisplayProjects from "./DisplayProjects";
 import axios from 'axios';
-import {basePathForProjects, tagBasePath} from "./paths";
+import {basePathForProjects} from "./paths";
 
 export default function ProjectDashboard() {
  /*   const initialState = {
@@ -203,8 +203,11 @@ export default function ProjectDashboard() {
         setProjects(projects.filter(project => project.projectName !== projectName))
     }
 
+    const test = (a) => {
+        console.log(a)
+    }
 
-    function createTag (projectId, newTag) {
+   /* function createTag (projectId, newTag) {
         const createNewTag = async () => {
           let path = tagBasePath.replace("{identifier}",
               projectId)
@@ -213,20 +216,20 @@ export default function ProjectDashboard() {
 
             console.log(body)
 
-          /*  axios.post(path,
+          /!*  axios.post(path,
                 body,
                 {
                     headers: {
                         'Content-Type': 'application/json',
                     }
                 }
-            ).then(response => console.log(response.data));*/
+            ).then(response => console.log(response.data));*!/
 
 
         };
 
         createNewTag();
-    }
+    }*/
 
     useEffect(()=> {
 
@@ -243,31 +246,28 @@ export default function ProjectDashboard() {
 
         fetchData();
 
-
-
-
     }, [])
 
     return (
         <div className="container">
-
+            <ProjectContext.Provider
+                value={{
+                    projects,
+                    test
+                }}>
             <div className="row mt-3">
                 <AddProject addProject={addRepository}/>
             </div>
             <div className="row mt-5">
-                <ProjectContext.Provider
-                    value={{
-                        projects,
-                        createTag
-                    }}>
 
                     <DisplayProjects
                         removeProjectFromTheList={deleteProject}
                     />
 
-                </ProjectContext.Provider>
+
 
             </div>
+            </ProjectContext.Provider>
 
         </div>
     );
