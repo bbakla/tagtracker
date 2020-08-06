@@ -9,6 +9,7 @@ import com.tagtracker.model.dto.ProjectDto;
 import com.tagtracker.model.dto.gitlab.TagDto;
 import com.tagtracker.model.entity.Tag;
 import com.tagtracker.model.resource.ProjectResource;
+import com.tagtracker.model.resource.TagResource;
 import com.tagtracker.service.ProjectService;
 import com.tagtracker.service.ProjectNotFoundException;
 import java.net.URI;

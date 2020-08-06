@@ -1,18 +1,16 @@
-import React, {useContext, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 
 import TagFormModal from "./TagFormModal";
 import {Table} from "react-bootstrap";
 import axios from 'axios';
-import {createTagPath, deleteTagPath} from "../paths";
+import {basePathForProjects, tagBasePath, deleteTagPath} from "../paths";
 import {useLocation} from "react-router";
 import {ProjectContext} from "../ProjectDashboard";
 
 export default function DisplayTags() {
 
-            let location = useLocation();
-            const [showModal, setShowModal] = useState(false);
-            const [tagsToDisplay, setTagsToDisplay] = useState(location.state.tags)
-
+    let location = useLocation();
+    const [tagsToDisplay, setTagsToDisplay] = useState(location.state.tags)
 
     const deleteTag = (tagName) => {
         let confirmDelete = window.confirm("Are you sure deleting the tag?")
@@ -20,7 +18,8 @@ export default function DisplayTags() {
             setTagsToDisplay(tagsToDisplay.filter(
                 tag => tag.tagName !== tagName));
 
-            let path = deleteTagPath.replace("{identifier}", location.state.projectId)
+            let path = deleteTagPath.replace("{identifier}",
+                location.state.projectId)
 
             path = path.replace("{tagName}", tagName).replace("{isRemoteTagDeleted}", "true");
 
@@ -52,7 +51,7 @@ export default function DisplayTags() {
         }
 
         const createTag = async () => {
-            let path = createTagPath.replace("{identifier}",
+            let path = tagBasePath.replace("{identifier}",
                 location.state.projectId)
 
             const body = JSON.stringify(newTag)
@@ -70,7 +69,7 @@ export default function DisplayTags() {
 
         createTag();
 
-            setTagsToDisplay(tags =>[...tags, newTag] )
+        setTagsToDisplay(tags => [...tags, newTag])
 
     }
 
@@ -98,66 +97,79 @@ export default function DisplayTags() {
         setTagsToDisplay(newTags);
     }
 
-        const tagsList = tagsToDisplay.map(tag => {
+    useEffect(() => {
+        const fetchData = async () => {
 
-            return (
-                <tr key={tag.tagName + "key"}>
-                    <td>{tag.tagName}</td>
-                    <td>{tag.message}</td>
-                    <td>{tag.releaseNotes}</td>
+            let path = tagBasePath.replace("{identifier}",
+                location.state.projectId)
 
-                    <td>
-                        <div>
-                            <TagFormModal buttonLabel="Edit"
-                                          tagName={tag.tagName}
-                                          message={tag.message}
-                                          releaseNotes={tag.releaseNotes}
-                                          saveTag={editTagHandle}
-                            />
-                            {' '}
+            const tags = await axios(path);
+            setTagsToDisplay(tags.data);
 
-                            <button type="button"
-                                    className="btn btn-sm btn-danger"
-                                    onClick={() => deleteTag(tag.tagName)}>
-                                <i className=" far fa-trash-alt"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
+        };
 
-            )
-        });
+        fetchData();
+    }, [])
+
+    const tagsList = tagsToDisplay.map(tag => {
 
         return (
+            <tr key={tag.tagName + "key"}>
+                <td>{tag.tagName}</td>
+                <td>{tag.message}</td>
+                <td>{tag.releaseNotes}</td>
 
-
-            <div className="container">
-                <h3 className="mt-3">{location.state.projectName}</h3>
-                <div className="row">
-                    <div className="col-12">
-                        <Table responsive hover>
-                            <thead>
-                            <tr>
-                                <th>Tag Name</th>
-                                <th>Message</th>
-                                <th>Release Note</th>
-
-                            </tr>
-                            </thead>
-
-                            <tbody>
-                            {tagsList}
-                            </tbody>
-                        </Table>
-
-                        <TagFormModal
-                            buttonLabel="Create"
-                            saveTag={saveTagHandle}
-
+                <td>
+                    <div>
+                        <TagFormModal buttonLabel="Edit"
+                                      tagName={tag.tagName}
+                                      message={tag.message}
+                                      releaseNotes={tag.releaseNotes}
+                                      saveTag={editTagHandle}
                         />
+                        {' '}
+
+                        <button type="button"
+                                className="btn btn-sm btn-danger"
+                                onClick={() => deleteTag(tag.tagName)}>
+                            <i className=" far fa-trash-alt"></i>
+                        </button>
                     </div>
+                </td>
+            </tr>
+
+        )
+    });
+
+    return (
+
+        <div className="container">
+            <h3 className="mt-3">{location.state.projectName}</h3>
+            <div className="row">
+                <div className="col-12">
+                    <Table responsive hover>
+                        <thead>
+                        <tr>
+                            <th>Tag Name</th>
+                            <th>Message</th>
+                            <th>Release Note</th>
+
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        {tagsList}
+                        </tbody>
+                    </Table>
+
+                    <TagFormModal
+                        buttonLabel="Create"
+                        saveTag={saveTagHandle}
+
+                    />
                 </div>
             </div>
+        </div>
 
-        );
+    );
 }

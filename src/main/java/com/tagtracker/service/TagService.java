@@ -13,6 +13,7 @@ import com.tagtracker.repository.TagRepository;
 import com.tagtracker.service.gitlab.GitlabService;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
@@ -56,8 +57,9 @@ public class TagService {
     return conversionService.convert(savedTagThatIsDependentOn, TagResource.class);
   }
 
-  public TagResource addATagAsDependentOnMe(String projectIdentifier, String mainTagName,
-      DependencyDto dependentOnMeDto) throws ProjectNotFoundException {
+  public TagResource addATagAsDependentOnMe(
+      String projectIdentifier, String mainTagName, DependencyDto dependentOnMeDto)
+      throws ProjectNotFoundException {
 
     Project mainProject = projectService.getProject(projectIdentifier);
 
@@ -67,8 +69,8 @@ public class TagService {
         dependentOnMeProjectOptional, dependentOnMeDto.getProjectName());
 
     Tag mainTag = mainProject.findTag(mainTagName);
-    Tag dependentOnMeTag = dependentOnMeProjectOptional.get()
-        .findTag(dependentOnMeDto.getTagName());
+    Tag dependentOnMeTag =
+        dependentOnMeProjectOptional.get().findTag(dependentOnMeDto.getTagName());
 
     mainTag.addDependentOnMe(dependentOnMeTag);
     Tag mainTagSaved = tagRepository.save(mainTag);
@@ -107,8 +109,8 @@ public class TagService {
     projectInDatabase.addTag(newTag);
     Project projectWithNewTag = projectRepository.save(projectInDatabase);
 
-    return conversionService
-        .convert(projectWithNewTag.findTag(tagDto.getTagName()), TagResource.class);
+    return conversionService.convert(
+        projectWithNewTag.findTag(tagDto.getTagName()), TagResource.class);
   }
 
   @Transactional
@@ -126,13 +128,22 @@ public class TagService {
     }
 
     tagRepository.deleteByTagNameAndProject_RemoteProjectId(tagName, project.getRemoteProjectId());
-    //project.removeTag(tagName);
+    // project.removeTag(tagName);
 
     var tags = tagRepository.findAll();
     System.out.println(Iterables.size(tags));
-
   }
 
+  public List<TagResource> getTagsOfAProject(String identifier) throws ProjectNotFoundException {
+    Project project = projectService.getProject(identifier);
+
+    List<TagResource> tags =
+        project.getTags().stream()
+            .map(t -> conversionService.convert(t, TagResource.class))
+            .collect(Collectors.toList());
+
+    return tags;
+  }
 
   private Tag addDependencyOnMeForATag(Tag tagThatIsDependentOn, DependencyDto dependentOnDto) {
 
@@ -143,5 +154,4 @@ public class TagService {
 
     return tagRepository.save(tagDependentOnMe);
   }
-
 }

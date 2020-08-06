@@ -2,7 +2,7 @@ import React, {createContext, useEffect, useState} from "react";
 import AddProject from "./AddProject";
 import DisplayProjects from "./DisplayProjects";
 import axios from 'axios';
-import {basePathForProjects, createTagPath} from "./paths";
+import {basePathForProjects, tagBasePath} from "./paths";
 
 export default function ProjectDashboard() {
  /*   const initialState = {
@@ -206,8 +206,8 @@ export default function ProjectDashboard() {
 
     function createTag (projectId, newTag) {
         const createNewTag = async () => {
-            let path = createTagPath.replace("{identifier}",
-                projectId)
+          let path = tagBasePath.replace("{identifier}",
+              projectId)
 
             const body = JSON.stringify(newTag)
 
