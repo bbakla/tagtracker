@@ -1,4 +1,4 @@
-import React, {Component, useState} from "react";
+import React, {useState} from "react";
 import {basePathForProjects} from "./paths";
 import axios from 'axios';
 

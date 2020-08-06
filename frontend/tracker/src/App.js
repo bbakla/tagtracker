@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'mdbreact/dist/css/mdb.css';
 
 import {Route, Switch} from "react-router-dom";
-import {DisplayTags} from "./tags/DisplayTags";
+import DisplayTags from "./tags/DisplayTags";
 import ProjectDashboard from "./ProjectDashboard";
 import Navbar from "./navigation/Navbar";
 import {RelatedProjects} from "./dependencies/RelatedProjects";

@@ -1,35 +1,33 @@
-import React, {Component} from "react";
+import React, {useState} from "react";
 
 import {TagFormModal} from "./TagFormModal";
 import {Table} from "react-bootstrap";
 import axios from 'axios';
-import {basePathForProjects, createTagPath, deleteTagPath} from "../paths";
+import {createTagPath, deleteTagPath} from "../paths";
+import {useLocation} from "react-router";
 
-export class DisplayTags extends Component {
-    constructor(props) {
-        super(props);
+export default function DisplayTags() {
 
-        this.state = {
-            showModal: false,
-            tagsToDisplay: this.props.location.state.tags
-        }
-    }
+            let location = useLocation();
+            const [showModal, setShowModal] = useState(false);
+            const [tagsToDisplay, setTagsToDisplay] = useState(location.state.tags)
 
 
-    deleteTag = (tagName) => {
+    const deleteTag = (tagName) => {
         let confirmDelete = window.confirm("Are you sure deleting the tag?")
         if (confirmDelete) {
-            this.setState({
-                tagsToDisplay: this.state.tagsToDisplay.filter(
-                    tag => tag.tagName !== tagName)
-            });
+            setTagsToDisplay(tagsToDisplay.filter(
+                tag => tag.tagName !== tagName));
+
+            let path = deleteTagPath.replace("{identifier}", location.state.projectId)
+
+            path = path.replace("{tagName}", tagName).replace("{isRemoteTagDeleted}", "true");
+
+            debugger;
 
             const deleteTag = async () => {
-                const deletedTag = await axios(
-                    deleteTagPath.replace("{identifier}",
-                        this.props.location.state.projectName).replace(
-                        "{tagName}", tagName));
-                console.log(deletedTag)
+                axios.delete(path,
+                ).then(response => console.log(response.data))
             };
 
             deleteTag();
@@ -37,7 +35,7 @@ export class DisplayTags extends Component {
 
     }
 
-    saveTagHandle = (tag) => {
+    const saveTagHandle = (tag) => {
         const newTag = {
             tagName: tag.name,
             message: tag.message,
@@ -56,13 +54,11 @@ export class DisplayTags extends Component {
 
         const createTag = async () => {
             let path = createTagPath.replace("{identifier}",
-                this.props.location.state.projectName)
-            console.log(path);
+                location.state.projectId)
 
             const body = JSON.stringify(newTag)
-            console.log(body)
 
-            axios.post("/projects/116955/tags",
+            axios.post(path,
                 body,
                 {
                     headers: {
@@ -75,12 +71,13 @@ export class DisplayTags extends Component {
 
         createTag();
 
-        this.setState({tagsToDisplay: this.state.tagsToDisplay.concat(newTag)});
+        setTagsToDisplay(tags =>[...tags, newTag] )
+        //this.setState({tagsToDisplay: this.state.tagsToDisplay.concat(newTag)});
 
     }
 
-    editTagHandle = (modifiedTag) => {
-        const existingTag = this.state.tagsToDisplay.find(t => t.tagName === modifiedTag.name)
+    const editTagHandle = (modifiedTag) => {
+        const existingTag = tagsToDisplay.find(t => t.tagName === modifiedTag.name)
 
         let newTags = this.state.tagsToDisplay.map(t => {
             if (t.tagName === modifiedTag.name) {
@@ -100,12 +97,10 @@ export class DisplayTags extends Component {
             }
         });
 
-        this.setState({tagsToDisplay: newTags});
+        setTagsToDisplay(newTags);
     }
 
-    render() {
-
-        const tagsList = this.state.tagsToDisplay.map(tag => {
+        const tagsList = tagsToDisplay.map(tag => {
 
             return (
                 <tr key={tag.tagName + "key"}>
@@ -119,13 +114,13 @@ export class DisplayTags extends Component {
                                           tagName={tag.tagName}
                                           message={tag.message}
                                           releaseNotes={tag.releaseNotes}
-                                          saveTag={this.editTagHandle}
+                                          saveTag={editTagHandle}
                             />
                             {' '}
 
                             <button type="button"
                                     className="btn btn-sm btn-danger"
-                                    onClick={() => this.deleteTag(tag.tagName)}>
+                                    onClick={() => deleteTag(tag.tagName)}>
                                 <i className=" far fa-trash-alt"></i>
                             </button>
                         </div>
@@ -139,7 +134,7 @@ export class DisplayTags extends Component {
 
 
             <div className="container">
-                <h3 className="mt-3">{this.props.location.state.projectName}</h3>
+                <h3 className="mt-3">{location.state.projectName}</h3>
                 <div className="row">
                     <div className="col-12">
                         <Table responsive hover>
@@ -159,12 +154,11 @@ export class DisplayTags extends Component {
 
                         <TagFormModal
                             buttonLabel="Create"
-                            saveTag={this.saveTagHandle}
+                            saveTag={saveTagHandle}
                         />
                     </div>
                 </div>
             </div>
 
         );
-    }
 }

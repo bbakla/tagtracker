@@ -1,17 +1,19 @@
 package com.tagtracker.model.dto.gitlab;
 
-import org.aspectj.bridge.Message;
-
 public class TagDto {
 
   private String message;
   private String tagName;
-  private String releaseNote;
+  private String releaseNotes;
+
+  public TagDto() {
+
+  }
 
   public TagDto(String tagName, String message, String releaseNote) {
     this.message = message;
     this.tagName = tagName;
-    this.releaseNote = releaseNote;
+    this.releaseNotes = releaseNote;
   }
 
   public String getMessage() {
@@ -30,11 +32,11 @@ public class TagDto {
     this.tagName = tagName;
   }
 
-  public String getReleaseNote() {
-    return releaseNote;
+  public String getReleaseNotes() {
+    return releaseNotes;
   }
 
-  public void setReleaseNote(String releaseNote) {
-    this.releaseNote = releaseNote;
+  public void setReleaseNotes(String releaseNotes) {
+    this.releaseNotes = releaseNotes;
   }
 }

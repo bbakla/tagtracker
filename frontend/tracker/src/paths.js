@@ -1,6 +1,5 @@
-export const basePathForProjects = "projects"
+export const basePathForProjects = "/projects"
 export const createTagPath = basePathForProjects + "/{identifier}/tags";
-export const deleteTagPath = basePathForProjects
-    + "/{identifier}/tags/{tagName}";
+export const deleteTagPath = createTagPath + "/{tagName}?deleteRemoteTag={isRemoteTagDeleted}";
 
 

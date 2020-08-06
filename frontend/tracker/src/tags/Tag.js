@@ -13,7 +13,8 @@ export default function Tag({currentTagName, projectName, projectId, tags}) {
                 pathname: pathName(projectId),
                 state: {
                     tags: tags,
-                    projectName: projectName
+                    projectName: projectName,
+                    projectId: projectId
                 }
             }}>
          <span>

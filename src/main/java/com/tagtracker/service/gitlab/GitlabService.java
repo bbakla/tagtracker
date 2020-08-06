@@ -117,7 +117,7 @@ public class GitlabService {
                             .queryParam("tag_name", tagDto.getTagName())
                             .queryParam("ref", "master")
                             .queryParam("message", tagDto.getMessage())
-                            .queryParam("release_description", tagDto.getReleaseNote())
+                            .queryParam("release_description", tagDto.getReleaseNotes())
                             .build(projectId));
 
     WebClient.ResponseSpec responseSpec = request.accept(MediaType.APPLICATION_JSON).retrieve();
