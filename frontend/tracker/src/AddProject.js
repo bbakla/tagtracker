@@ -48,11 +48,14 @@ export default function AddProject({addProject}){
 
     const handleAddProject = () => {
 
-        axios.post(basePathForProjects, {
-               "identifier": projectIdentifier
-           }).then(response => addProject(response.data))
+      const body = {
+        "identifier": projectIdentifier
+      }
 
-        setProjectIdentifier("");
+      axios.post(basePathForProjects, body).then(
+          response => addProject(response.data))
+
+      setProjectIdentifier("");
     }
 
   return (

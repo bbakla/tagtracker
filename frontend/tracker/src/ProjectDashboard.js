@@ -187,7 +187,7 @@ export default function ProjectDashboard() {
 
 
     const addRepository = (projectData) => {
-        console.log(projectData)
+        //console.log(projectData)
 
         const project = {
             projectName: projectData.projectName,
@@ -212,7 +212,8 @@ export default function ProjectDashboard() {
               .then(data => console.log(data))*/
 
           const projects = await axios(basePathForProjects);
-          setProjects(projects.data);
+        setProjects(projects.data);
+        console.log(projects.data)
         };
 
         fetchData();

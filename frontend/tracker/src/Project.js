@@ -4,7 +4,6 @@ import Deployment from "./deployment/Deployment";
 import {ShowDependency} from "./dependencies/ShowDependency";
 
 export default function Project({project, removeProject}) {
-
     const [selectedTagIndex, setSelectedTagIndex] = useState(0);
 
     const handleSelect = (event) => {
@@ -22,10 +21,6 @@ export default function Project({project, removeProject}) {
         }
     }
 
-    const saveTag = (tag = {}) => {
-        console.log("in project");
-        //console.log(tag);
-    }
 
     const description = project.description.length === 0 ? <br/>
         : project.description
@@ -40,16 +35,17 @@ export default function Project({project, removeProject}) {
         : project.tags[selectedTagIndex].dependentOn
 
     return (
-        <div key={project.name} className="col-md-6">
+        <div key={project.projectName} className="col-md-6">
 
-            <div className="card p-1">
-                <h5 className=" card-header">{project.name}
-                    <button className="outline-danger float-right btn-sm"
-                            onClick={handleRemove}><i
-                        className=" far fa-trash-alt"></i></button>
-                </h5>
+          <div className="card p-1">
+            <h5 className=" card-header">{project.projectName}
+              <button className="outline-danger float-right btn-sm"
+                      onClick={handleRemove}><i
+                  className=" far fa-trash-alt"></i></button>
+            </h5>
+            <h6 className=" card-header">{project.projectId}</h6>
 
-                <div className="card-body">
+            <div className="card-body">
 
                     <select className="form-control col-md-4"
                             onChange={handleSelect}>
@@ -70,7 +66,7 @@ export default function Project({project, removeProject}) {
                         <div className="col-xs-6 col-md-6">
 
                             <Tag currentTagName={tagName}
-                                 projectName={project.name}
+                                 projectName={project.projectName}
                                  projectId={project.projectId}
                                  tags={tagList}
                             />
