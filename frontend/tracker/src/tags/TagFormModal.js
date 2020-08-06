@@ -1,94 +1,96 @@
-import React, {Component} from "react";
+import React, {useState} from "react";
 import Button from "react-bootstrap/Button"
 import {Modal} from "react-bootstrap";
 
-export class TagFormModal extends Component {
+export default function TagFormModal({tName, m, releaseN, buttonLabel, saveTag}) {
 
-  constructor(props) {
-    super(props);
+    const [showModal, setShowModal] = useState(false);
+    const [tagName, setTagName] = useState(tName);
+    const [message, setMessage] = useState(m);
+    const [releaseNotes, setReleaseNotes] = useState(releaseN);
 
-    this.state = {
-      showModal: false,
-      tagName: this.props.tagName,
-      message: this.props.message,
-      releaseNotes: this.props.releaseNotes
+
+    const close = () => {
+        setShowModal(false);
     }
-  }
 
-  close = () => {
-    this.setState({showModal: false});
-  }
+    const open = () => {
+        setShowModal(true);
+    }
 
-  open = () => {
-    this.setState({showModal: true});
-  }
+    const saveTagHandle = () => {
+        saveTag({
+            name: tagName,
+            message: message,
+            releaseNotes: releaseNotes
+        });
+        close();
+    }
 
-  saveTag = () => {
-this.props.saveTag({
-    name: this.state.tagName,
-    message: this.state.message,
-    releaseNotes: this.state.releaseNotes
-    })
-    this.close()
-  }
+/*    const saveValue = (event) => {
+        this.setState({[event.target.name]: event.target.value});
+    }*/
 
-  saveValue = (event) => {
-    this.setState({[event.target.name] : event.target.value});
-  }
 
-  render() {
-    const label = this.props.buttonLabel;
-    let title = "";
-    let button = '';
-    let disabled = false;
+        const label = buttonLabel;
+        let title = "";
+        let button = '';
+        let disabled = false;
 
-        if(label === "Edit") {
-          title = "Edit tag";
-          disabled= true;
-          button = <button className="float-left btn btn-sm btn-success" onClick={this.open}>
-                      <i className="fas fa-edit"></i>
-                  </button>
+        if (label === "Edit") {
+            title = "Edit tag";
+            disabled = true;
+            button = <button className="float-left btn btn-sm btn-success" onClick={open}>
+                <i className="fas fa-edit"></i>
+            </button>
         } else {
-          button =  <Button className="btn btn-outline-primary btn-block" onClick={this.open}>
-            Create New Tag
-          </Button>
-          title = "Create New Tag";
+            button = <Button className="btn btn-outline-primary btn-block" onClick={open}>
+                Create New Tag
+            </Button>
+            title = "Create New Tag";
 
         }
 
-    return (
-        <div>
-          {button}
-          <Modal show={this.state.showModal} onHide={this.close}>
-            <Modal.Header>{title}</Modal.Header>
-            <Modal.Body>
+        return (
+            <div>
+                {button}
+                <Modal show={showModal} onHide={close}>
+                    <Modal.Header>{title}</Modal.Header>
+                    <Modal.Body>
 
-              <form>
-                <div className="form-group">
-                  <label htmlFor="tagNameInput">Tag Name </label>
-                  <input type="text" className="form-control" name="tagName" aria-describedby="tagName"  disabled = {disabled}  onChange={this.saveValue}
-                         placeholder="Enter tag name with the format v2.5.6" defaultValue={this.state.tagName}/>
-                    <small id="emailHelp" className="form-text text-muted">should be in the format of v0.2.1 </small>
-                </div>
-                <div className="form-group">
-                  <label htmlFor="messageInput">Message</label>
-                  <input type="text" className="form-control" name="message" onChange={this.saveValue} placeholder="Enter message" disabled = {disabled} defaultValue={this.state.message}/>
-                </div>
+                        <form>
+                            <div className="form-group">
+                                <label htmlFor="tagNameInput">Tag Name </label>
+                                <input type="text" className="form-control" name="tagName" aria-describedby="tagName"
+                                       disabled={disabled} onChange={e => setTagName(e.target.value)}
+                                       placeholder="Enter tag name with the format v2.5.6"
+                                       defaultValue={tagName}/>
+                                <small id="emailHelp" className="form-text text-muted">should be in the format of
+                                    v0.2.1 </small>
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="messageInput">Message</label>
+                                <input type="text" className="form-control" name="message" onChange={e => setMessage(e.target.value)}
+                                       placeholder="Enter message" disabled={disabled}
+                                       defaultValue={message}/>
+                            </div>
 
-                <div className="form-group">
-                  <label htmlFor="releaseNotesInput">Release note</label>
-                  <input type="text" className="form-control" name="releaseNotes" onChange={this.saveValue} placeholder="Enter release notes" defaultValue={this.state.releaseNotes}/>
-                </div>
-              </form>
+                            <div className="form-group">
+                                <label htmlFor="releaseNotesInput">Release note</label>
+                                <input type="text" className="form-control" name="releaseNotes"
+                                       onChange={e => setReleaseNotes(e.target.value)} placeholder="Enter release notes"
+                                       defaultValue={releaseNotes}/>
+                            </div>
+                        </form>
 
-            </Modal.Body>
-            <Modal.Footer>
-              <button type="submit" className="btn btn-primary" onClick={this.saveTag}>{label}</button>
-              <Button onClick={this.close}>Close</Button>
-            </Modal.Footer>
-          </Modal>
-        </div>
-    );
-  }
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <button type="submit" className="btn btn-primary" onClick={saveTagHandle}>{label}</button>
+                        <Button onClick={close}>Close</Button>
+                    </Modal.Footer>
+                </Modal>
+            </div>
+        );
+
 
 }

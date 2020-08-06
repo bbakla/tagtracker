@@ -1,10 +1,11 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 
-import {TagFormModal} from "./TagFormModal";
+import TagFormModal from "./TagFormModal";
 import {Table} from "react-bootstrap";
 import axios from 'axios';
 import {createTagPath, deleteTagPath} from "../paths";
 import {useLocation} from "react-router";
+import {ProjectContext} from "../ProjectDashboard";
 
 export default function DisplayTags() {
 
@@ -22,8 +23,6 @@ export default function DisplayTags() {
             let path = deleteTagPath.replace("{identifier}", location.state.projectId)
 
             path = path.replace("{tagName}", tagName).replace("{isRemoteTagDeleted}", "true");
-
-            debugger;
 
             const deleteTag = async () => {
                 axios.delete(path,
@@ -71,8 +70,7 @@ export default function DisplayTags() {
 
         createTag();
 
-        setTagsToDisplay(tags =>[...tags, newTag] )
-        //this.setState({tagsToDisplay: this.state.tagsToDisplay.concat(newTag)});
+            setTagsToDisplay(tags =>[...tags, newTag] )
 
     }
 
@@ -155,6 +153,7 @@ export default function DisplayTags() {
                         <TagFormModal
                             buttonLabel="Create"
                             saveTag={saveTagHandle}
+
                         />
                     </div>
                 </div>

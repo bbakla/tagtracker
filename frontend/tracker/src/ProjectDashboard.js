@@ -2,7 +2,7 @@ import React, {createContext, useEffect, useState} from "react";
 import AddProject from "./AddProject";
 import DisplayProjects from "./DisplayProjects";
 import axios from 'axios';
-import {basePathForProjects} from "./paths";
+import {basePathForProjects, createTagPath} from "./paths";
 
 export default function ProjectDashboard() {
  /*   const initialState = {
@@ -203,6 +203,31 @@ export default function ProjectDashboard() {
         setProjects(projects.filter(project => project.projectName !== projectName))
     }
 
+
+    function createTag (projectId, newTag) {
+        const createNewTag = async () => {
+            let path = createTagPath.replace("{identifier}",
+                projectId)
+
+            const body = JSON.stringify(newTag)
+
+            console.log(body)
+
+          /*  axios.post(path,
+                body,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                }
+            ).then(response => console.log(response.data));*/
+
+
+        };
+
+        createNewTag();
+    }
+
     useEffect(()=> {
 
       const fetchData = async () => {
@@ -231,7 +256,10 @@ export default function ProjectDashboard() {
             </div>
             <div className="row mt-5">
                 <ProjectContext.Provider
-                    value={{projects}}>
+                    value={{
+                        projects,
+                        createTag
+                    }}>
 
                     <DisplayProjects
                         removeProjectFromTheList={deleteProject}
