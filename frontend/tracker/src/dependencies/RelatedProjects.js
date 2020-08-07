@@ -5,13 +5,15 @@ import {useLocation} from "react-router";
 import {DEPENDENT_ON, DEPENDENT_ON_ME} from "./dependency";
 import {addDependentOn, addDependentOnMe} from "../paths";
 import axios from 'axios';
-import {ProjectContext} from "../ProjectDashboard";
+import {GlobalContext} from "../Store";
+//import {ProjectContext} from "../ProjectDashboard";
 
 export default function RelatedProjects() {
 
     const location = useLocation();
     const [dependencies, setDependencies] = useState(location.state.dependencies)
-    const {testApi} = useContext(ProjectContext);
+    const {test} = useContext(GlobalContext);
+
 
     const deleteDependency = (projectName) => {
         let confirmDelete = window.confirm("Are you sure deleting the tag?")
@@ -21,15 +23,13 @@ export default function RelatedProjects() {
         }
     }
 
-
 const saveDependency = (dependency) => {
     const newDependency = {
         projectName: dependency.projectName,
         tag: dependency.tagName
     }
 
-    debugger;
-    testApi.a("e");
+    test("saving")
 
     setDependencies(dependencies => [...dependencies, newDependency]);
 

@@ -10,6 +10,9 @@ import DisplayTags from "./tags/DisplayTags";
 import ProjectDashboard from "./ProjectDashboard";
 import Navbar from "./navigation/Navbar";
 import RelatedProjects from "./dependencies/RelatedProjects";
+import Store from "./Store";
+
+
 
 
 export default function App() {
@@ -17,6 +20,7 @@ export default function App() {
     return (
 
         <div>
+            <Store>
             <div>
                 <Navbar/>
             </div>
@@ -26,10 +30,10 @@ export default function App() {
                 <Route exact path="/projects/:projectId/tags" component={DisplayTags}/>
                 <Route exact path="/projects/:projectId/dependentOn" component={RelatedProjects}/>
                 <Route exact path="/projects/:projectId/dependentToMe" component={RelatedProjects}/>
-                {/*<Route exact path="/projects/:projectId/dependentToMe" component={RelatedProjects}/>*/}
                 }
 
             </Switch>
+           </Store>
 
 
         </div>

@@ -2,11 +2,12 @@ import React, {Component, useContext} from "react";
 import {Link} from "react-router-dom";
 
 import {DEPENDENT_ON} from "./dependency";
+import {GlobalContext} from "../Store";
 
-import {ProjectContext} from "../ProjectDashboard";
+//import {ProjectContext} from "../ProjectDashboard";
 
 export default function ShowDependency({relationshipType, projectName, projectId, dependencies}) {
-    const {projects} = useContext(ProjectContext);
+    const {projects} = useContext(GlobalContext);
 
     const buttonName = relationshipType === DEPENDENT_ON ? "DependentOn" : "DependentToMe";
     const dependencyType = relationshipType === DEPENDENT_ON ? "Depends on " + projectName : "Projects dependent on " + projectName

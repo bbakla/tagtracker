@@ -1,12 +1,13 @@
 import React, {useContext} from "react";
 import Project from "./Project";
+import {GlobalContext} from "./Store";
 
-import {ProjectContext} from "./ProjectDashboard";
+//import {ProjectContext} from "./ProjectDashboard";
 
 
 export default function DisplayProjects({removeProjectFromTheList}) {
 
-    const {projects} = useContext(ProjectContext);
+    const {projects} = useContext(GlobalContext);
 
 /*    sortTag = (tags) => {
 

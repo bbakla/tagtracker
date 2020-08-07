@@ -1,22 +1,19 @@
 import React, {useContext, useState} from "react";
 import {basePathForProjects} from "./paths";
 import axios from 'axios';
-import {ProjectContext___} from "./ProjectDashboard";
+import {GlobalContext} from "./Store";
 
-export default function AddProject({addProject}){
+
+export default function AddProject(){
     const [projectIdentifier, setProjectIdentifier] = useState("");
+    const {addRepository} = useContext(GlobalContext)
 
     const  saveIdentifier = (event) => {
         setProjectIdentifier(event.target.value);
     }
 
     const handleAddProject = () => {
-      const body = {
-        "identifier": projectIdentifier
-      }
-
-      axios.post(basePathForProjects, body).then(
-          response => addProject(response.data))
+     addRepository(projectIdentifier)
 
       setProjectIdentifier("");
 
