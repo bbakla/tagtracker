@@ -1,6 +1,8 @@
 import React, {useContext} from "react";
 import Project from "./Project";
+
 import {ProjectContext} from "./ProjectDashboard";
+
 
 export default function DisplayProjects({removeProjectFromTheList}) {
 

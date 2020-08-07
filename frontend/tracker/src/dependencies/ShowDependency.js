@@ -1,7 +1,9 @@
 import React, {Component, useContext} from "react";
 import {Link} from "react-router-dom";
-import {ProjectContext} from "../ProjectDashboard";
+
 import {DEPENDENT_ON} from "./dependency";
+
+import {ProjectContext} from "../ProjectDashboard";
 
 export default function ShowDependency({relationshipType, projectName, projectId, dependencies}) {
     const {projects} = useContext(ProjectContext);
@@ -21,7 +23,6 @@ export default function ShowDependency({relationshipType, projectName, projectId
                     projects: projects,
                     projectName: projectName,
                     relationshipType: relationshipType
-
                 }
             }}>
 

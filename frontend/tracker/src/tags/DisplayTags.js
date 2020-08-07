@@ -5,7 +5,7 @@ import {Table} from "react-bootstrap";
 import axios from 'axios';
 import {basePathForProjects, tagBasePath, deleteTagPath} from "../paths";
 import {useLocation} from "react-router";
-import {ProjectContext} from "../ProjectDashboard";
+import {ProjectContext___} from "../ProjectDashboard";
 
 export default function DisplayTags() {
 

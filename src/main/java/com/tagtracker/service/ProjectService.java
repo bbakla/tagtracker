@@ -46,7 +46,7 @@ public class ProjectService {
     Project projectEntity = new Project();
     projectEntity.setRemoteProjectId(project.getId());
     projectEntity.setProjectName(project.getName());
-    projectEntity.setEncodedPath(project.getPath_with_namespace());
+    projectEntity.setEncodedPath(project.getPathWithNamespace());
     projectEntity.setDescription(project.getDescription());
 
     Set<Tag> projectTags = getTagsOfRemoteRepository(projectEntity.getRemoteProjectId());

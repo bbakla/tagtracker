@@ -7,7 +7,7 @@ export default function DependencyModal({pName, tName, saveDependency, buttonLab
 const [showModal, setShowModal] = useState(false);
 const [tagName, setTagName] = useState(tName);
 const [showProjects, setShowProjects] = useState(projects.filter(p => p.projectName !== pName));
-const [selectedProjectName, setSelectedProjectName] = useState(showProjects[0].projectName);
+const [selectedProjectName, setSelectedProjectName] = useState(showProjects.length === 0 ? "0" : showProjects[0].projectName);
 
 
     const open = () => {
@@ -63,13 +63,13 @@ const [selectedProjectName, setSelectedProjectName] = useState(showProjects[0].p
 
                             <div className="form-group">
                                 <label htmlFor="tagNameInput">Tag Name</label>
-                                <select className="form-control col-md-4"
+                                {showProjects.length > 0 && <select className="form-control col-md-4"
                                         onChange={e => setTagName(e.target.value)}>
                                     {
                                         showProjects.find(p => p.projectName === selectedProjectName).tags.map(tag => {
                                         return <option key={tag.tagName} value={tag.tagName}>{tag.tagName}</option>
                                     })}
-                                </select>
+                                </select>}
                             </div>
                         </form>
                     </Modal.Body>

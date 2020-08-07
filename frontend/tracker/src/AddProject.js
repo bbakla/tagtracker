@@ -1,6 +1,7 @@
 import React, {useContext, useState} from "react";
 import {basePathForProjects} from "./paths";
 import axios from 'axios';
+import {ProjectContext___} from "./ProjectDashboard";
 
 export default function AddProject({addProject}){
     const [projectIdentifier, setProjectIdentifier] = useState("");
@@ -10,7 +11,6 @@ export default function AddProject({addProject}){
     }
 
     const handleAddProject = () => {
-
       const body = {
         "identifier": projectIdentifier
       }
@@ -20,11 +20,12 @@ export default function AddProject({addProject}){
 
       setProjectIdentifier("");
 
+
     }
 
   return (
       <div className="input-group mb-2 ">
-        <input type="text" name="projectIdentifier" className="form-control" defaultValue={projectIdentifier} onChange={saveIdentifier}/>
+        <input type="text" name="projectIdentifier" className="form-control" value={projectIdentifier} onChange={saveIdentifier}/>
         <button className="btn-md btn-outline-secondary" type="submit" onClick={handleAddProject}>Add
           repository
         </button>

@@ -5,11 +5,13 @@ import {useLocation} from "react-router";
 import {DEPENDENT_ON, DEPENDENT_ON_ME} from "./dependency";
 import {addDependentOn, addDependentOnMe} from "../paths";
 import axios from 'axios';
+import {ProjectContext} from "../ProjectDashboard";
 
 export default function RelatedProjects() {
 
     const location = useLocation();
     const [dependencies, setDependencies] = useState(location.state.dependencies)
+    const {testApi} = useContext(ProjectContext);
 
     const deleteDependency = (projectName) => {
         let confirmDelete = window.confirm("Are you sure deleting the tag?")
@@ -26,10 +28,13 @@ const saveDependency = (dependency) => {
         tag: dependency.tagName
     }
 
+    debugger;
+    testApi.a("e");
+
     setDependencies(dependencies => [...dependencies, newDependency]);
 
 
-    if(location.state.relationshipType === DEPENDENT_ON) {
+/*    if(location.state.relationshipType === DEPENDENT_ON) {
         let path = addDependentOn.replace("{identifier}", dependency.projectName)
             .replace("{tagName", dependency.tagName)
 
@@ -38,7 +43,7 @@ const saveDependency = (dependency) => {
     } else if (location.state.relationshipType === DEPENDENT_ON_ME) {
         let path = addDependentOnMe.replace("{identifier}", dependency.projectName)
             .replace("{tagName", dependency.tagName)
-    }
+    }*/
 
 }
 

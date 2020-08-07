@@ -11,6 +11,7 @@ import ProjectDashboard from "./ProjectDashboard";
 import Navbar from "./navigation/Navbar";
 import RelatedProjects from "./dependencies/RelatedProjects";
 
+
 export default function App() {
 
     return (
@@ -19,15 +20,18 @@ export default function App() {
             <div>
                 <Navbar/>
             </div>
+
             <Switch>
-                {/*<Route exact path="/projects" render={ (props) => <ProjectDashboard {...props} projects = {this.state.projects}/>}/>*/}
-                <Route exact path="/projects" component={ProjectDashboard}/>
+                <Route exact path="/" component={ProjectDashboard}/>
                 <Route exact path="/projects/:projectId/tags" component={DisplayTags}/>
                 <Route exact path="/projects/:projectId/dependentOn" component={RelatedProjects}/>
                 <Route exact path="/projects/:projectId/dependentToMe" component={RelatedProjects}/>
+                {/*<Route exact path="/projects/:projectId/dependentToMe" component={RelatedProjects}/>*/}
                 }
 
             </Switch>
+
+
         </div>
 //            </Router>
 

@@ -1,552 +1,945 @@
+
 package com.tagtracker.model.entity.gitlab;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({
+    "id",
+    "description",
+    "name",
+    "name_with_namespace",
+    "path",
+    "path_with_namespace",
+    "created_at",
+    "default_branch",
+    "tag_list",
+    "ssh_url_to_repo",
+    "http_url_to_repo",
+    "web_url",
+    "readme_url",
+    "avatar_url",
+    "forks_count",
+    "star_count",
+    "last_activity_at",
+    "namespace",
+    "_links",
+    "empty_repo",
+    "archived",
+    "visibility",
+    "owner",
+    "resolve_outdated_diff_discussions",
+    "container_registry_enabled",
+    "container_expiration_policy",
+    "issues_enabled",
+    "merge_requests_enabled",
+    "wiki_enabled",
+    "jobs_enabled",
+    "snippets_enabled",
+    "service_desk_enabled",
+    "service_desk_address",
+    "can_create_merge_request_in",
+    "issues_access_level",
+    "repository_access_level",
+    "merge_requests_access_level",
+    "forking_access_level",
+    "wiki_access_level",
+    "builds_access_level",
+    "snippets_access_level",
+    "pages_access_level",
+    "emails_disabled",
+    "shared_runners_enabled",
+    "lfs_enabled",
+    "creator_id",
+    "import_status",
+    "import_error",
+    "open_issues_count",
+    "runners_token",
+    "ci_default_git_depth",
+    "public_jobs",
+    "build_git_strategy",
+    "build_timeout",
+    "auto_cancel_pending_pipelines",
+    "build_coverage_regex",
+    "ci_config_path",
+    "shared_with_groups",
+    "only_allow_merge_if_pipeline_succeeds",
+    "allow_merge_on_skipped_pipeline",
+    "request_access_enabled",
+    "only_allow_merge_if_all_discussions_are_resolved",
+    "remove_source_branch_after_merge",
+    "printing_merge_request_link_enabled",
+    "merge_method",
+    "suggestion_commit_message",
+    "auto_devops_enabled",
+    "auto_devops_deploy_strategy",
+    "autoclose_referenced_issues",
+    "permissions"
+})
 public class GitlabProject {
 
+  @JsonProperty("id")
   private String id;
+  @JsonProperty("description")
   private String description;
+  @JsonProperty("name")
   private String name;
-  private String name_with_namespace;
+  @JsonProperty("name_with_namespace")
+  private String nameWithNamespace;
+  @JsonProperty("path")
   private String path;
-  private String path_with_namespace;
-  private String created_at;
-  private String default_branch;
-  ArrayList<Object> tag_list = new ArrayList<Object>();
-  private String ssh_url_to_repo;
-  private String http_url_to_repo;
-  private String web_url;
-  private String readme_url = null;
-  private String avatar_url = null;
-  private float star_count;
-  private float forks_count;
-  private String last_activity_at;
-  Namespace NamespaceObject;
-  _links _linksObject;
-  private boolean empty_repo;
-  private boolean archived;
+  @JsonProperty("path_with_namespace")
+  private String pathWithNamespace;
+  @JsonProperty("created_at")
+  private String createdAt;
+  @JsonProperty("default_branch")
+  private String defaultBranch;
+  @JsonProperty("tag_list")
+  private List<Object> tagList = new ArrayList<Object>();
+  @JsonProperty("ssh_url_to_repo")
+  private String sshUrlToRepo;
+  @JsonProperty("http_url_to_repo")
+  private String httpUrlToRepo;
+  @JsonProperty("web_url")
+  private String webUrl;
+  @JsonProperty("readme_url")
+  private Object readmeUrl;
+  @JsonProperty("avatar_url")
+  private Object avatarUrl;
+  @JsonProperty("forks_count")
+  private Integer forksCount;
+  @JsonProperty("star_count")
+  private Integer starCount;
+  @JsonProperty("last_activity_at")
+  private String lastActivityAt;
+  @JsonProperty("namespace")
+  private Namespace namespace;
+  @JsonProperty("_links")
+  private Links links;
+  @JsonProperty("empty_repo")
+  private Boolean emptyRepo;
+  @JsonProperty("archived")
+  private Boolean archived;
+  @JsonProperty("visibility")
   private String visibility;
-  Owner OwnerObject;
-  private boolean resolve_outdated_diff_discussions;
-  private boolean container_registry_enabled;
-  private boolean issues_enabled;
-  private boolean merge_requests_enabled;
-  private boolean wiki_enabled;
-  private boolean jobs_enabled;
-  private boolean snippets_enabled;
-  private String issues_access_level;
-  private String repository_access_level;
-  private String merge_requests_access_level;
-  private String wiki_access_level;
-  private String builds_access_level;
-  private String snippets_access_level;
-  private boolean shared_runners_enabled;
-  private boolean lfs_enabled;
-  private float creator_id;
-  private String import_status;
-  private String import_error = null;
-  private float open_issues_count;
-  private String runners_token;
-  private float ci_default_git_depth;
-  private boolean public_jobs;
-  private String build_git_strategy;
-  private float build_timeout;
-  private String auto_cancel_pending_pipelines;
-  private String build_coverage_regex = null;
-  private String ci_config_path = null;
-  ArrayList<Object> shared_with_groups = new ArrayList<Object>();
-  private boolean only_allow_merge_if_pipeline_succeeds;
-  private boolean request_access_enabled;
-  private boolean only_allow_merge_if_all_discussions_are_resolved;
-  private boolean remove_source_branch_after_merge;
-  private boolean printing_merge_request_link_enabled;
-  private String merge_method;
-  private boolean auto_devops_enabled;
-  private String auto_devops_deploy_strategy;
-  Permissions PermissionsObject;
+  @JsonProperty("owner")
+  private Owner owner;
+  @JsonProperty("resolve_outdated_diff_discussions")
+  private Boolean resolveOutdatedDiffDiscussions;
+  @JsonProperty("container_registry_enabled")
+  private Boolean containerRegistryEnabled;
+  @JsonProperty("container_expiration_policy")
+  private ContainerExpirationPolicy containerExpirationPolicy;
+  @JsonProperty("issues_enabled")
+  private Boolean issuesEnabled;
+  @JsonProperty("merge_requests_enabled")
+  private Boolean mergeRequestsEnabled;
+  @JsonProperty("wiki_enabled")
+  private Boolean wikiEnabled;
+  @JsonProperty("jobs_enabled")
+  private Boolean jobsEnabled;
+  @JsonProperty("snippets_enabled")
+  private Boolean snippetsEnabled;
+  @JsonProperty("service_desk_enabled")
+  private Boolean serviceDeskEnabled;
+  @JsonProperty("service_desk_address")
+  private Object serviceDeskAddress;
+  @JsonProperty("can_create_merge_request_in")
+  private Boolean canCreateMergeRequestIn;
+  @JsonProperty("issues_access_level")
+  private String issuesAccessLevel;
+  @JsonProperty("repository_access_level")
+  private String repositoryAccessLevel;
+  @JsonProperty("merge_requests_access_level")
+  private String mergeRequestsAccessLevel;
+  @JsonProperty("forking_access_level")
+  private String forkingAccessLevel;
+  @JsonProperty("wiki_access_level")
+  private String wikiAccessLevel;
+  @JsonProperty("builds_access_level")
+  private String buildsAccessLevel;
+  @JsonProperty("snippets_access_level")
+  private String snippetsAccessLevel;
+  @JsonProperty("pages_access_level")
+  private String pagesAccessLevel;
+  @JsonProperty("emails_disabled")
+  private Object emailsDisabled;
+  @JsonProperty("shared_runners_enabled")
+  private Boolean sharedRunnersEnabled;
+  @JsonProperty("lfs_enabled")
+  private Boolean lfsEnabled;
+  @JsonProperty("creator_id")
+  private Integer creatorId;
+  @JsonProperty("import_status")
+  private String importStatus;
+  @JsonProperty("import_error")
+  private Object importError;
+  @JsonProperty("open_issues_count")
+  private Integer openIssuesCount;
+  @JsonProperty("runners_token")
+  private String runnersToken;
+  @JsonProperty("ci_default_git_depth")
+  private Integer ciDefaultGitDepth;
+  @JsonProperty("public_jobs")
+  private Boolean publicJobs;
+  @JsonProperty("build_git_strategy")
+  private String buildGitStrategy;
+  @JsonProperty("build_timeout")
+  private Integer buildTimeout;
+  @JsonProperty("auto_cancel_pending_pipelines")
+  private String autoCancelPendingPipelines;
+  @JsonProperty("build_coverage_regex")
+  private Object buildCoverageRegex;
+  @JsonProperty("ci_config_path")
+  private Object ciConfigPath;
+  @JsonProperty("shared_with_groups")
+  private List<Object> sharedWithGroups = new ArrayList<Object>();
+  @JsonProperty("only_allow_merge_if_pipeline_succeeds")
+  private Boolean onlyAllowMergeIfPipelineSucceeds;
+  @JsonProperty("allow_merge_on_skipped_pipeline")
+  private Object allowMergeOnSkippedPipeline;
+  @JsonProperty("request_access_enabled")
+  private Boolean requestAccessEnabled;
+  @JsonProperty("only_allow_merge_if_all_discussions_are_resolved")
+  private Boolean onlyAllowMergeIfAllDiscussionsAreResolved;
+  @JsonProperty("remove_source_branch_after_merge")
+  private Boolean removeSourceBranchAfterMerge;
+  @JsonProperty("printing_merge_request_link_enabled")
+  private Boolean printingMergeRequestLinkEnabled;
+  @JsonProperty("merge_method")
+  private String mergeMethod;
+  @JsonProperty("suggestion_commit_message")
+  private Object suggestionCommitMessage;
+  @JsonProperty("auto_devops_enabled")
+  private Boolean autoDevopsEnabled;
+  @JsonProperty("auto_devops_deploy_strategy")
+  private String autoDevopsDeployStrategy;
+  @JsonProperty("autoclose_referenced_issues")
+  private Boolean autocloseReferencedIssues;
+  @JsonProperty("permissions")
+  private Permissions permissions;
+  @JsonIgnore
+  private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-  // Getter Methods
-
+  @JsonProperty("id")
   public String getId() {
     return id;
   }
 
-  public String getDescription() {
-    return description;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public String getName_with_namespace() {
-    return name_with_namespace;
-  }
-
-  public String getPath() {
-    return path;
-  }
-
-  public String getPath_with_namespace() {
-    return path_with_namespace;
-  }
-
-  public String getCreated_at() {
-    return created_at;
-  }
-
-  public String getDefault_branch() {
-    return default_branch;
-  }
-
-  public String getSsh_url_to_repo() {
-    return ssh_url_to_repo;
-  }
-
-  public String getHttp_url_to_repo() {
-    return http_url_to_repo;
-  }
-
-  public String getWeb_url() {
-    return web_url;
-  }
-
-  public String getReadme_url() {
-    return readme_url;
-  }
-
-  public String getAvatar_url() {
-    return avatar_url;
-  }
-
-  public float getStar_count() {
-    return star_count;
-  }
-
-  public float getForks_count() {
-    return forks_count;
-  }
-
-  public String getLast_activity_at() {
-    return last_activity_at;
-  }
-
-  public Namespace getNamespace() {
-    return NamespaceObject;
-  }
-
-  public _links get_links() {
-    return _linksObject;
-  }
-
-  public boolean getEmpty_repo() {
-    return empty_repo;
-  }
-
-  public boolean getArchived() {
-    return archived;
-  }
-
-  public String getVisibility() {
-    return visibility;
-  }
-
-  public Owner getOwner() {
-    return OwnerObject;
-  }
-
-  public boolean getResolve_outdated_diff_discussions() {
-    return resolve_outdated_diff_discussions;
-  }
-
-  public boolean getContainer_registry_enabled() {
-    return container_registry_enabled;
-  }
-
-  public boolean getIssues_enabled() {
-    return issues_enabled;
-  }
-
-  public boolean getMerge_requests_enabled() {
-    return merge_requests_enabled;
-  }
-
-  public boolean getWiki_enabled() {
-    return wiki_enabled;
-  }
-
-  public boolean getJobs_enabled() {
-    return jobs_enabled;
-  }
-
-  public boolean getSnippets_enabled() {
-    return snippets_enabled;
-  }
-
-  public String getIssues_access_level() {
-    return issues_access_level;
-  }
-
-  public String getRepository_access_level() {
-    return repository_access_level;
-  }
-
-  public String getMerge_requests_access_level() {
-    return merge_requests_access_level;
-  }
-
-  public String getWiki_access_level() {
-    return wiki_access_level;
-  }
-
-  public String getBuilds_access_level() {
-    return builds_access_level;
-  }
-
-  public String getSnippets_access_level() {
-    return snippets_access_level;
-  }
-
-  public boolean getShared_runners_enabled() {
-    return shared_runners_enabled;
-  }
-
-  public boolean getLfs_enabled() {
-    return lfs_enabled;
-  }
-
-  public float getCreator_id() {
-    return creator_id;
-  }
-
-  public String getImport_status() {
-    return import_status;
-  }
-
-  public String getImport_error() {
-    return import_error;
-  }
-
-  public float getOpen_issues_count() {
-    return open_issues_count;
-  }
-
-  public String getRunners_token() {
-    return runners_token;
-  }
-
-  public float getCi_default_git_depth() {
-    return ci_default_git_depth;
-  }
-
-  public boolean getPublic_jobs() {
-    return public_jobs;
-  }
-
-  public String getBuild_git_strategy() {
-    return build_git_strategy;
-  }
-
-  public float getBuild_timeout() {
-    return build_timeout;
-  }
-
-  public String getAuto_cancel_pending_pipelines() {
-    return auto_cancel_pending_pipelines;
-  }
-
-  public String getBuild_coverage_regex() {
-    return build_coverage_regex;
-  }
-
-  public String getCi_config_path() {
-    return ci_config_path;
-  }
-
-  public boolean getOnly_allow_merge_if_pipeline_succeeds() {
-    return only_allow_merge_if_pipeline_succeeds;
-  }
-
-  public boolean getRequest_access_enabled() {
-    return request_access_enabled;
-  }
-
-  public boolean getOnly_allow_merge_if_all_discussions_are_resolved() {
-    return only_allow_merge_if_all_discussions_are_resolved;
-  }
-
-  public boolean getRemove_source_branch_after_merge() {
-    return remove_source_branch_after_merge;
-  }
-
-  public boolean getPrinting_merge_request_link_enabled() {
-    return printing_merge_request_link_enabled;
-  }
-
-  public String getMerge_method() {
-    return merge_method;
-  }
-
-  public boolean getAuto_devops_enabled() {
-    return auto_devops_enabled;
-  }
-
-  public String getAuto_devops_deploy_strategy() {
-    return auto_devops_deploy_strategy;
-  }
-
-  public Permissions getPermissions() {
-    return PermissionsObject;
-  }
-
-  // Setter Methods
-
+  @JsonProperty("id")
   public void setId(String id) {
     this.id = id;
   }
 
+  @JsonProperty("description")
+  public String getDescription() {
+    return description;
+  }
+
+  @JsonProperty("description")
   public void setDescription(String description) {
     this.description = description;
   }
 
+  @JsonProperty("name")
+  public String getName() {
+    return name;
+  }
+
+  @JsonProperty("name")
   public void setName(String name) {
     this.name = name;
   }
 
-  public void setName_with_namespace(String name_with_namespace) {
-    this.name_with_namespace = name_with_namespace;
+  @JsonProperty("name_with_namespace")
+  public String getNameWithNamespace() {
+    return nameWithNamespace;
   }
 
+  @JsonProperty("name_with_namespace")
+  public void setNameWithNamespace(String nameWithNamespace) {
+    this.nameWithNamespace = nameWithNamespace;
+  }
+
+  @JsonProperty("path")
+  public String getPath() {
+    return path;
+  }
+
+  @JsonProperty("path")
   public void setPath(String path) {
     this.path = path;
   }
 
-  public void setPath_with_namespace(String path_with_namespace) {
-    this.path_with_namespace = path_with_namespace;
+  @JsonProperty("path_with_namespace")
+  public String getPathWithNamespace() {
+    return pathWithNamespace;
   }
 
-  public void setCreated_at(String created_at) {
-    this.created_at = created_at;
+  @JsonProperty("path_with_namespace")
+  public void setPathWithNamespace(String pathWithNamespace) {
+    this.pathWithNamespace = pathWithNamespace;
   }
 
-  public void setDefault_branch(String default_branch) {
-    this.default_branch = default_branch;
+  @JsonProperty("created_at")
+  public String getCreatedAt() {
+    return createdAt;
   }
 
-  public void setSsh_url_to_repo(String ssh_url_to_repo) {
-    this.ssh_url_to_repo = ssh_url_to_repo;
+  @JsonProperty("created_at")
+  public void setCreatedAt(String createdAt) {
+    this.createdAt = createdAt;
   }
 
-  public void setHttp_url_to_repo(String http_url_to_repo) {
-    this.http_url_to_repo = http_url_to_repo;
+  @JsonProperty("default_branch")
+  public String getDefaultBranch() {
+    return defaultBranch;
   }
 
-  public void setWeb_url(String web_url) {
-    this.web_url = web_url;
+  @JsonProperty("default_branch")
+  public void setDefaultBranch(String defaultBranch) {
+    this.defaultBranch = defaultBranch;
   }
 
-  public void setReadme_url(String readme_url) {
-    this.readme_url = readme_url;
+  @JsonProperty("tag_list")
+  public List<Object> getTagList() {
+    return tagList;
   }
 
-  public void setAvatar_url(String avatar_url) {
-    this.avatar_url = avatar_url;
+  @JsonProperty("tag_list")
+  public void setTagList(List<Object> tagList) {
+    this.tagList = tagList;
   }
 
-  public void setStar_count(float star_count) {
-    this.star_count = star_count;
+  @JsonProperty("ssh_url_to_repo")
+  public String getSshUrlToRepo() {
+    return sshUrlToRepo;
   }
 
-  public void setForks_count(float forks_count) {
-    this.forks_count = forks_count;
+  @JsonProperty("ssh_url_to_repo")
+  public void setSshUrlToRepo(String sshUrlToRepo) {
+    this.sshUrlToRepo = sshUrlToRepo;
   }
 
-  public void setLast_activity_at(String last_activity_at) {
-    this.last_activity_at = last_activity_at;
+  @JsonProperty("http_url_to_repo")
+  public String getHttpUrlToRepo() {
+    return httpUrlToRepo;
   }
 
-  public void setNamespace(Namespace namespaceObject) {
-    this.NamespaceObject = namespaceObject;
+  @JsonProperty("http_url_to_repo")
+  public void setHttpUrlToRepo(String httpUrlToRepo) {
+    this.httpUrlToRepo = httpUrlToRepo;
   }
 
-  public void set_links(_links _linksObject) {
-    this._linksObject = _linksObject;
+  @JsonProperty("web_url")
+  public String getWebUrl() {
+    return webUrl;
   }
 
-  public void setEmpty_repo(boolean empty_repo) {
-    this.empty_repo = empty_repo;
+  @JsonProperty("web_url")
+  public void setWebUrl(String webUrl) {
+    this.webUrl = webUrl;
   }
 
-  public void setArchived(boolean archived) {
+  @JsonProperty("readme_url")
+  public Object getReadmeUrl() {
+    return readmeUrl;
+  }
+
+  @JsonProperty("readme_url")
+  public void setReadmeUrl(Object readmeUrl) {
+    this.readmeUrl = readmeUrl;
+  }
+
+  @JsonProperty("avatar_url")
+  public Object getAvatarUrl() {
+    return avatarUrl;
+  }
+
+  @JsonProperty("avatar_url")
+  public void setAvatarUrl(Object avatarUrl) {
+    this.avatarUrl = avatarUrl;
+  }
+
+  @JsonProperty("forks_count")
+  public Integer getForksCount() {
+    return forksCount;
+  }
+
+  @JsonProperty("forks_count")
+  public void setForksCount(Integer forksCount) {
+    this.forksCount = forksCount;
+  }
+
+  @JsonProperty("star_count")
+  public Integer getStarCount() {
+    return starCount;
+  }
+
+  @JsonProperty("star_count")
+  public void setStarCount(Integer starCount) {
+    this.starCount = starCount;
+  }
+
+  @JsonProperty("last_activity_at")
+  public String getLastActivityAt() {
+    return lastActivityAt;
+  }
+
+  @JsonProperty("last_activity_at")
+  public void setLastActivityAt(String lastActivityAt) {
+    this.lastActivityAt = lastActivityAt;
+  }
+
+  @JsonProperty("namespace")
+  public Namespace getNamespace() {
+    return namespace;
+  }
+
+  @JsonProperty("namespace")
+  public void setNamespace(Namespace namespace) {
+    this.namespace = namespace;
+  }
+
+  @JsonProperty("_links")
+  public Links getLinks() {
+    return links;
+  }
+
+  @JsonProperty("_links")
+  public void setLinks(Links links) {
+    this.links = links;
+  }
+
+  @JsonProperty("empty_repo")
+  public Boolean getEmptyRepo() {
+    return emptyRepo;
+  }
+
+  @JsonProperty("empty_repo")
+  public void setEmptyRepo(Boolean emptyRepo) {
+    this.emptyRepo = emptyRepo;
+  }
+
+  @JsonProperty("archived")
+  public Boolean getArchived() {
+    return archived;
+  }
+
+  @JsonProperty("archived")
+  public void setArchived(Boolean archived) {
     this.archived = archived;
   }
 
+  @JsonProperty("visibility")
+  public String getVisibility() {
+    return visibility;
+  }
+
+  @JsonProperty("visibility")
   public void setVisibility(String visibility) {
     this.visibility = visibility;
   }
 
-  public void setOwner(Owner ownerObject) {
-    this.OwnerObject = ownerObject;
+  @JsonProperty("owner")
+  public Owner getOwner() {
+    return owner;
   }
 
-  public void setResolve_outdated_diff_discussions(boolean resolve_outdated_diff_discussions) {
-    this.resolve_outdated_diff_discussions = resolve_outdated_diff_discussions;
+  @JsonProperty("owner")
+  public void setOwner(Owner owner) {
+    this.owner = owner;
   }
 
-  public void setContainer_registry_enabled(boolean container_registry_enabled) {
-    this.container_registry_enabled = container_registry_enabled;
+  @JsonProperty("resolve_outdated_diff_discussions")
+  public Boolean getResolveOutdatedDiffDiscussions() {
+    return resolveOutdatedDiffDiscussions;
   }
 
-  public void setIssues_enabled(boolean issues_enabled) {
-    this.issues_enabled = issues_enabled;
+  @JsonProperty("resolve_outdated_diff_discussions")
+  public void setResolveOutdatedDiffDiscussions(Boolean resolveOutdatedDiffDiscussions) {
+    this.resolveOutdatedDiffDiscussions = resolveOutdatedDiffDiscussions;
   }
 
-  public void setMerge_requests_enabled(boolean merge_requests_enabled) {
-    this.merge_requests_enabled = merge_requests_enabled;
+  @JsonProperty("container_registry_enabled")
+  public Boolean getContainerRegistryEnabled() {
+    return containerRegistryEnabled;
   }
 
-  public void setWiki_enabled(boolean wiki_enabled) {
-    this.wiki_enabled = wiki_enabled;
+  @JsonProperty("container_registry_enabled")
+  public void setContainerRegistryEnabled(Boolean containerRegistryEnabled) {
+    this.containerRegistryEnabled = containerRegistryEnabled;
   }
 
-  public void setJobs_enabled(boolean jobs_enabled) {
-    this.jobs_enabled = jobs_enabled;
+  @JsonProperty("container_expiration_policy")
+  public ContainerExpirationPolicy getContainerExpirationPolicy() {
+    return containerExpirationPolicy;
   }
 
-  public void setSnippets_enabled(boolean snippets_enabled) {
-    this.snippets_enabled = snippets_enabled;
+  @JsonProperty("container_expiration_policy")
+  public void setContainerExpirationPolicy(ContainerExpirationPolicy containerExpirationPolicy) {
+    this.containerExpirationPolicy = containerExpirationPolicy;
   }
 
-  public void setIssues_access_level(String issues_access_level) {
-    this.issues_access_level = issues_access_level;
+  @JsonProperty("issues_enabled")
+  public Boolean getIssuesEnabled() {
+    return issuesEnabled;
   }
 
-  public void setRepository_access_level(String repository_access_level) {
-    this.repository_access_level = repository_access_level;
+  @JsonProperty("issues_enabled")
+  public void setIssuesEnabled(Boolean issuesEnabled) {
+    this.issuesEnabled = issuesEnabled;
   }
 
-  public void setMerge_requests_access_level(String merge_requests_access_level) {
-    this.merge_requests_access_level = merge_requests_access_level;
+  @JsonProperty("merge_requests_enabled")
+  public Boolean getMergeRequestsEnabled() {
+    return mergeRequestsEnabled;
   }
 
-  public void setWiki_access_level(String wiki_access_level) {
-    this.wiki_access_level = wiki_access_level;
+  @JsonProperty("merge_requests_enabled")
+  public void setMergeRequestsEnabled(Boolean mergeRequestsEnabled) {
+    this.mergeRequestsEnabled = mergeRequestsEnabled;
   }
 
-  public void setBuilds_access_level(String builds_access_level) {
-    this.builds_access_level = builds_access_level;
+  @JsonProperty("wiki_enabled")
+  public Boolean getWikiEnabled() {
+    return wikiEnabled;
   }
 
-  public void setSnippets_access_level(String snippets_access_level) {
-    this.snippets_access_level = snippets_access_level;
+  @JsonProperty("wiki_enabled")
+  public void setWikiEnabled(Boolean wikiEnabled) {
+    this.wikiEnabled = wikiEnabled;
   }
 
-  public void setShared_runners_enabled(boolean shared_runners_enabled) {
-    this.shared_runners_enabled = shared_runners_enabled;
+  @JsonProperty("jobs_enabled")
+  public Boolean getJobsEnabled() {
+    return jobsEnabled;
   }
 
-  public void setLfs_enabled(boolean lfs_enabled) {
-    this.lfs_enabled = lfs_enabled;
+  @JsonProperty("jobs_enabled")
+  public void setJobsEnabled(Boolean jobsEnabled) {
+    this.jobsEnabled = jobsEnabled;
   }
 
-  public void setCreator_id(float creator_id) {
-    this.creator_id = creator_id;
+  @JsonProperty("snippets_enabled")
+  public Boolean getSnippetsEnabled() {
+    return snippetsEnabled;
   }
 
-  public void setImport_status(String import_status) {
-    this.import_status = import_status;
+  @JsonProperty("snippets_enabled")
+  public void setSnippetsEnabled(Boolean snippetsEnabled) {
+    this.snippetsEnabled = snippetsEnabled;
   }
 
-  public void setImport_error(String import_error) {
-    this.import_error = import_error;
+  @JsonProperty("service_desk_enabled")
+  public Boolean getServiceDeskEnabled() {
+    return serviceDeskEnabled;
   }
 
-  public void setOpen_issues_count(float open_issues_count) {
-    this.open_issues_count = open_issues_count;
+  @JsonProperty("service_desk_enabled")
+  public void setServiceDeskEnabled(Boolean serviceDeskEnabled) {
+    this.serviceDeskEnabled = serviceDeskEnabled;
   }
 
-  public void setRunners_token(String runners_token) {
-    this.runners_token = runners_token;
+  @JsonProperty("service_desk_address")
+  public Object getServiceDeskAddress() {
+    return serviceDeskAddress;
   }
 
-  public void setCi_default_git_depth(float ci_default_git_depth) {
-    this.ci_default_git_depth = ci_default_git_depth;
+  @JsonProperty("service_desk_address")
+  public void setServiceDeskAddress(Object serviceDeskAddress) {
+    this.serviceDeskAddress = serviceDeskAddress;
   }
 
-  public void setPublic_jobs(boolean public_jobs) {
-    this.public_jobs = public_jobs;
+  @JsonProperty("can_create_merge_request_in")
+  public Boolean getCanCreateMergeRequestIn() {
+    return canCreateMergeRequestIn;
   }
 
-  public void setBuild_git_strategy(String build_git_strategy) {
-    this.build_git_strategy = build_git_strategy;
+  @JsonProperty("can_create_merge_request_in")
+  public void setCanCreateMergeRequestIn(Boolean canCreateMergeRequestIn) {
+    this.canCreateMergeRequestIn = canCreateMergeRequestIn;
   }
 
-  public void setBuild_timeout(float build_timeout) {
-    this.build_timeout = build_timeout;
+  @JsonProperty("issues_access_level")
+  public String getIssuesAccessLevel() {
+    return issuesAccessLevel;
   }
 
-  public void setAuto_cancel_pending_pipelines(String auto_cancel_pending_pipelines) {
-    this.auto_cancel_pending_pipelines = auto_cancel_pending_pipelines;
+  @JsonProperty("issues_access_level")
+  public void setIssuesAccessLevel(String issuesAccessLevel) {
+    this.issuesAccessLevel = issuesAccessLevel;
   }
 
-  public void setBuild_coverage_regex(String build_coverage_regex) {
-    this.build_coverage_regex = build_coverage_regex;
+  @JsonProperty("repository_access_level")
+  public String getRepositoryAccessLevel() {
+    return repositoryAccessLevel;
   }
 
-  public void setCi_config_path(String ci_config_path) {
-    this.ci_config_path = ci_config_path;
+  @JsonProperty("repository_access_level")
+  public void setRepositoryAccessLevel(String repositoryAccessLevel) {
+    this.repositoryAccessLevel = repositoryAccessLevel;
   }
 
-  public void setOnly_allow_merge_if_pipeline_succeeds(
-      boolean only_allow_merge_if_pipeline_succeeds) {
-    this.only_allow_merge_if_pipeline_succeeds = only_allow_merge_if_pipeline_succeeds;
+  @JsonProperty("merge_requests_access_level")
+  public String getMergeRequestsAccessLevel() {
+    return mergeRequestsAccessLevel;
   }
 
-  public void setRequest_access_enabled(boolean request_access_enabled) {
-    this.request_access_enabled = request_access_enabled;
+  @JsonProperty("merge_requests_access_level")
+  public void setMergeRequestsAccessLevel(String mergeRequestsAccessLevel) {
+    this.mergeRequestsAccessLevel = mergeRequestsAccessLevel;
   }
 
-  public void setOnly_allow_merge_if_all_discussions_are_resolved(
-      boolean only_allow_merge_if_all_discussions_are_resolved) {
-    this.only_allow_merge_if_all_discussions_are_resolved = only_allow_merge_if_all_discussions_are_resolved;
+  @JsonProperty("forking_access_level")
+  public String getForkingAccessLevel() {
+    return forkingAccessLevel;
   }
 
-  public void setRemove_source_branch_after_merge(boolean remove_source_branch_after_merge) {
-    this.remove_source_branch_after_merge = remove_source_branch_after_merge;
+  @JsonProperty("forking_access_level")
+  public void setForkingAccessLevel(String forkingAccessLevel) {
+    this.forkingAccessLevel = forkingAccessLevel;
   }
 
-  public void setPrinting_merge_request_link_enabled(boolean printing_merge_request_link_enabled) {
-    this.printing_merge_request_link_enabled = printing_merge_request_link_enabled;
+  @JsonProperty("wiki_access_level")
+  public String getWikiAccessLevel() {
+    return wikiAccessLevel;
   }
 
-  public void setMerge_method(String merge_method) {
-    this.merge_method = merge_method;
+  @JsonProperty("wiki_access_level")
+  public void setWikiAccessLevel(String wikiAccessLevel) {
+    this.wikiAccessLevel = wikiAccessLevel;
   }
 
-  public void setAuto_devops_enabled(boolean auto_devops_enabled) {
-    this.auto_devops_enabled = auto_devops_enabled;
+  @JsonProperty("builds_access_level")
+  public String getBuildsAccessLevel() {
+    return buildsAccessLevel;
   }
 
-  public void setAuto_devops_deploy_strategy(String auto_devops_deploy_strategy) {
-    this.auto_devops_deploy_strategy = auto_devops_deploy_strategy;
+  @JsonProperty("builds_access_level")
+  public void setBuildsAccessLevel(String buildsAccessLevel) {
+    this.buildsAccessLevel = buildsAccessLevel;
   }
 
-  public void setPermissions(Permissions permissionsObject) {
-    this.PermissionsObject = permissionsObject;
+  @JsonProperty("snippets_access_level")
+  public String getSnippetsAccessLevel() {
+    return snippetsAccessLevel;
   }
 
-  public ArrayList<Object> getTag_list() {
-    return tag_list;
+  @JsonProperty("snippets_access_level")
+  public void setSnippetsAccessLevel(String snippetsAccessLevel) {
+    this.snippetsAccessLevel = snippetsAccessLevel;
   }
 
-  public void setTag_list(ArrayList<Object> tag_list) {
-    this.tag_list = tag_list;
+  @JsonProperty("pages_access_level")
+  public String getPagesAccessLevel() {
+    return pagesAccessLevel;
   }
 
-  public boolean isJobs_enabled() {
-    return jobs_enabled;
+  @JsonProperty("pages_access_level")
+  public void setPagesAccessLevel(String pagesAccessLevel) {
+    this.pagesAccessLevel = pagesAccessLevel;
   }
+
+  @JsonProperty("emails_disabled")
+  public Object getEmailsDisabled() {
+    return emailsDisabled;
+  }
+
+  @JsonProperty("emails_disabled")
+  public void setEmailsDisabled(Object emailsDisabled) {
+    this.emailsDisabled = emailsDisabled;
+  }
+
+  @JsonProperty("shared_runners_enabled")
+  public Boolean getSharedRunnersEnabled() {
+    return sharedRunnersEnabled;
+  }
+
+  @JsonProperty("shared_runners_enabled")
+  public void setSharedRunnersEnabled(Boolean sharedRunnersEnabled) {
+    this.sharedRunnersEnabled = sharedRunnersEnabled;
+  }
+
+  @JsonProperty("lfs_enabled")
+  public Boolean getLfsEnabled() {
+    return lfsEnabled;
+  }
+
+  @JsonProperty("lfs_enabled")
+  public void setLfsEnabled(Boolean lfsEnabled) {
+    this.lfsEnabled = lfsEnabled;
+  }
+
+  @JsonProperty("creator_id")
+  public Integer getCreatorId() {
+    return creatorId;
+  }
+
+  @JsonProperty("creator_id")
+  public void setCreatorId(Integer creatorId) {
+    this.creatorId = creatorId;
+  }
+
+  @JsonProperty("import_status")
+  public String getImportStatus() {
+    return importStatus;
+  }
+
+  @JsonProperty("import_status")
+  public void setImportStatus(String importStatus) {
+    this.importStatus = importStatus;
+  }
+
+  @JsonProperty("import_error")
+  public Object getImportError() {
+    return importError;
+  }
+
+  @JsonProperty("import_error")
+  public void setImportError(Object importError) {
+    this.importError = importError;
+  }
+
+  @JsonProperty("open_issues_count")
+  public Integer getOpenIssuesCount() {
+    return openIssuesCount;
+  }
+
+  @JsonProperty("open_issues_count")
+  public void setOpenIssuesCount(Integer openIssuesCount) {
+    this.openIssuesCount = openIssuesCount;
+  }
+
+  @JsonProperty("runners_token")
+  public String getRunnersToken() {
+    return runnersToken;
+  }
+
+  @JsonProperty("runners_token")
+  public void setRunnersToken(String runnersToken) {
+    this.runnersToken = runnersToken;
+  }
+
+  @JsonProperty("ci_default_git_depth")
+  public Integer getCiDefaultGitDepth() {
+    return ciDefaultGitDepth;
+  }
+
+  @JsonProperty("ci_default_git_depth")
+  public void setCiDefaultGitDepth(Integer ciDefaultGitDepth) {
+    this.ciDefaultGitDepth = ciDefaultGitDepth;
+  }
+
+  @JsonProperty("public_jobs")
+  public Boolean getPublicJobs() {
+    return publicJobs;
+  }
+
+  @JsonProperty("public_jobs")
+  public void setPublicJobs(Boolean publicJobs) {
+    this.publicJobs = publicJobs;
+  }
+
+  @JsonProperty("build_git_strategy")
+  public String getBuildGitStrategy() {
+    return buildGitStrategy;
+  }
+
+  @JsonProperty("build_git_strategy")
+  public void setBuildGitStrategy(String buildGitStrategy) {
+    this.buildGitStrategy = buildGitStrategy;
+  }
+
+  @JsonProperty("build_timeout")
+  public Integer getBuildTimeout() {
+    return buildTimeout;
+  }
+
+  @JsonProperty("build_timeout")
+  public void setBuildTimeout(Integer buildTimeout) {
+    this.buildTimeout = buildTimeout;
+  }
+
+  @JsonProperty("auto_cancel_pending_pipelines")
+  public String getAutoCancelPendingPipelines() {
+    return autoCancelPendingPipelines;
+  }
+
+  @JsonProperty("auto_cancel_pending_pipelines")
+  public void setAutoCancelPendingPipelines(String autoCancelPendingPipelines) {
+    this.autoCancelPendingPipelines = autoCancelPendingPipelines;
+  }
+
+  @JsonProperty("build_coverage_regex")
+  public Object getBuildCoverageRegex() {
+    return buildCoverageRegex;
+  }
+
+  @JsonProperty("build_coverage_regex")
+  public void setBuildCoverageRegex(Object buildCoverageRegex) {
+    this.buildCoverageRegex = buildCoverageRegex;
+  }
+
+  @JsonProperty("ci_config_path")
+  public Object getCiConfigPath() {
+    return ciConfigPath;
+  }
+
+  @JsonProperty("ci_config_path")
+  public void setCiConfigPath(Object ciConfigPath) {
+    this.ciConfigPath = ciConfigPath;
+  }
+
+  @JsonProperty("shared_with_groups")
+  public List<Object> getSharedWithGroups() {
+    return sharedWithGroups;
+  }
+
+  @JsonProperty("shared_with_groups")
+  public void setSharedWithGroups(List<Object> sharedWithGroups) {
+    this.sharedWithGroups = sharedWithGroups;
+  }
+
+  @JsonProperty("only_allow_merge_if_pipeline_succeeds")
+  public Boolean getOnlyAllowMergeIfPipelineSucceeds() {
+    return onlyAllowMergeIfPipelineSucceeds;
+  }
+
+  @JsonProperty("only_allow_merge_if_pipeline_succeeds")
+  public void setOnlyAllowMergeIfPipelineSucceeds(Boolean onlyAllowMergeIfPipelineSucceeds) {
+    this.onlyAllowMergeIfPipelineSucceeds = onlyAllowMergeIfPipelineSucceeds;
+  }
+
+  @JsonProperty("allow_merge_on_skipped_pipeline")
+  public Object getAllowMergeOnSkippedPipeline() {
+    return allowMergeOnSkippedPipeline;
+  }
+
+  @JsonProperty("allow_merge_on_skipped_pipeline")
+  public void setAllowMergeOnSkippedPipeline(Object allowMergeOnSkippedPipeline) {
+    this.allowMergeOnSkippedPipeline = allowMergeOnSkippedPipeline;
+  }
+
+  @JsonProperty("request_access_enabled")
+  public Boolean getRequestAccessEnabled() {
+    return requestAccessEnabled;
+  }
+
+  @JsonProperty("request_access_enabled")
+  public void setRequestAccessEnabled(Boolean requestAccessEnabled) {
+    this.requestAccessEnabled = requestAccessEnabled;
+  }
+
+  @JsonProperty("only_allow_merge_if_all_discussions_are_resolved")
+  public Boolean getOnlyAllowMergeIfAllDiscussionsAreResolved() {
+    return onlyAllowMergeIfAllDiscussionsAreResolved;
+  }
+
+  @JsonProperty("only_allow_merge_if_all_discussions_are_resolved")
+  public void setOnlyAllowMergeIfAllDiscussionsAreResolved(Boolean onlyAllowMergeIfAllDiscussionsAreResolved) {
+    this.onlyAllowMergeIfAllDiscussionsAreResolved = onlyAllowMergeIfAllDiscussionsAreResolved;
+  }
+
+  @JsonProperty("remove_source_branch_after_merge")
+  public Boolean getRemoveSourceBranchAfterMerge() {
+    return removeSourceBranchAfterMerge;
+  }
+
+  @JsonProperty("remove_source_branch_after_merge")
+  public void setRemoveSourceBranchAfterMerge(Boolean removeSourceBranchAfterMerge) {
+    this.removeSourceBranchAfterMerge = removeSourceBranchAfterMerge;
+  }
+
+  @JsonProperty("printing_merge_request_link_enabled")
+  public Boolean getPrintingMergeRequestLinkEnabled() {
+    return printingMergeRequestLinkEnabled;
+  }
+
+  @JsonProperty("printing_merge_request_link_enabled")
+  public void setPrintingMergeRequestLinkEnabled(Boolean printingMergeRequestLinkEnabled) {
+    this.printingMergeRequestLinkEnabled = printingMergeRequestLinkEnabled;
+  }
+
+  @JsonProperty("merge_method")
+  public String getMergeMethod() {
+    return mergeMethod;
+  }
+
+  @JsonProperty("merge_method")
+  public void setMergeMethod(String mergeMethod) {
+    this.mergeMethod = mergeMethod;
+  }
+
+  @JsonProperty("suggestion_commit_message")
+  public Object getSuggestionCommitMessage() {
+    return suggestionCommitMessage;
+  }
+
+  @JsonProperty("suggestion_commit_message")
+  public void setSuggestionCommitMessage(Object suggestionCommitMessage) {
+    this.suggestionCommitMessage = suggestionCommitMessage;
+  }
+
+  @JsonProperty("auto_devops_enabled")
+  public Boolean getAutoDevopsEnabled() {
+    return autoDevopsEnabled;
+  }
+
+  @JsonProperty("auto_devops_enabled")
+  public void setAutoDevopsEnabled(Boolean autoDevopsEnabled) {
+    this.autoDevopsEnabled = autoDevopsEnabled;
+  }
+
+  @JsonProperty("auto_devops_deploy_strategy")
+  public String getAutoDevopsDeployStrategy() {
+    return autoDevopsDeployStrategy;
+  }
+
+  @JsonProperty("auto_devops_deploy_strategy")
+  public void setAutoDevopsDeployStrategy(String autoDevopsDeployStrategy) {
+    this.autoDevopsDeployStrategy = autoDevopsDeployStrategy;
+  }
+
+  @JsonProperty("autoclose_referenced_issues")
+  public Boolean getAutocloseReferencedIssues() {
+    return autocloseReferencedIssues;
+  }
+
+  @JsonProperty("autoclose_referenced_issues")
+  public void setAutocloseReferencedIssues(Boolean autocloseReferencedIssues) {
+    this.autocloseReferencedIssues = autocloseReferencedIssues;
+  }
+
+  @JsonProperty("permissions")
+  public Permissions getPermissions() {
+    return permissions;
+  }
+
+  @JsonProperty("permissions")
+  public void setPermissions(Permissions permissions) {
+    this.permissions = permissions;
+  }
+
+  @JsonAnyGetter
+  public Map<String, Object> getAdditionalProperties() {
+    return this.additionalProperties;
+  }
+
+  @JsonAnySetter
+  public void setAdditionalProperty(String name, Object value) {
+    this.additionalProperties.put(name, value);
+  }
+
+
 }
-
-
-
