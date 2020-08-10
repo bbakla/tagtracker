@@ -61,7 +61,7 @@ public class Tag implements Serializable {
   //@ManyToMany(fetch = FetchType.EAGER)
   //@JsonBackReference
   @OneToMany(fetch = FetchType.EAGER)
-  private Set<Tag> dependentOnMe = new HashSet();
+  private Set<Tag> relatedTags = new HashSet();
 
   /*  @ManyToMany(mappedBy = "dependentToMe", fetch = FetchType.EAGER)
     @JsonManagedReference
@@ -138,25 +138,25 @@ public class Tag implements Serializable {
     this.deployedEnvironments.put(environment, true);
   }
 
-  public void setDependentOnMe(Set<Tag> dependentToMe) {
-    this.dependentOnMe = dependentToMe;
+  public void setRelatedTags(Set<Tag> dependentToMe) {
+    this.relatedTags = dependentToMe;
   }
 
   public void addDependentOnMe(Tag dependentOnMe) {
 
-    this.dependentOnMe.add(dependentOnMe);
+    this.relatedTags.add(dependentOnMe);
   }
 
   public void removeDependentOnMe(Tag dependentToMe) {
-    this.dependentOnMe.remove(dependentToMe);
+    this.relatedTags.remove(dependentToMe);
   }
 
   public Set<Tag> getDependentOn() {
     return dependentOn;
   }
 
-  public void setDependentOn(Set<Tag> dependentTo) {
-    this.dependentOn = dependentTo;
+  public void setDependentOn(Set<Tag> relatedTags) {
+    this.relatedTags = relatedTags;
   }
 
   public void addDependency(Tag dependency) {
@@ -183,12 +183,12 @@ public class Tag implements Serializable {
     this.commitMessage = commitMessage;
   }
 
-  public Set<Tag> getDependentOnMe() {
-    return dependentOnMe;
+  public Set<Tag> getRelatedTags() {
+    return relatedTags;
   }
 
   private boolean isAddedDependentOnMeList(Tag dependency) {
-    return dependency.getDependentOnMe().
+    return dependency.getRelatedTags().
         stream().
         filter(t -> t.getTagName().equals(this.getTagName())).
         findAny().isEmpty() ? false : true;

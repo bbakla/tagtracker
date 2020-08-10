@@ -38,23 +38,30 @@ public class TagService {
   ConversionService conversionService;
 
   public TagResource addATagAsDependency(
-      String projectIdentifier, String mainTagName, DependencyDto dependentOnDto)
+      String projectIdentifier, String tagNameOfProject, DependencyDto dependentOnDto)
       throws ProjectNotFoundException {
 
     Project project = projectService.getProject(projectIdentifier);
 
-    Optional<Project> dependentOnProjectOptional =
+    Optional<Project> relatedProject =
         projectRepository.findProjectByProjectName(dependentOnDto.getProjectName());
+
     projectService.throwProjectNotFoundIfProjectNotAvailable(
-        dependentOnProjectOptional, dependentOnDto.getProjectName());
+        relatedProject, dependentOnDto.getProjectName());
 
-    Tag tagThatIsDependentOn = project.findTag(mainTagName);
-    Tag savedDependentOnThatTag = addDependencyOnMeForATag(tagThatIsDependentOn, dependentOnDto);
+    Tag relatedTag = relatedProject.get().findTag(dependentOnDto.getTagName());
 
-    tagThatIsDependentOn.addDependency(savedDependentOnThatTag);
-    Tag savedTagThatIsDependentOn = tagRepository.save(tagThatIsDependentOn);
+    Tag dependentTag = project.findTag(tagNameOfProject);
+    dependentTag.addDependency(relatedTag);
+    Tag dependentTagSaved = tagRepository.save(dependentTag);
+    Tag relatedTagUpdated = tagRepository.save(relatedTag);
 
-    return conversionService.convert(savedTagThatIsDependentOn, TagResource.class);
+    //Tag relationSavedInDatabase = addRelationToRelatedTag(dependentTag, dependentOnDto, relatedTag);
+
+    //dependentTag.addDependency(relationSavedInDatabase);
+    //Tag savedTagThatIsDependentOn = tagRepository.save(dependentTag);
+
+    return conversionService.convert(dependentTagSaved, TagResource.class);
   }
 
   public TagResource addATagAsDependentOnMe(
@@ -145,13 +152,25 @@ public class TagService {
     return tags;
   }
 
-  private Tag addDependencyOnMeForATag(Tag tagThatIsDependentOn, DependencyDto dependentOnDto) {
+  public TagResource getTagOfAProject(String identifier, String tagName)
+      throws ProjectNotFoundException {
+    Project project = projectService.getProject(identifier);
 
-    Tag tagDependentOnMe =
-        tagRepository.findTagByTagNameAndProjectProjectName(
-            dependentOnDto.getTagName(), dependentOnDto.getProjectName());
-    tagDependentOnMe.addDependentOnMe(tagThatIsDependentOn);
+    TagResource tagResource = project.getTags()
+        .stream()
+        .filter(t -> t.getTagName().equals(tagName))
+        .map(t -> conversionService.convert(t, TagResource.class))
+        .findFirst().get();
 
-    return tagRepository.save(tagDependentOnMe);
+    return tagResource;
+  }
+
+  private Tag addRelationToRelatedTag(Tag tagThatIsDependentOn, DependencyDto dependentOnDto,
+      Tag hasNewDependentOnMe)
+      throws ProjectNotFoundException {
+
+    hasNewDependentOnMe.addDependentOnMe(tagThatIsDependentOn);
+
+    return tagRepository.save(hasNewDependentOnMe);
   }
 }

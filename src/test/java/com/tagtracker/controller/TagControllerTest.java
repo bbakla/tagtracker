@@ -83,6 +83,7 @@ public class TagControllerTest {
     DependencyDto dependencyDto =
         new DependencyDto(
             notDependentProject.getProjectName(),
+            notDependentProject.getRemoteProjectId(),
             notDependentProject.getTags().iterator().next().getTagName());
 
     // WHEN
@@ -108,7 +109,7 @@ public class TagControllerTest {
     Tag notDependentTagInDatabase =
         tagRepository.findTagByTagNameAndProjectProjectName(
             dependencyDto.getTagName(), dependencyDto.getProjectName());
-    assertEquals(1, notDependentTagInDatabase.getDependentOnMe().size());
+    assertEquals(1, notDependentTagInDatabase.getRelatedTags().size());
   }
 
   @Test
@@ -136,6 +137,7 @@ public class TagControllerTest {
     DependencyDto dependencyDto =
         new DependencyDto(
             dependentProject.getProjectName(),
+            dependentProject.getRemoteProjectId(),
             dependentProject.getTags().iterator().next().getTagName());
 
     // WHEN
@@ -162,7 +164,7 @@ public class TagControllerTest {
         tagRepository.findTagByTagNameAndProjectProjectName(
             notDependentTag.getTagName(),
             notDependentTag.getProject().getProjectName());
-    assertEquals(1, notDependentTagInDatabase.getDependentOnMe().size());
+    assertEquals(1, notDependentTagInDatabase.getRelatedTags().size());
   }
 
   @Test

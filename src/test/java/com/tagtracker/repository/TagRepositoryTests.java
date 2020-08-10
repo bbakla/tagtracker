@@ -1,6 +1,5 @@
 package com.tagtracker.repository;
 
-import com.google.common.collect.Iterables;
 import com.tagtracker.TestSampleCreator;
 import com.tagtracker.model.entity.Project;
 import com.tagtracker.model.entity.Tag;
@@ -74,6 +73,44 @@ public class TagRepositoryTests {
     assertEquals(0,
         projectRepository.findProjectByRemoteProjectId(project.getRemoteProjectId()).get().getTags()
             .size());
+  }
+
+  @Test
+  public void canAddDependencyToAProject() {
+    Project project = TestSampleCreator.createAProjectWithNoDependencies(true);
+    projectRepository.save(project);
+    Tag projectTag = project.getTags().iterator().next();
+
+    Project project2 = TestSampleCreator.createAProjectWithNoDependencies(false);
+    project2.setProjectName("secondProject");
+    project2.setRemoteProjectId("secondRemoteProject");
+    project2.addTag(TestSampleCreator.createTag("secondProjectTag", project2));
+    projectRepository.save(project2);
+    Tag projectTag2 = project2.getTags().iterator().next();
+
+    Project project3 = TestSampleCreator.createAProjectWithNoDependencies(false);
+    project3.setProjectName("thirdProject");
+    project3.setRemoteProjectId("thirdRemoteProject");
+    project3.addTag(TestSampleCreator.createTag("thirdProjectTag", project3));
+    projectRepository.save(project3);
+    Tag projectTag3 = project3.getTags().iterator().next();
+
+    projectTag.addDependency(projectTag2);
+    projectTag.addDependency(projectTag3);
+    Tag savedProjectTag = tagRepository.save(projectTag);
+    Tag updatedtag2 = tagRepository.save(projectTag2);
+    Tag updatedTag3 = tagRepository.save(projectTag3);
+
+    System.out.println(updatedtag2);
+    System.out.println(updatedTag3);
+
+    assertTrue(savedProjectTag.getDependentOn().size() == 2);
+
+    Tag tagOfProject2 = tagRepository
+        .findTagByTagNameAndProjectProjectName(projectTag2.getTagName(), project2.getProjectName());
+    assertEquals(1, tagOfProject2.getRelatedTags().size());
+
+
   }
 
 }

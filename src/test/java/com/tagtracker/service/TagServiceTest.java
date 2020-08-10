@@ -55,7 +55,9 @@ public class TagServiceTest {
     ProjectResource tenant1Project = projectService
         .saveRemoteProjectRepositoryInformation(tenant1ProjectId); // has only one tag
 
-    DependencyDto dependencyDto = new DependencyDto(tenant1Project.getProjectName(),
+    DependencyDto dependencyDto = new DependencyDto(
+        tenant1Project.getProjectName(),
+        tenant1Project.getProjectId(),
         tenant1Project.getTags().iterator().next().getTagName());
     Tag dependsOnATag = tagRepository
         .findTagByTagNameAndProjectProjectName(project.getTags().iterator().next().getTagName(),
@@ -71,7 +73,7 @@ public class TagServiceTest {
 
     assertTrue(dependsOnATagAfterDependencyAdded.getDependentOn().stream()
         .anyMatch(d -> d.getTagName().equals(dependsOnMeTag.getTagName())));
-    assertTrue(dependsOnMeTag.getDependentOnMe().stream()
+    assertTrue(dependsOnMeTag.getRelatedTags().stream()
         .anyMatch(d -> d.getTagName().equals(dependsOnATagAfterDependencyAdded.getTagName())));
   }
 
@@ -96,7 +98,9 @@ public class TagServiceTest {
     dependentTag.addDependency(notDependentTag);
     Tag savedDependentTag = tagRepository.save(dependentTag);
 
-    DependencyDto dependentOnMeDto = new DependencyDto(dependentProject.getProjectName(),
+    DependencyDto dependentOnMeDto = new DependencyDto(
+        dependentProject.getProjectName(),
+        dependentProject.getProjectId(),
         savedDependentTag.getTagName());
     TagResource savedMainTag = tagService
         .addATagAsDependentOnMe(notDependentProject.getProjectId(), notDependentTag.getTagName(),
@@ -106,7 +110,7 @@ public class TagServiceTest {
         .findTagByTagNameAndProject_RemoteProjectId(savedMainTag.getTagName(),
             savedMainTag.getProjectId());
 
-    assertTrue(1 == getMainTagFromRepo.getDependentOnMe().size());
+    assertTrue(1 == getMainTagFromRepo.getRelatedTags().size());
   }
 
   @Test

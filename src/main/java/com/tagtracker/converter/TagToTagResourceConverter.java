@@ -13,19 +13,21 @@ public class TagToTagResourceConverter implements Converter<Tag, TagResource> {
   @Override
   public TagResource convert(Tag source) {
     var tagResource =
-        new TagResource(source.getRemoteProjectId(), source.getTagName(), source.getMessage(),
+        new TagResource(source.getRemoteProjectId(), source.getProjectName(), source.getTagName(),
+            source.getMessage(),
             source.getReleaseMessage());
 
     tagResource.setDeployedEnvironments(source.getDeployedEnvironments() == null ? new EnumMap<>(Environment.class) : source.getDeployedEnvironments() );
     tagResource.setTagsDependentOn(convertDependencies(source.getDependentOn()));
-    tagResource.setTagsDependentOnMe(convertDependencies(source.getDependentOnMe()));
+    tagResource.setTagsDependentOnMe(convertDependencies(source.getRelatedTags()));
 
     return tagResource;
   }
 
   private Set<TagResource> convertDependencies(Set<Tag> dependencies) {
     return dependencies.stream()
-        .map(d -> new TagResource(d.getRemoteProjectId(), d.getTagName(), d.getMessage(),
+        .map(d -> new TagResource(d.getRemoteProjectId(), d.getProjectName(), d.getTagName(),
+            d.getMessage(),
             d.getReleaseMessage()))
         .collect(Collectors.toSet());
   }

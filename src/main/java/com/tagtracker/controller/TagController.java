@@ -4,13 +4,11 @@ import static com.tagtracker.controller.Constants.GITLAB_PROJECT_TAGS_BY_IDENTIF
 import static com.tagtracker.controller.Constants.PROJECT_BASE_PATH;
 import static com.tagtracker.controller.Constants.PROJECT_PATH_BY_ID_AND_DEPENDENCY_PATH;
 import static com.tagtracker.controller.Constants.PROJECT_PATH_BY_ID_AND_DEPENDENT_ON_ME_PATH;
-import static com.tagtracker.controller.Constants.PROJECT_PATH_DELETE_TAG_BY_NAME;
+import static com.tagtracker.controller.Constants.PROJECT_TAG_BY_NAME;
 import static com.tagtracker.controller.Constants.PROJECT_PATH_TO_DEPLOY;
 
 import com.tagtracker.model.dto.gitlab.TagDto;
 import com.tagtracker.model.entity.Environment;
-import com.tagtracker.model.entity.Tag;
-import com.tagtracker.model.resource.ProjectResource;
 import com.tagtracker.model.resource.TagResource;
 import com.tagtracker.service.ProjectNotFoundException;
 import com.tagtracker.service.TagService;
@@ -88,7 +86,7 @@ public class TagController {
         .body(tag);
   }
 
-  @DeleteMapping(PROJECT_PATH_DELETE_TAG_BY_NAME)
+  @DeleteMapping(PROJECT_TAG_BY_NAME)
   public ResponseEntity<?> deleteTag(
       @PathVariable String identifier,
       @PathVariable String tagName,
@@ -106,5 +104,16 @@ public class TagController {
     List<TagResource> tags = tagService.getTagsOfAProject(identifier);
 
     return ResponseEntity.ok().body(tags);
+  }
+
+  @GetMapping(PROJECT_TAG_BY_NAME)
+  public ResponseEntity<TagResource> getSpecificTagOfAProject(@PathVariable String identifier,
+      @PathVariable String tagName) throws ProjectNotFoundException {
+
+    TagResource tag = tagService.getTagOfAProject(identifier, tagName);
+
+    return ResponseEntity.ok().body(tag);
+
+
   }
 }
