@@ -2,7 +2,6 @@ import React, {useContext} from "react";
 import Project from "./Project";
 import {GlobalContext} from "./Store";
 
-//import {ProjectContext} from "./ProjectDashboard";
 
 
 export default function DisplayProjects({removeProjectFromTheList}) {
@@ -16,7 +15,7 @@ export default function DisplayProjects({removeProjectFromTheList}) {
         return sorted;
     }*/
 
-    const removeProject = (projectName) => {
+  const removeProject = (projectName) => {
         removeProjectFromTheList(projectName)
     }
 

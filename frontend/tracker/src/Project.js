@@ -32,10 +32,10 @@ export default function Project({project, removeProject}) {
 
     const deployments = project.tags.length === 0 ? []
         : project.tags[selectedTagIndex].deployments
-    const dependentToMe = project.tags.length === 0 ? []
+    /*const dependentToMe = project.tags.length === 0 ? []
         : project.tags[selectedTagIndex].tagsDependentOnMe
     const dependentOn = project.tags.length === 0 ? []
-        : project.tags[selectedTagIndex].tagsDependentOn
+        : project.tags[selectedTagIndex].tagsDependentOn*/
 
     return (
         <div key={project.projectName} className="col-md-6">
@@ -68,27 +68,31 @@ export default function Project({project, removeProject}) {
                     <div className="row">
                         <div className="col-xs-6 col-md-6">
 
-                            <Tag currentTagName={tagName}
-                                 projectName={project.projectName}
-                                 projectId={project.projectId}
-                                 tags={tagList}
-                            />
+                          <Tag currentTagName={tagName}
+                               projectName={project.projectName}
+                               projectId={project.projectId}
+                               tags={tagList}
+                          />
 
-                              <Deployment deploymentStatus={deployments}
-                                        projectId={project.projectId}/>
+                          <Deployment deploymentStatus={deployments}
+                                      projectId={project.projectId}/>
                         </div>
-                        <div className="col-xs-6 col-md-6">
-                            <ShowDependency relationshipType={DEPENDENT_ON_ME}
-                                            dependencies={dependentToMe}
-                                            projectName={project.projectName}
-                                            projectId={project.projectId}
-                            />
-                            <ShowDependency relationshipType= {DEPENDENT_ON}
-                                            dependencies={dependentOn}
-                                            projectName={project.projectName}
-                                            projectId={project.projectId}
-                            />
-                        </div>
+                      <div className="col-xs-6 col-md-6">
+                        <ShowDependency relationshipType={DEPENDENT_ON}
+                            //dependencies={dependentOn}
+                                        projectName={project.projectName}
+                                        projectId={project.projectId}
+                                        tagName={tagName}
+                        />
+
+                        <ShowDependency relationshipType={DEPENDENT_ON_ME}
+                            // dependencies={dependentToMe}
+                                        projectName={project.projectName}
+                                        projectId={project.projectId}
+                                        tagName={tagName}
+                        />
+
+                      </div>
                     </div>
                 </div>
                 {/*   <ButtonGroup className="p-3" toggle={true}>

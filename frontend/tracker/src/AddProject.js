@@ -17,7 +17,6 @@ export default function AddProject(){
 
       setProjectIdentifier("");
 
-
     }
 
   return (

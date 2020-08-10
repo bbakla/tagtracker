@@ -19,12 +19,16 @@ export default function TagFormModal({tName, m, releaseN, buttonLabel, saveTag})
     }
 
     const saveTagHandle = () => {
-        saveTag({
-            name: tagName,
-            message: message,
-            releaseNotes: releaseNotes
-        });
-        close();
+      saveTag({
+        name: tagName,
+        message: message,
+        releaseNotes: releaseNotes
+      });
+
+      setTagName("");
+      setMessage("");
+      setReleaseNotes("");
+      close();
     }
 
 /*    const saveValue = (event) => {

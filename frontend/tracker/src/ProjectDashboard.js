@@ -1,9 +1,13 @@
-import React from "react";
+import React, {useContext, useEffect} from "react";
 import AddProject from "./AddProject";
 import DisplayProjects from "./DisplayProjects";
-
+import {GlobalContext} from "./Store";
+import axios from "axios";
+import {basePathForProjects} from "./paths";
 
 export default function ProjectDashboard() {
+
+  const {isLoading, loading, projects, setProjects} = useContext(GlobalContext);
 
   /*
 
@@ -39,18 +43,32 @@ export default function ProjectDashboard() {
          createNewTag();
      }*/
 
-    return (
-        <div className="container">
+  useEffect(() => {
+    const fetchData = async () => {
 
-                <div className="row mt-3">
+      try {
+        const result = await axios(basePathForProjects);
+        setProjects(result.data);
 
-                    <AddProject/>
-                </div>
-                <div className="row mt-5">
+      } catch (e) {
+        console.log(e)
+      }
 
+    };
 
+    fetchData();
+  }, []);
+
+  return (
+      <div className="container">
+
+        <div className="row mt-3">
+
+          <AddProject/>
+        </div>
+
+        <div className="row mt-5">
                     <DisplayProjects />
-
                 </div>
 
 

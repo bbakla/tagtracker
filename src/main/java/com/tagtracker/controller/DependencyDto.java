@@ -6,8 +6,11 @@ public class DependencyDto {
 
   private String tagName;
 
-  public DependencyDto(String projectName, String tagName) {
+  private String projectId;
+
+  public DependencyDto(String projectName, String projectId, String tagName) {
     this.projectName = projectName;
+    this.projectId = projectId;
     this.tagName = tagName;
   }
 
@@ -17,6 +20,14 @@ public class DependencyDto {
 
   public void setProjectName(String projectName) {
     this.projectName = projectName;
+  }
+
+  public String getProjectId() {
+    return projectId;
+  }
+
+  public void setProjectId(String projectId) {
+    this.projectId = projectId;
   }
 
   public String getTagName() {

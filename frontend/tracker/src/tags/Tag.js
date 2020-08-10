@@ -1,11 +1,10 @@
-import React from "react";
+import React, {useContext} from "react";
 import {Link} from "react-router-dom";
+import {GlobalContext} from "../Store";
 
 
 export default function Tag({currentTagName, projectName, projectId, tags}) {
-
-    //const pathName = "/projects/:projectId/tags".replace(":projectId", this.props.projectId); //1. approach
-    const pathName = (projectId) => `/projects/${projectId}/tags`; // 2.approach
+  const pathName = (projectId) => `/projects/${projectId}/tags`;
 
     return (
         <div>

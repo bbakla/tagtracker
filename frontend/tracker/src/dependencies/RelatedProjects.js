@@ -1,49 +1,37 @@
-import React, {Component, useContext, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {Table} from "react-bootstrap";
 import DependencyModal from "./DependencyModal";
 import {useLocation} from "react-router";
 import {DEPENDENT_ON, DEPENDENT_ON_ME} from "./dependency";
-import {addDependentOn, addDependentOnMe} from "../paths";
-import axios from 'axios';
+
 import {GlobalContext} from "../Store";
-//import {ProjectContext} from "../ProjectDashboard";
 
 export default function RelatedProjects() {
 
-    const location = useLocation();
-    const [dependencies, setDependencies] = useState(location.state.dependencies)
-    const {test} = useContext(GlobalContext);
+  const location = useLocation();
+  const {saveDependency, deleteDependency, projects} = useContext(
+      GlobalContext);
+  const [dependencies, setDependencies] = useState([])
 
+  const handleDeleteDependency = (projectName) => {
+    let confirmDelete = window.confirm("Are you sure deleting the dependency?")
+    if (confirmDelete) {
 
-    const deleteDependency = (projectName) => {
-        let confirmDelete = window.confirm("Are you sure deleting the tag?")
-        if (confirmDelete) {
-
-            setDependencies(dependencies.filter(d => d.projectName !== projectName));
-        }
+      setDependencies(dependencies.filter(d => d.projectName !== projectName));
     }
+  }
 
-const saveDependency = (dependency) => {
+  const handleSaveDependency = (dependency) => {
     const newDependency = {
-        projectName: dependency.projectName,
-        tag: dependency.tagName
+      projectName: dependency.projectName,
+      tagName: dependency.tagName,
+      projectId: dependency.projectId
     }
-
-    test("saving")
 
     setDependencies(dependencies => [...dependencies, newDependency]);
 
-
-/*    if(location.state.relationshipType === DEPENDENT_ON) {
-        let path = addDependentOn.replace("{identifier}", dependency.projectName)
-            .replace("{tagName", dependency.tagName)
-
-        axios.patch(path, )
-
-    } else if (location.state.relationshipType === DEPENDENT_ON_ME) {
-        let path = addDependentOnMe.replace("{identifier}", dependency.projectName)
-            .replace("{tagName", dependency.tagName)
-    }*/
+    saveDependency(location.state.projectId, location.state.tagName,
+        newDependency, location.state.relationshipType)
 
 }
 
@@ -68,44 +56,56 @@ const updateDependency = (updated) => {
     const tagDependencies = dependencies.map(dependency => {
 
         return (
-            <tr key={dependency.projectName + "_" + dependency.tag}>
-                <td>{dependency.projectName}</td>
-                <td>{dependency.tag}</td>
+            <tr key={dependency.projectName + "_" + dependency.tagName}>
+              <td>{dependency.projectName}</td>
+              <td>{dependency.tagName}</td>
 
-                <td>
-                    <div>
+              <td>
 
-                        <DependencyModal buttonLabel="Edit"
-                                         pName={dependency.projectName}
-                                         tName={dependency.tag}
-                                         saveDependency={updateDependency}
-                                         projects ={location.state.projects}
+                {location.state.relationshipType === DEPENDENT_ON &&
+                (<div>
 
+                  <DependencyModal buttonLabel="Edit"
+                                   pName={dependency.projectName}
+                                   tName={dependency.tagName}
+                                   saveDependency={updateDependency}
+                                   projects={location.state.projects}
+                  />
 
-                        >
+                  <button type="button" className="btn btn-sm btn-danger"
+                          onClick={() => handleDeleteDependency(
+                              dependency.projectName)}>
+                    <i className=" far fa-trash-alt"></i>
+                  </button>
+                </div>)}
 
-                        </DependencyModal>
-                        <button type="button" className="btn btn-sm btn-danger"
-                                onClick={() => deleteDependency(dependency.projectName)}>
-                            <i className=" far fa-trash-alt"></i>
-                        </button>
-                    </div>
-                </td>
+              </td>
 
             </tr>
 
         )
     });
 
-    return (
-        <div className="container">
-            <h3 className="mt-3">{location.state.dependencyTitle}</h3>
-            <div className="row">
-                <div className="col-12">
-                    <Table responsive hover>
-                        <thead>
-                        <tr>
-                            <th>Project Name</th>
+  useEffect(() => {
+    const tag = projects.find(
+        p => p.projectName === location.state.projectName).tags.find(
+        t => t.tagName === location.state.tagName);
+
+    setDependencies(location.state.relationshipType === DEPENDENT_ON_ME
+        ? tag.tagsDependentOnMe : tag.tagsDependentOn)
+  })
+
+  console.log(location.state.relationshipType)
+
+  return (
+      <div className="container">
+        <h3 className="mt-3">{location.state.dependencyTitle}</h3>
+        <div className="row">
+          <div className="col-12">
+            <Table responsive hover>
+              <thead>
+              <tr>
+                <th>Project Name</th>
                             <th>Tag</th>
                         </tr>
                         </thead>
@@ -116,9 +116,10 @@ const updateDependency = (updated) => {
 
                     <DependencyModal
                         buttonLabel="Create"
-                        saveDependency={saveDependency}
+                        saveDependency={handleSaveDependency}
                         pName={location.state.projectName}
-                        projects ={location.state.projects}
+                        projects={location.state.projects}
+                        relationshipType={location.state.relationshipType}
                     />
                 </div>
             </div>
