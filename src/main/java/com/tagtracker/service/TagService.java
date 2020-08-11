@@ -1,7 +1,7 @@
 package com.tagtracker.service;
 
 import com.google.common.collect.Iterables;
-import com.tagtracker.controller.DependencyDto;
+import com.tagtracker.model.dto.DependencyDto;
 import com.tagtracker.model.dto.gitlab.TagDto;
 import com.tagtracker.model.entity.Environment;
 import com.tagtracker.model.entity.Project;
@@ -55,11 +55,6 @@ public class TagService {
     dependentTag.addDependency(dependencyTag);
     Tag dependentTagSaved = tagRepository.save(dependentTag);
     Tag relatedTagUpdated = tagRepository.save(dependencyTag);
-
-    //Tag relationSavedInDatabase = addRelationToRelatedTag(dependentTag, dependentOnDto, relatedTag);
-
-    //dependentTag.addDependency(relationSavedInDatabase);
-    //Tag savedTagThatIsDependentOn = tagRepository.save(dependentTag);
 
     return conversionService.convert(dependentTagSaved, TagResource.class);
   }

@@ -24,16 +24,16 @@ import javax.persistence.MapKeyColumn;
 import javax.persistence.MapKeyEnumerated;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import org.springframework.data.annotation.CreatedDate;
 
 @Entity
-@Table//(uniqueConstraints = @UniqueConstraint(columnNames = {"tagName"}))
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"tagName", "remote_project_id"})})
 public class Tag implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  //@Column(name = "id")
   private Long id;
 
   @NotNull
@@ -66,13 +66,9 @@ public class Tag implements Serializable {
       joinColumns = {@JoinColumn(name="dependent_on_id")},
       inverseJoinColumns = {@JoinColumn(name = "tag_id")}
       )
-  //@JsonBackReference
-  //@OneToMany(fetch = FetchType.EAGER)
   private Set<Tag> relatedTags = new HashSet();
 
-  /*  @ManyToMany(mappedBy = "dependentToMe", fetch = FetchType.EAGER)
-    @JsonManagedReference
-    */
+
   @OneToMany(fetch = FetchType.EAGER)
   private Set<Tag> dependentOn = new HashSet();
 

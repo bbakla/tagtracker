@@ -7,6 +7,7 @@ import static com.tagtracker.controller.Constants.PROJECT_PATH_BY_ID_AND_DEPENDE
 import static com.tagtracker.controller.Constants.PROJECT_TAG_BY_NAME;
 import static com.tagtracker.controller.Constants.PROJECT_PATH_TO_DEPLOY;
 
+import com.tagtracker.model.dto.DependencyDto;
 import com.tagtracker.model.dto.gitlab.TagDto;
 import com.tagtracker.model.entity.Environment;
 import com.tagtracker.model.resource.TagResource;
@@ -48,7 +49,7 @@ public class TagController {
     return ResponseEntity.ok().body(tagResource);
   }
 
-  @PatchMapping(PROJECT_PATH_BY_ID_AND_DEPENDENT_ON_ME_PATH)
+/*  @PatchMapping(PROJECT_PATH_BY_ID_AND_DEPENDENT_ON_ME_PATH)
   public ResponseEntity<TagResource> dependentOnMe(
       @PathVariable String identifier,
       @PathVariable String tagName,
@@ -57,7 +58,7 @@ public class TagController {
     TagResource tagResource = tagService.addATagAsDependentOnMe(identifier, tagName, dependentOnMe);
 
     return ResponseEntity.ok().body(tagResource);
-  }
+  }*/
 
   @PatchMapping(PROJECT_PATH_TO_DEPLOY)
   public ResponseEntity<TagResource> deployTo(

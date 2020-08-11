@@ -15,11 +15,7 @@ export default function DependencyModal({pName, tName, saveDependency, buttonLab
       showProjects.length === 0 ? "" : showProjects[0].projectName);
   const [selectedTagName, setSelectedTagName] = useState(
       tName === undefined ? projects.find(
-          p => p.projectName === selectedProjectName).tags[0].tagName : tName);
-
-
-  console.log(selectedTagName);
-  console.log(selectedProjectName);
+          p => p.projectName === selectedProjectName).tags[0].tagName : tName)
 
 
   const open = () => {
