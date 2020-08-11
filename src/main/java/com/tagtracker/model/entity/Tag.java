@@ -6,6 +6,7 @@ import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -16,6 +17,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyColumn;
 import javax.persistence.MapKeyEnumerated;
@@ -58,9 +61,13 @@ public class Tag implements Serializable {
   @Column(name = "IS_DEPLOYED")
   private Map<Environment, Boolean> deployedEnvironments = new EnumMap<>(Environment.class);
 
-  //@ManyToMany(fetch = FetchType.EAGER)
+  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @JoinTable(name="tag_relations",
+      joinColumns = {@JoinColumn(name="dependent_on_id")},
+      inverseJoinColumns = {@JoinColumn(name = "tag_id")}
+      )
   //@JsonBackReference
-  @OneToMany(fetch = FetchType.EAGER)
+  //@OneToMany(fetch = FetchType.EAGER)
   private Set<Tag> relatedTags = new HashSet();
 
   /*  @ManyToMany(mappedBy = "dependentToMe", fetch = FetchType.EAGER)
@@ -142,12 +149,12 @@ public class Tag implements Serializable {
     this.relatedTags = dependentToMe;
   }
 
-  public void addDependentOnMe(Tag dependentOnMe) {
+  public void addRelatedTag(Tag dependentOnMe) {
 
     this.relatedTags.add(dependentOnMe);
   }
 
-  public void removeDependentOnMe(Tag dependentToMe) {
+  public void removeRelatedTag(Tag dependentToMe) {
     this.relatedTags.remove(dependentToMe);
   }
 
@@ -160,16 +167,16 @@ public class Tag implements Serializable {
   }
 
   public void addDependency(Tag dependency) {
-    if (!isAddedDependentOnMeList(dependency)) {
-      dependency.addDependentOnMe(this);
+    if (!isMeInMyRelatedListOfDependency(dependency)) {
+      dependency.addRelatedTag(this);
     }
 
     this.dependentOn.add(dependency);
   }
 
   public void removeDependency(Tag dependency) {
-    if (isAddedDependentOnMeList(dependency)) {
-      dependency.removeDependentOnMe(this);
+    if (isMeInMyRelatedListOfDependency(dependency)) {
+      dependency.removeRelatedTag(this);
     }
 
     this.dependentOn.remove(dependency);
@@ -187,14 +194,14 @@ public class Tag implements Serializable {
     return relatedTags;
   }
 
-  private boolean isAddedDependentOnMeList(Tag dependency) {
+  private boolean isMeInMyRelatedListOfDependency(Tag dependency) {
     return dependency.getRelatedTags().
         stream().
         filter(t -> t.getTagName().equals(this.getTagName())).
         findAny().isEmpty() ? false : true;
   }
 
-  private boolean isAddedDependentOnList(String dependentOnThatTagName) {
+  private boolean isTagInDependencyList(String dependentOnThatTagName) {
     return this.getDependentOn()
         .stream()
         .filter(t -> t.getTagName().equals(dependentOnThatTagName))

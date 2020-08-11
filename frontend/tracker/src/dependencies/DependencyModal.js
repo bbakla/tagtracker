@@ -17,6 +17,11 @@ export default function DependencyModal({pName, tName, saveDependency, buttonLab
       tName === undefined ? projects.find(
           p => p.projectName === selectedProjectName).tags[0].tagName : tName);
 
+
+  console.log(selectedTagName);
+  console.log(selectedProjectName);
+
+
   const open = () => {
     setShowModal(true);
   }
@@ -26,7 +31,7 @@ export default function DependencyModal({pName, tName, saveDependency, buttonLab
   }
 
   const handleSaveDependency = () => {
-    debugger;
+
     saveDependency({
       projectName: selectedProjectName,
       tagName: selectedTagName
@@ -38,7 +43,6 @@ export default function DependencyModal({pName, tName, saveDependency, buttonLab
   const determineButtonLabel = () => {
     let label = buttonLabel;
     let button = '';
-    console.log(relationshipType)
 
     if (label === "Edit") {
       label = "Save"
@@ -48,7 +52,6 @@ export default function DependencyModal({pName, tName, saveDependency, buttonLab
           </button>
     } else {
       label = "Create"
-      debugger;
       if (relationshipType === DEPENDENT_ON) {
 
         button = <Button className="btn btn-outline-primary btn-block"
@@ -57,6 +60,12 @@ export default function DependencyModal({pName, tName, saveDependency, buttonLab
     }
 
     return {label, button}
+  }
+
+  const handleSelectedProjectName = (value) => {
+    setSelectedProjectName(value)
+    const tagValue = showProjects.find(p => p.projectName === value).tags[0].tagName
+    setSelectedTagName(tagValue)
   }
 
   return (
@@ -69,7 +78,7 @@ export default function DependencyModal({pName, tName, saveDependency, buttonLab
               <div className="form-group">
                 <label htmlFor="projectNameInput">Project Name</label>
                 <select className="form-control col-md-4"
-                        onChange={e => setSelectedProjectName(e.target.value)}
+                        onChange={e => handleSelectedProjectName(e.target.value)}
                         value={selectedProjectName}>
                   {
                     showProjects.map(p => {
@@ -94,8 +103,11 @@ export default function DependencyModal({pName, tName, saveDependency, buttonLab
                         tag => {
                           return <option key={tag.tagName}
                                          value={tag.tagName}>{tag.tagName}</option>
-                        })}
-                </select>}
+                        })
+
+                  }
+                </select>
+                }
               </div>
             </form>
           </Modal.Body>

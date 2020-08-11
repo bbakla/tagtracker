@@ -95,8 +95,6 @@ const updateDependency = (updated) => {
         ? tag.tagsDependentOnMe : tag.tagsDependentOn)
   })
 
-  console.log(location.state.relationshipType)
-
   return (
       <div className="container">
         <h3 className="mt-3">{location.state.dependencyTitle}</h3>

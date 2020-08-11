@@ -49,12 +49,12 @@ public class TagService {
     projectService.throwProjectNotFoundIfProjectNotAvailable(
         relatedProject, dependentOnDto.getProjectName());
 
-    Tag relatedTag = relatedProject.get().findTag(dependentOnDto.getTagName());
+    Tag dependencyTag = relatedProject.get().findTag(dependentOnDto.getTagName());
 
     Tag dependentTag = project.findTag(tagNameOfProject);
-    dependentTag.addDependency(relatedTag);
+    dependentTag.addDependency(dependencyTag);
     Tag dependentTagSaved = tagRepository.save(dependentTag);
-    Tag relatedTagUpdated = tagRepository.save(relatedTag);
+    Tag relatedTagUpdated = tagRepository.save(dependencyTag);
 
     //Tag relationSavedInDatabase = addRelationToRelatedTag(dependentTag, dependentOnDto, relatedTag);
 
@@ -79,7 +79,7 @@ public class TagService {
     Tag dependentOnMeTag =
         dependentOnMeProjectOptional.get().findTag(dependentOnMeDto.getTagName());
 
-    mainTag.addDependentOnMe(dependentOnMeTag);
+    mainTag.addRelatedTag(dependentOnMeTag);
     Tag mainTagSaved = tagRepository.save(mainTag);
 
     dependentOnMeTag.addDependency(mainTag);
@@ -169,7 +169,7 @@ public class TagService {
       Tag hasNewDependentOnMe)
       throws ProjectNotFoundException {
 
-    hasNewDependentOnMe.addDependentOnMe(tagThatIsDependentOn);
+    hasNewDependentOnMe.addRelatedTag(tagThatIsDependentOn);
 
     return tagRepository.save(hasNewDependentOnMe);
   }

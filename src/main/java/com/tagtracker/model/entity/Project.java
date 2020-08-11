@@ -1,5 +1,6 @@
 package com.tagtracker.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.util.*;
@@ -35,7 +36,8 @@ public class Project extends Auditable<String> implements Serializable {
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER)
 
-  @JsonManagedReference
+  //@JsonManagedReference
+@JsonBackReference
   private Set<Tag> tags = new HashSet<>();
 
   //	@EmbeddedId
