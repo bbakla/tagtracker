@@ -6,9 +6,9 @@ import {DEPENDENT_ON, DEPENDENT_ON_ME} from "./dependencies/dependency";
 
 
 const sortTags =  (t1, t2) => {
-    if(t1.tagName.toLowerCase() > t2.tagName.toLowerCase()) {
+    if(t1.tagName < t2.tagName) {
         return 1;
-    } else if(t1.tagName.toLowerCase() === t2.tagName.toLowerCase()){
+    } else if(t1.tagName === t2.tagName){
         return 0;
     } else {
         return -1;
@@ -44,8 +44,6 @@ export default function Project({project, removeProject}) {
     }
 
 
-    console.log(tagsToBeSelected)
-
     const description = project.description.length === 0 ? <br/>
         : project.description
 
@@ -65,7 +63,7 @@ export default function Project({project, removeProject}) {
 
 
     return (
-        <div key={project.projectName} className="col-md-6">
+        <div key={project.projectName} className="col-md-6 mb-3">
 
           <div className="card p-1">
             <h5 className=" card-header">{project.projectName}

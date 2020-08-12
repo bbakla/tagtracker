@@ -24,9 +24,6 @@ export default function RelatedProjects() {
          }
   })
 
-    console.log(location.state.tagName)
-    console.log(projects)
-
   const handleDeleteDependency = (projectName) => {
     let confirmDelete = window.confirm("Are you sure deleting the dependency?")
     if (confirmDelete) {
@@ -100,15 +97,6 @@ const updateDependency = (updated) => {
 
         )
     });
-
-/*  useEffect(() => {
-    const tag = projects.find(
-        p => p.projectName === location.state.projectName).tags.find(
-        t => t.tagName === location.state.tagName);
-
-    setDependencies(location.state.relationshipType === DEPENDENT_ON_ME
-        ? tag.tagsDependentOnMe : tag.tagsDependentOn)
-  })*/
 
   return (
       <div className="container">

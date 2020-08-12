@@ -337,7 +337,7 @@ const useInit = () => {
               setProjects(result.data);
               setError(false);
               setLoading(true);
-              console.log(result.data)
+
 
             } catch (e) {
                 setError(true);
@@ -352,6 +352,8 @@ const useInit = () => {
 
     return [{projects, isLoading, isError}, setProjects]
 }
+
+
 
 
 /*

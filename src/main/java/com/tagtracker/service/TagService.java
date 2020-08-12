@@ -105,7 +105,7 @@ public class TagService {
     Tag newTag = new Tag();
     newTag.setTagName(tagInRemote.getName());
     newTag.setMessage(tagInRemote.getMessage());
-    newTag.setReleaseMessage(tagInRemote.getRelease().getDescription());
+    newTag.setReleaseMessage(tagInRemote.getRelease() != null ? tagInRemote.getRelease().getDescription() : null);
     newTag.setProject(projectInDatabase);
 
     projectInDatabase.addTag(newTag);

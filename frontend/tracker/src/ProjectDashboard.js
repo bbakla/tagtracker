@@ -43,7 +43,7 @@ export default function ProjectDashboard() {
          createNewTag();
      }*/
 
-  useEffect(() => {
+/*  useEffect(() => {
     const fetchData = async () => {
 
       try {
@@ -57,7 +57,7 @@ export default function ProjectDashboard() {
     };
 
     fetchData();
-  }, []);
+  }, []);*/
 
   return (
       <div className="container">
