@@ -28,6 +28,17 @@ export default function RelatedProjects() {
     let confirmDelete = window.confirm("Are you sure deleting the dependency?")
     if (confirmDelete) {
 
+      const dependency = dependencies.find(d => d.projectName === projectName)
+
+      const dependenyToBeRemoved = {
+        projectName: projectName,
+        tagName: dependency.tagName,
+        projectId: dependency.projectId
+      }
+
+      deleteDependency(location.state.projectId, location.state.tagName,
+          dependenyToBeRemoved)
+
       setDependencies(dependencies.filter(d => d.projectName !== projectName));
     }
   }

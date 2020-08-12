@@ -59,7 +59,29 @@ public class TagService {
     return conversionService.convert(dependentTagSaved, TagResource.class);
   }
 
-  public TagResource addATagAsDependentOnMe(
+  public TagResource removeTagFromDependencies(
+      String projectIdentifier, String tagNameOfProject, DependencyDto dependentOnDto)
+      throws ProjectNotFoundException {
+
+    Optional<Project> relatedProject =
+        projectRepository.findProjectByProjectName(dependentOnDto.getProjectName());
+
+    projectService.throwProjectNotFoundIfProjectNotAvailable(
+        relatedProject, dependentOnDto.getProjectName());
+
+    Tag relatedTag = relatedProject.get().findTag(dependentOnDto.getTagName());
+
+    Project project = projectService.getProject(projectIdentifier);
+    Tag projectTag = project.findTag(tagNameOfProject);
+    projectTag.removeDependency(relatedTag);
+
+    Tag dependentTagSaved = tagRepository.save(projectTag);
+    Tag relatedTagUpdated = tagRepository.save(relatedTag);
+
+    return conversionService.convert(dependentTagSaved, TagResource.class);
+  }
+
+/*  public TagResource addATagAsDependentOnMe(
       String projectIdentifier, String mainTagName, DependencyDto dependentOnMeDto)
       throws ProjectNotFoundException {
 
@@ -81,7 +103,7 @@ public class TagService {
     tagRepository.save(dependentOnMeTag);
 
     return conversionService.convert(mainTagSaved, TagResource.class);
-  }
+  }*/
 
   public TagResource deploy(String projectIdentifier, String tagName, Environment environment)
       throws ProjectNotFoundException {

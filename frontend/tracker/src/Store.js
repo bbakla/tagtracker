@@ -1,10 +1,8 @@
 import axios from "axios";
 import {
-  addDependentOn,
-  addDependentOnMe,
+  dependentOnPath,
   basePathForProjects,
-  deleteTagPath,
-  tagBasePath
+
 } from "./paths";
 import React, {createContext, useEffect, useReducer, useState} from "react";
 import AppReducer from "./AppReducer";
@@ -271,7 +269,7 @@ const Store = ({children}) => {
 
   const saveDependency = (projectId, tagName, newDependency,
       dependencyType) => {
-    let path = addDependentOn;
+    let path = dependentOnPath;
 
     if (dependencyType === DEPENDENT_ON) {
       path = path.replace("{identifier}", projectId)
@@ -283,9 +281,10 @@ const Store = ({children}) => {
     }
 
     const saveDependency = async () => {
-      const response = await axios.patch(path, JSON.stringify(newDependency), {
+      const response = await axios.put(path, JSON.stringify(newDependency), {
         headers: {
           'Content-Type': 'application/json',
+          'X-operation': 'save'
         }
       }).catch(err => console.log(err))
     }
@@ -293,8 +292,22 @@ const Store = ({children}) => {
     saveDependency();
   }
 
-  const deleteDependency = (projectId, deletedDependencyProjectId) => {
+  const deleteDependency = (projectId, projectTagId, dependencyToBeRemoved) => {
 
+    let path = dependentOnPath.replace("{identifier}", projectId)
+    .replace("{tagName}", projectTagId)
+
+    const removeDependency = async () => {
+      const response = await axios.put(path,
+          JSON.stringify(dependencyToBeRemoved), {
+            headers: {
+              'Content-Type': 'application/json',
+              'X-operation': 'remove'
+            }
+          }).catch(err => console.log(err))
+    }
+
+    removeDependency();
   }
 
   const loading = () => {
