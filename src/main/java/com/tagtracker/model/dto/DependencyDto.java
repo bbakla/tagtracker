@@ -1,4 +1,4 @@
-package com.tagtracker.controller;
+package com.tagtracker.model.dto;
 
 public class DependencyDto {
 

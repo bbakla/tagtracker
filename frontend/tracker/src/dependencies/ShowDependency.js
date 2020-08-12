@@ -7,8 +7,8 @@ export default function ShowDependency({relationshipType, projectName, projectId
 
   const buttonName = relationshipType === DEPENDENT_ON ? "Dependent on"
       : "Related with";
-  const title = relationshipType === DEPENDENT_ON ? projectName
-      + "dependencies " : projectName + " relations "
+  const title = relationshipType === DEPENDENT_ON ? projectName + " / "+ tagName
+      + " dependencies " : projectName + " / " + tagName + " relations "
   const pathName = (projectId) => `/projects/${projectId}/${relationshipType}`;
 
   return (

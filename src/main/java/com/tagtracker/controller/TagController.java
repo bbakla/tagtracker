@@ -3,10 +3,10 @@ package com.tagtracker.controller;
 import static com.tagtracker.controller.Constants.GITLAB_PROJECT_TAGS_BY_IDENTIFIER;
 import static com.tagtracker.controller.Constants.PROJECT_BASE_PATH;
 import static com.tagtracker.controller.Constants.PROJECT_PATH_BY_ID_AND_DEPENDENCY_PATH;
-import static com.tagtracker.controller.Constants.PROJECT_PATH_BY_ID_AND_DEPENDENT_ON_ME_PATH;
 import static com.tagtracker.controller.Constants.PROJECT_TAG_BY_NAME;
 import static com.tagtracker.controller.Constants.PROJECT_PATH_TO_DEPLOY;
 
+import com.tagtracker.model.dto.DependencyDto;
 import com.tagtracker.model.dto.gitlab.TagDto;
 import com.tagtracker.model.entity.Environment;
 import com.tagtracker.model.resource.TagResource;
@@ -24,7 +24,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,19 +38,25 @@ public class TagController {
   @Autowired
   private TagService tagService;
 
-  @PatchMapping(PROJECT_PATH_BY_ID_AND_DEPENDENCY_PATH)
+  @PutMapping(PROJECT_PATH_BY_ID_AND_DEPENDENCY_PATH)
   public ResponseEntity<TagResource> addDependency(
+      @RequestHeader("X-operation") String operation,
       @PathVariable String identifier,
       @PathVariable String tagName,
       @RequestBody DependencyDto dependentTo)
       throws ProjectNotFoundException {
 
-    TagResource tagResource = tagService.addATagAsDependency(identifier, tagName, dependentTo);
+    TagResource tagResource = null;
+    if (operation.equals("save")) {
+      tagResource = tagService.addATagAsDependency(identifier, tagName, dependentTo);
+    } else if (operation.equals("remove")) {
+      tagResource = tagService.removeTagFromDependencies(identifier, tagName, dependentTo);
+    }
 
     return ResponseEntity.ok().body(tagResource);
   }
 
-  @PatchMapping(PROJECT_PATH_BY_ID_AND_DEPENDENT_ON_ME_PATH)
+  /*  @PatchMapping(PROJECT_PATH_BY_ID_AND_DEPENDENT_ON_ME_PATH)
   public ResponseEntity<TagResource> dependentOnMe(
       @PathVariable String identifier,
       @PathVariable String tagName,
@@ -57,7 +65,7 @@ public class TagController {
     TagResource tagResource = tagService.addATagAsDependentOnMe(identifier, tagName, dependentOnMe);
 
     return ResponseEntity.ok().body(tagResource);
-  }
+  }*/
 
   @PatchMapping(PROJECT_PATH_TO_DEPLOY)
   public ResponseEntity<TagResource> deployTo(
@@ -107,13 +115,12 @@ public class TagController {
   }
 
   @GetMapping(PROJECT_TAG_BY_NAME)
-  public ResponseEntity<TagResource> getSpecificTagOfAProject(@PathVariable String identifier,
-      @PathVariable String tagName) throws ProjectNotFoundException {
+  public ResponseEntity<TagResource> getSpecificTagOfAProject(
+      @PathVariable String identifier, @PathVariable String tagName)
+      throws ProjectNotFoundException {
 
     TagResource tag = tagService.getTagOfAProject(identifier, tagName);
 
     return ResponseEntity.ok().body(tag);
-
-
   }
 }

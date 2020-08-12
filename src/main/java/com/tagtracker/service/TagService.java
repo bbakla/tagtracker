@@ -1,7 +1,7 @@
 package com.tagtracker.service;
 
 import com.google.common.collect.Iterables;
-import com.tagtracker.controller.DependencyDto;
+import com.tagtracker.model.dto.DependencyDto;
 import com.tagtracker.model.dto.gitlab.TagDto;
 import com.tagtracker.model.entity.Environment;
 import com.tagtracker.model.entity.Project;
@@ -49,22 +49,39 @@ public class TagService {
     projectService.throwProjectNotFoundIfProjectNotAvailable(
         relatedProject, dependentOnDto.getProjectName());
 
-    Tag relatedTag = relatedProject.get().findTag(dependentOnDto.getTagName());
+    Tag dependencyTag = relatedProject.get().findTag(dependentOnDto.getTagName());
 
     Tag dependentTag = project.findTag(tagNameOfProject);
-    dependentTag.addDependency(relatedTag);
+    dependentTag.addDependency(dependencyTag);
     Tag dependentTagSaved = tagRepository.save(dependentTag);
-    Tag relatedTagUpdated = tagRepository.save(relatedTag);
-
-    //Tag relationSavedInDatabase = addRelationToRelatedTag(dependentTag, dependentOnDto, relatedTag);
-
-    //dependentTag.addDependency(relationSavedInDatabase);
-    //Tag savedTagThatIsDependentOn = tagRepository.save(dependentTag);
+    Tag relatedTagUpdated = tagRepository.save(dependencyTag);
 
     return conversionService.convert(dependentTagSaved, TagResource.class);
   }
 
-  public TagResource addATagAsDependentOnMe(
+  public TagResource removeTagFromDependencies(
+      String projectIdentifier, String tagNameOfProject, DependencyDto dependentOnDto)
+      throws ProjectNotFoundException {
+
+    Optional<Project> relatedProject =
+        projectRepository.findProjectByProjectName(dependentOnDto.getProjectName());
+
+    projectService.throwProjectNotFoundIfProjectNotAvailable(
+        relatedProject, dependentOnDto.getProjectName());
+
+    Tag relatedTag = relatedProject.get().findTag(dependentOnDto.getTagName());
+
+    Project project = projectService.getProject(projectIdentifier);
+    Tag projectTag = project.findTag(tagNameOfProject);
+    projectTag.removeDependency(relatedTag);
+
+    Tag dependentTagSaved = tagRepository.save(projectTag);
+    Tag relatedTagUpdated = tagRepository.save(relatedTag);
+
+    return conversionService.convert(dependentTagSaved, TagResource.class);
+  }
+
+/*  public TagResource addATagAsDependentOnMe(
       String projectIdentifier, String mainTagName, DependencyDto dependentOnMeDto)
       throws ProjectNotFoundException {
 
@@ -79,14 +96,14 @@ public class TagService {
     Tag dependentOnMeTag =
         dependentOnMeProjectOptional.get().findTag(dependentOnMeDto.getTagName());
 
-    mainTag.addDependentOnMe(dependentOnMeTag);
+    mainTag.addRelatedTag(dependentOnMeTag);
     Tag mainTagSaved = tagRepository.save(mainTag);
 
     dependentOnMeTag.addDependency(mainTag);
     tagRepository.save(dependentOnMeTag);
 
     return conversionService.convert(mainTagSaved, TagResource.class);
-  }
+  }*/
 
   public TagResource deploy(String projectIdentifier, String tagName, Environment environment)
       throws ProjectNotFoundException {
@@ -110,7 +127,7 @@ public class TagService {
     Tag newTag = new Tag();
     newTag.setTagName(tagInRemote.getName());
     newTag.setMessage(tagInRemote.getMessage());
-    newTag.setReleaseMessage(tagInRemote.getRelease().getDescription());
+    newTag.setReleaseMessage(tagInRemote.getRelease() != null ? tagInRemote.getRelease().getDescription() : null);
     newTag.setProject(projectInDatabase);
 
     projectInDatabase.addTag(newTag);
@@ -169,7 +186,7 @@ public class TagService {
       Tag hasNewDependentOnMe)
       throws ProjectNotFoundException {
 
-    hasNewDependentOnMe.addDependentOnMe(tagThatIsDependentOn);
+    hasNewDependentOnMe.addRelatedTag(tagThatIsDependentOn);
 
     return tagRepository.save(hasNewDependentOnMe);
   }

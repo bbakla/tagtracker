@@ -11,11 +11,33 @@ export default function RelatedProjects() {
   const location = useLocation();
   const {saveDependency, deleteDependency, projects} = useContext(
       GlobalContext);
-  const [dependencies, setDependencies] = useState([])
+  const [dependencies, setDependencies] = useState( () => {
+
+          const tag = projects.find(
+              p => p.projectName === location.state.projectName).tags.find(
+              t => t.tagName === location.state.tagName);
+
+         if (location.state.relationshipType === DEPENDENT_ON_ME) {
+             return tag.tagsDependentOnMe
+         } else {
+           return tag.tagsDependentOn;
+         }
+  })
 
   const handleDeleteDependency = (projectName) => {
     let confirmDelete = window.confirm("Are you sure deleting the dependency?")
     if (confirmDelete) {
+
+      const dependency = dependencies.find(d => d.projectName === projectName)
+
+      const dependenyToBeRemoved = {
+        projectName: projectName,
+        tagName: dependency.tagName,
+        projectId: dependency.projectId
+      }
+
+      deleteDependency(location.state.projectId, location.state.tagName,
+          dependenyToBeRemoved)
 
       setDependencies(dependencies.filter(d => d.projectName !== projectName));
     }
@@ -28,10 +50,10 @@ export default function RelatedProjects() {
       projectId: dependency.projectId
     }
 
-    setDependencies(dependencies => [...dependencies, newDependency]);
+      saveDependency(location.state.projectId, location.state.tagName,
+          newDependency, location.state.relationshipType)
 
-    saveDependency(location.state.projectId, location.state.tagName,
-        newDependency, location.state.relationshipType)
+    setDependencies(depends => [...depends, newDependency]);
 
 }
 
@@ -61,8 +83,8 @@ const updateDependency = (updated) => {
               <td>{dependency.tagName}</td>
 
               <td>
+                  {  location.state.relationshipType === DEPENDENT_ON &&
 
-                {location.state.relationshipType === DEPENDENT_ON &&
                 (<div>
 
                   <DependencyModal buttonLabel="Edit"
@@ -77,25 +99,15 @@ const updateDependency = (updated) => {
                               dependency.projectName)}>
                     <i className=" far fa-trash-alt"></i>
                   </button>
-                </div>)}
-
+                </div>)
+                  }
               </td>
+
 
             </tr>
 
         )
     });
-
-  useEffect(() => {
-    const tag = projects.find(
-        p => p.projectName === location.state.projectName).tags.find(
-        t => t.tagName === location.state.tagName);
-
-    setDependencies(location.state.relationshipType === DEPENDENT_ON_ME
-        ? tag.tagsDependentOnMe : tag.tagsDependentOn)
-  })
-
-  console.log(location.state.relationshipType)
 
   return (
       <div className="container">
