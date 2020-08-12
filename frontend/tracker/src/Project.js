@@ -1,18 +1,37 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Tag from "./tags/Tag";
 import Deployment from "./deployment/Deployment";
 import ShowDependency from "./dependencies/ShowDependency";
 import {DEPENDENT_ON, DEPENDENT_ON_ME} from "./dependencies/dependency";
 
+
+const sortTags =  (t1, t2) => {
+    if(t1.tagName.toLowerCase() > t2.tagName.toLowerCase()) {
+        return 1;
+    } else if(t1.tagName.toLowerCase() === t2.tagName.toLowerCase()){
+        return 0;
+    } else {
+        return -1;
+    }
+}
+
 export default function Project({project, removeProject}) {
     const [selectedTagIndex, setSelectedTagIndex] = useState(0);
+    const [selectedTag, setSelectedTag] = useState("");
+    const [tagsToBeSelected, setTagsToBeSelected] = useState(() => {
+        if (project.tags.length > 0) {
+            return project.tags.sort(sortTags);
+        } else {
+            return [];
+        }
 
-
-
+    });
+    
     const handleSelect = (event) => {
         let selectedTagName = event.target.value
 
         let index = project.tags.findIndex(t => (t.tagName === selectedTagName));
+        setSelectedTag(selectedTagName);
 
         setSelectedTagIndex(index);
     }
@@ -24,11 +43,11 @@ export default function Project({project, removeProject}) {
         }
     }
 
+
+    console.log(tagsToBeSelected)
+
     const description = project.description.length === 0 ? <br/>
         : project.description
-    const tagName = project.tags.length === 0 ? ""
-        : project.tags[selectedTagIndex].tagName
-    const tagList = project.tags.length === 0 ? [] : project.tags
 
     const deployments = project.tags.length === 0 ? []
         : project.tags[selectedTagIndex].deployments
@@ -36,6 +55,14 @@ export default function Project({project, removeProject}) {
         : project.tags[selectedTagIndex].tagsDependentOnMe
     const dependentOn = project.tags.length === 0 ? []
         : project.tags[selectedTagIndex].tagsDependentOn*/
+
+    useEffect(() => {
+        if (tagsToBeSelected.length > 0) {
+            setSelectedTag(tagsToBeSelected[0].tagName)
+        }
+    }, [])
+
+
 
     return (
         <div key={project.projectName} className="col-md-6">
@@ -54,7 +81,7 @@ export default function Project({project, removeProject}) {
                             onChange={handleSelect}>
 
                         {
-                            project.tags.map(tag => (
+                            tagsToBeSelected.map(tag => (
                                 <option key={tag.tagName} value={tag.tagName}>{tag.tagName} </option>
                             ))
                         }
@@ -68,10 +95,10 @@ export default function Project({project, removeProject}) {
                     <div className="row">
                         <div className="col-xs-6 col-md-6">
 
-                          <Tag currentTagName={tagName}
+                          <Tag currentTagName={selectedTag}
                                projectName={project.projectName}
                                projectId={project.projectId}
-                               tags={tagList}
+                               tags={tagsToBeSelected}
                           />
 
                           <Deployment deploymentStatus={deployments}
@@ -82,14 +109,14 @@ export default function Project({project, removeProject}) {
                             //dependencies={dependentOn}
                                         projectName={project.projectName}
                                         projectId={project.projectId}
-                                        tagName={tagName}
+                                        tagName={selectedTag}
                         />
 
                         <ShowDependency relationshipType={DEPENDENT_ON_ME}
                             // dependencies={dependentToMe}
                                         projectName={project.projectName}
                                         projectId={project.projectId}
-                                        tagName={tagName}
+                                        tagName={selectedTag}
                         />
 
                       </div>
