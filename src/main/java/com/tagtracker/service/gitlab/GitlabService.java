@@ -1,5 +1,9 @@
 package com.tagtracker.service.gitlab;
 
+import static com.tagtracker.controller.Constants.GITLAB_PROJECT_JOBS;
+import static com.tagtracker.controller.Constants.GITLAB_PROJECT_JOB_OPERATION;
+
+import com.tagtracker.model.dto.JOB_OPERATION;
 import com.tagtracker.model.dto.gitlab.TagDto;
 import com.tagtracker.model.entity.gitlab.GitlabProject;
 import com.tagtracker.model.entity.gitlab.pipelines.GitlabJob;
@@ -7,6 +11,7 @@ import com.tagtracker.model.entity.gitlab.tags.GitlabTag;
 
 import com.tagtracker.service.ProjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.info.ProjectInfoProperties.Git;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -50,6 +55,7 @@ public class GitlabService {
 
     return responseSpec.bodyToMono(GitlabTag[].class).block();
   }
+
 
   // should be refactored
   public GitlabTag getTagOfARemoteRepository(String projectId, String tagName)
@@ -127,25 +133,28 @@ public class GitlabService {
     return responseSpec.bodyToMono(GitlabTag.class).block();
   }
 
-  public GitlabProject getProject() {
-    GitlabProject project =
-        WebClient.builder()
-            .build()
-            .get()
-            .uri("https://code.siemens.com/api/v4/projects/102943")
-            .header("PRIVATE-TOKEN", privateToken)
-            .retrieve()
-            .bodyToMono(GitlabProject.class)
-            .block();
-
-    System.out.println("sdfsdfsdfsdf");
-    System.out.println(project.getName());
-    //    project.subscribe((p -> System.out.println(p.getName())));
-
-    return null;
-  }
-
   public GitlabJob[] getProjectJobs(String projectId) {
-    return null;
+
+    WebClient.RequestBodySpec request = (RequestBodySpec)
+        client.get()
+            .uri(uriBuilder -> uriBuilder.path(GITLAB_PROJECT_JOBS).build(projectId));
+
+    WebClient.ResponseSpec responseSpec = request.accept(MediaType.APPLICATION_JSON).retrieve();
+
+    return responseSpec.bodyToMono(GitlabJob[].class).block();
+
   }
+
+  public GitlabJob playAJob(String projectId, String jobId, JOB_OPERATION operation) {
+    WebClient.RequestBodySpec requestBodySpec = (RequestBodySpec)
+        client.post()
+            .uri(uriBuilder -> uriBuilder.path(GITLAB_PROJECT_JOB_OPERATION)
+                .build(projectId, jobId, operation.name()));
+
+    WebClient.ResponseSpec responseSpec = requestBodySpec.accept(MediaType.APPLICATION_JSON)
+        .retrieve();
+
+    return responseSpec.bodyToMono(GitlabJob.class).block();
+  }
+
 }

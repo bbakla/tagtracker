@@ -12,7 +12,7 @@ public class Constants {
   public static final String GITLAB_PROJECT_BASE_PATH = "/repositories";
   public static final String GITLAB_PROJECT_TAGS_BY_IDENTIFIER = "/{identifier}/tags";
 
-  public static final String GITLAB_PROJECT_JOBS = PROJECT_PATH_BY_ID + "/jobs";
+  public static final String GITLAB_PROJECT_JOBS = PROJECT_BASE_PATH + PROJECT_PATH_BY_ID + "/jobs";
   public static final String GITLAB_PROJECT_JOB_OPERATION =
       GITLAB_PROJECT_JOBS + "/{jobId}/{operation}";
 
