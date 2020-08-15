@@ -1,0 +1,17 @@
+@startuml
+
+header DataClassFlows
+footer Page %page% of %lastpage%
+title Save Repository in Tracker
+
+User -> ProjectController : ProjectDto
+ProjectController --> ProjectService : ProjectDto
+
+database ProjectDatabase
+
+ProjectService --> ProjectDatabase : Project
+ProjectDatabase --> ProjectService : Project
+User <-- ProjectController : ProjectResource
+
+
+@enduml

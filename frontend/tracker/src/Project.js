@@ -48,11 +48,12 @@ export default function Project({project, removeProject}) {
         : project.description
 
     const deployments = project.tags.length === 0 ? []
-        : project.tags[selectedTagIndex].deployments
+        : project.tags[selectedTagIndex].deployedEnvironments
     /*const dependentToMe = project.tags.length === 0 ? []
         : project.tags[selectedTagIndex].tagsDependentOnMe
     const dependentOn = project.tags.length === 0 ? []
         : project.tags[selectedTagIndex].tagsDependentOn*/
+
 
     useEffect(() => {
         if (tagsToBeSelected.length > 0) {
@@ -100,7 +101,9 @@ export default function Project({project, removeProject}) {
                           />
 
                           <Deployment deploymentStatus={deployments}
-                                      projectId={project.projectId}/>
+                                      projectId={project.projectId}
+                                      tagName={selectedTag}
+                          />
                         </div>
                       <div className="col-xs-6 col-md-6">
                         <ShowDependency relationshipType={DEPENDENT_ON}

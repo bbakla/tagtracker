@@ -1,8 +1,8 @@
 package com.tagtracker.repository;
 
 import com.tagtracker.TestSampleCreator;
-import com.tagtracker.model.entity.Project;
-import com.tagtracker.model.entity.Tag;
+import com.tagtracker.model.entity.tracker.Project;
+import com.tagtracker.model.entity.tracker.Tag;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

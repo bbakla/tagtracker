@@ -1,4 +1,4 @@
-package com.tagtracker.model.entity.gitlab;
+package com.tagtracker.model.entity.gitlab.tags;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -71,4 +71,3 @@ public class GitlabTag {
     return commitObject.getCreated_at();
   }
 }
-

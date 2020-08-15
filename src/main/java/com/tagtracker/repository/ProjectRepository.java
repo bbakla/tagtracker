@@ -1,6 +1,6 @@
 package com.tagtracker.repository;
 
-import com.tagtracker.model.entity.Project;
+import com.tagtracker.model.entity.tracker.Project;
 import java.util.Optional;
 import javax.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;

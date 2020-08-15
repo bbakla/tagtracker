@@ -1,0 +1,58 @@
+@startuml
+skinparam ParticipantPadding 20
+skinparam BoxPadding 10
+
+title Add Project ( 1. scenario)
+autonumber
+Frontend -> Backend: Add Project
+Backend -> Gitlab: Add project
+Gitlab --> Backend: project
+Backend -> Gitlab: Get pipelines of the project (projectId)
+Gitlab --> Backend: pipelines
+  loop # of tags
+Backend -> Gitlab: get tags' jobs (projectId, pipelineId)
+Gitlab --> Backend: Job
+Backend -> Backend: save Job(stage, name, id)
+  end
+Backend --> Frontend: project
+
+newpage Add Project(2. scenario)
+autonumber
+Frontend -> Backend: Add Project
+Backend -> Gitlab: Add project
+Gitlab --> Backend: project
+Backend -> Gitlab: Get jobs of a project(projectId)
+Backend -> Backend: Assign jobs to the tags
+Backend -> Backend: save Job(stage, name, id)
+Backend --> Frontend: project
+
+newpage Create Tag
+autonumber
+Frontend -> Backend: Create Tag
+Backend -> Gitlab: Create Tag
+Gitlab --> Backend: Tag
+Backend -> Gitlab: Get pipelines (projectId)
+Gitlab --> Backend: pipelines
+Backend -> Gitlab: Get jobs of the pipeline (projectId, pipelineId)
+Backend -> Backend: Put related tags' jobs into Tag
+Backend -> Backend: Save tag
+Backend --> Frontend: Tag
+
+newpage Play or Retry a job of a pipeline
+autonumber
+Frontend -> Backend: (projectId, tagName, jobId pipelineId, **play||retry**)
+Backend -> Gitlab: Change status of Job
+Gitlab --> Backend: JobResponse
+Backend -> Backend: Update job status
+Backend --> Frontend: send status
+activate Backend
+activate Gitlab
+Backend -> Gitlab: checkStatus periodically
+Backend -> Backend: Update job status
+Gitlab --> Backend: job finished
+
+deactivate Gitlab
+deactivate Backend
+Backend --> Frontend: new Status
+
+@enduml

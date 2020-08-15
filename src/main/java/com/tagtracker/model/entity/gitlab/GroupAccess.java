@@ -10,38 +10,39 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "project_access",
-    "group_access"
+    "access_level",
+    "notification_level"
 })
-public class Permissions {
+public class GroupAccess {
 
-  @JsonProperty("project_access")
-  private Object projectAccess;
-  @JsonProperty("group_access")
-  private GroupAccess groupAccess;
+  @JsonProperty("access_level")
+  private Integer accessLevel;
+  @JsonProperty("notification_level")
+  private Integer notificationLevel;
   @JsonIgnore
   private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-  @JsonProperty("project_access")
-  public Object getProjectAccess() {
-    return projectAccess;
+  @JsonProperty("access_level")
+  public Integer getAccessLevel() {
+    return accessLevel;
   }
 
-  @JsonProperty("project_access")
-  public void setProjectAccess(Object projectAccess) {
-    this.projectAccess = projectAccess;
+  @JsonProperty("access_level")
+  public void setAccessLevel(Integer accessLevel) {
+    this.accessLevel = accessLevel;
   }
 
-  @JsonProperty("group_access")
-  public GroupAccess getGroupAccess() {
-    return groupAccess;
+  @JsonProperty("notification_level")
+  public Integer getNotificationLevel() {
+    return notificationLevel;
   }
 
-  @JsonProperty("group_access")
-  public void setGroupAccess(GroupAccess groupAccess) {
-    this.groupAccess = groupAccess;
+  @JsonProperty("notification_level")
+  public void setNotificationLevel(Integer notificationLevel) {
+    this.notificationLevel = notificationLevel;
   }
 
   @JsonAnyGetter

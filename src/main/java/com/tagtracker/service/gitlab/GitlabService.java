@@ -2,7 +2,8 @@ package com.tagtracker.service.gitlab;
 
 import com.tagtracker.model.dto.gitlab.TagDto;
 import com.tagtracker.model.entity.gitlab.GitlabProject;
-import com.tagtracker.model.entity.gitlab.GitlabTag;
+import com.tagtracker.model.entity.gitlab.pipelines.GitlabJob;
+import com.tagtracker.model.entity.gitlab.tags.GitlabTag;
 
 import com.tagtracker.service.ProjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,8 @@ public class GitlabService {
     try {
       WebClient.RequestBodySpec request =
           client.method(HttpMethod.GET).uri("/projects/{projectIdentifier}", projectId);
-      WebClient.ResponseSpec responseSpec = request.accept(MediaType.APPLICATION_JSON).retrieve();
+      WebClient.ResponseSpec responseSpec =
+          request.accept(MediaType.APPLICATION_JSON).retrieve();
 
       return responseSpec.bodyToMono(GitlabProject.class).block();
     } catch (WebClientResponseException e) {
@@ -140,6 +142,10 @@ public class GitlabService {
     System.out.println(project.getName());
     //    project.subscribe((p -> System.out.println(p.getName())));
 
+    return null;
+  }
+
+  public GitlabJob[] getProjectJobs(String projectId) {
     return null;
   }
 }

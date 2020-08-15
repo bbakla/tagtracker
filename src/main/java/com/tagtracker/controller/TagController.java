@@ -7,8 +7,8 @@ import static com.tagtracker.controller.Constants.PROJECT_TAG_BY_NAME;
 import static com.tagtracker.controller.Constants.PROJECT_PATH_TO_DEPLOY;
 
 import com.tagtracker.model.dto.DependencyDto;
+import com.tagtracker.model.dto.JobDto;
 import com.tagtracker.model.dto.gitlab.TagDto;
-import com.tagtracker.model.entity.Environment;
 import com.tagtracker.model.resource.TagResource;
 import com.tagtracker.service.ProjectNotFoundException;
 import com.tagtracker.service.TagService;
@@ -56,24 +56,13 @@ public class TagController {
     return ResponseEntity.ok().body(tagResource);
   }
 
-  /*  @PatchMapping(PROJECT_PATH_BY_ID_AND_DEPENDENT_ON_ME_PATH)
-  public ResponseEntity<TagResource> dependentOnMe(
-      @PathVariable String identifier,
-      @PathVariable String tagName,
-      @RequestBody DependencyDto dependentOnMe)
-      throws ProjectNotFoundException {
-    TagResource tagResource = tagService.addATagAsDependentOnMe(identifier, tagName, dependentOnMe);
-
-    return ResponseEntity.ok().body(tagResource);
-  }*/
-
   @PatchMapping(PROJECT_PATH_TO_DEPLOY)
   public ResponseEntity<TagResource> deployTo(
       @PathVariable String identifier,
       @PathVariable String tagName,
-      @PathVariable Environment environment)
+      @PathVariable JobDto jobDto)
       throws ProjectNotFoundException {
-    TagResource tagResource = tagService.deploy(identifier, tagName, environment);
+    TagResource tagResource = tagService.playJob(identifier, tagName, jobDto);
 
     return ResponseEntity.ok().body(tagResource);
   }

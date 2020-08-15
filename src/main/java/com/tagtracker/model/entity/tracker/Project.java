@@ -1,7 +1,6 @@
-package com.tagtracker.model.entity;
+package com.tagtracker.model.entity.tracker;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -74,7 +73,7 @@ public class Project extends Auditable<String> implements Serializable {
     return projectName;
   }
 
-  public void setProjectName(java.lang.String serviceName) {
+  public void setProjectName(String serviceName) {
     this.projectName = serviceName;
   }
 
@@ -90,7 +89,7 @@ public class Project extends Auditable<String> implements Serializable {
     return remoteProjectId;
   }
 
-  public void setRemoteProjectId(java.lang.String id) {
+  public void setRemoteProjectId(String id) {
     this.remoteProjectId = id;
   }
 

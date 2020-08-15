@@ -1,9 +1,9 @@
 package com.tagtracker.service;
 
-import com.tagtracker.model.entity.Project;
-import com.tagtracker.model.entity.Tag;
+import com.tagtracker.model.entity.tracker.Project;
+import com.tagtracker.model.entity.tracker.Tag;
 import com.tagtracker.model.entity.gitlab.GitlabProject;
-import com.tagtracker.model.entity.gitlab.GitlabTag;
+import com.tagtracker.model.entity.gitlab.tags.GitlabTag;
 import com.tagtracker.model.resource.ProjectResource;
 import com.tagtracker.repository.ProjectRepository;
 import com.tagtracker.repository.TagRepository;

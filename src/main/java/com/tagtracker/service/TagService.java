@@ -2,11 +2,13 @@ package com.tagtracker.service;
 
 import com.google.common.collect.Iterables;
 import com.tagtracker.model.dto.DependencyDto;
+import com.tagtracker.model.dto.JobDto;
 import com.tagtracker.model.dto.gitlab.TagDto;
-import com.tagtracker.model.entity.Environment;
-import com.tagtracker.model.entity.Project;
-import com.tagtracker.model.entity.Tag;
-import com.tagtracker.model.entity.gitlab.GitlabTag;
+import com.tagtracker.model.entity.Job;
+import com.tagtracker.model.entity.tracker.Project;
+import com.tagtracker.model.entity.tracker.Tag;
+import com.tagtracker.model.entity.gitlab.tags.GitlabTag;
+import com.tagtracker.model.resource.JobResource;
 import com.tagtracker.model.resource.TagResource;
 import com.tagtracker.repository.ProjectRepository;
 import com.tagtracker.repository.TagRepository;
@@ -81,35 +83,16 @@ public class TagService {
     return conversionService.convert(dependentTagSaved, TagResource.class);
   }
 
-/*  public TagResource addATagAsDependentOnMe(
-      String projectIdentifier, String mainTagName, DependencyDto dependentOnMeDto)
-      throws ProjectNotFoundException {
-
-    Project mainProject = projectService.getProject(projectIdentifier);
-
-    Optional<Project> dependentOnMeProjectOptional =
-        projectRepository.findProjectByProjectName(dependentOnMeDto.getProjectName());
-    projectService.throwProjectNotFoundIfProjectNotAvailable(
-        dependentOnMeProjectOptional, dependentOnMeDto.getProjectName());
-
-    Tag mainTag = mainProject.findTag(mainTagName);
-    Tag dependentOnMeTag =
-        dependentOnMeProjectOptional.get().findTag(dependentOnMeDto.getTagName());
-
-    mainTag.addRelatedTag(dependentOnMeTag);
-    Tag mainTagSaved = tagRepository.save(mainTag);
-
-    dependentOnMeTag.addDependency(mainTag);
-    tagRepository.save(dependentOnMeTag);
-
-    return conversionService.convert(mainTagSaved, TagResource.class);
-  }*/
-
-  public TagResource deploy(String projectIdentifier, String tagName, Environment environment)
+  public TagResource playJob(String projectIdentifier, String tagName, JobDto job)
       throws ProjectNotFoundException {
     var project = projectService.getProject(projectIdentifier);
     Tag tag = project.findTag(tagName);
-    tag.deployedTo(environment);
+
+    /*
+    TODO:
+    1. play/retry job
+    2. Update tag job status
+    *  */
 
     Tag savedTag = tagRepository.save(tag);
 
@@ -180,14 +163,5 @@ public class TagService {
         .findFirst().get();
 
     return tagResource;
-  }
-
-  private Tag addRelationToRelatedTag(Tag tagThatIsDependentOn, DependencyDto dependentOnDto,
-      Tag hasNewDependentOnMe)
-      throws ProjectNotFoundException {
-
-    hasNewDependentOnMe.addRelatedTag(tagThatIsDependentOn);
-
-    return tagRepository.save(hasNewDependentOnMe);
   }
 }
