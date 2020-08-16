@@ -1,4 +1,4 @@
-package com.tagtracker.service.gitlab;
+package com.tagtracker.service;
 
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 

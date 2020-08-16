@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 public class GitlabJob {
 
     @JsonProperty("id")
-    private Integer id;
+    private String id;
     @JsonProperty("status")
     private String status;
     @JsonProperty("stage")
@@ -56,7 +56,7 @@ public class GitlabJob {
     @JsonProperty("duration")
     private Float duration;
     @JsonProperty("user")
-    private User user;
+    private GitlabUser gitlabUser;
     @JsonProperty("commit")
     private Commit commit;
     @JsonProperty("pipeline")
@@ -73,12 +73,12 @@ public class GitlabJob {
     private ArtifactsFile artifactsFile;
 
     @JsonProperty("id")
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
     @JsonProperty("id")
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -193,13 +193,13 @@ public class GitlabJob {
     }
 
     @JsonProperty("user")
-    public User getUser() {
-        return user;
+    public GitlabUser getUser() {
+        return gitlabUser;
     }
 
     @JsonProperty("user")
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(GitlabUser gitlabUser) {
+        this.gitlabUser = gitlabUser;
     }
 
     @JsonProperty("commit")

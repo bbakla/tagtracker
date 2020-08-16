@@ -1,4 +1,4 @@
-package com.tagtracker.model.entity;
+package com.tagtracker.model.entity.tracker;
 
 
 import javax.persistence.Column;
@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Job {
@@ -15,13 +16,20 @@ public class Job {
   private Long id;
 
   @Column
-  private Long jobid;
+  private String jobId;
 
   @Column
   private String stage;
 
   @Column
   private String name;
+
+  @Column
+  private String pipelineStatus;
+
+
+  @OneToOne
+  private User user;
 
   public Long getId() {
     return id;
@@ -47,11 +55,27 @@ public class Job {
     this.name = name;
   }
 
-  public Long getJobid() {
-    return jobid;
+  public void setJobId(String jobId) {
+    this.jobId = jobId;
   }
 
-  public void setJobId(Long jobid) {
-    this.jobid = jobid;
+  public String getJobId() {
+    return jobId;
+  }
+
+  public String getPipelineStatus() {
+    return pipelineStatus;
+  }
+
+  public void setPipelineStatus(String pipelineStatus) {
+    this.pipelineStatus = pipelineStatus;
+  }
+
+  public User getUser() {
+    return user;
+  }
+
+  public void setUser(User user) {
+    this.user = user;
   }
 }

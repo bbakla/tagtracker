@@ -1,5 +1,7 @@
 package com.tagtracker.config;
 
+import com.tagtracker.converter.GibLabJobToJobConverter;
+import com.tagtracker.converter.GibLabJobToJobResourceConverter;
 import com.tagtracker.converter.GitlabTagToTagConverter;
 import com.tagtracker.converter.ProjectToProjectResourceConverter;
 import com.tagtracker.converter.TagToTagResourceConverter;
@@ -17,5 +19,7 @@ public class WebConfig implements WebMvcConfigurer {
     registry.addConverter(tagConverter);
     registry.addConverter(new ProjectToProjectResourceConverter(tagConverter));
     registry.addConverter(new GitlabTagToTagConverter());
+    registry.addConverter(new GibLabJobToJobConverter());
+    registry.addConverter(new GibLabJobToJobResourceConverter());
   }
 }

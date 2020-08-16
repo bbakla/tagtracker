@@ -1,6 +1,5 @@
 package com.tagtracker.model.entity.tracker;
 
-import com.tagtracker.model.entity.Job;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;

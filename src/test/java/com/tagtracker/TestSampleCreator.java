@@ -1,6 +1,6 @@
 package com.tagtracker;
 
-import com.tagtracker.model.entity.Job;
+import com.tagtracker.model.entity.tracker.Job;
 import com.tagtracker.model.entity.tracker.Project;
 
 import com.tagtracker.model.entity.tracker.Tag;
@@ -33,7 +33,7 @@ public class TestSampleCreator {
 
   public static Job createJob(String stage) {
     Job job = new Job();
-    job.setJobId(111L);
+    job.setJobId("111");
     job.setName("name_" + stage);
     job.setStage(stage);
 

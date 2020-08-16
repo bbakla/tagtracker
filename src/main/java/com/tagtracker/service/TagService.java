@@ -1,10 +1,11 @@
 package com.tagtracker.service;
 
-import com.google.common.collect.Iterables;
 import com.tagtracker.model.dto.DependencyDto;
+import com.tagtracker.model.dto.JOB_OPERATION;
 import com.tagtracker.model.dto.JobDto;
 import com.tagtracker.model.dto.gitlab.TagDto;
-import com.tagtracker.model.entity.Job;
+import com.tagtracker.model.entity.gitlab.pipelines.GitlabJob;
+import com.tagtracker.model.entity.tracker.Job;
 import com.tagtracker.model.entity.tracker.Project;
 import com.tagtracker.model.entity.tracker.Tag;
 import com.tagtracker.model.entity.gitlab.tags.GitlabTag;
@@ -13,6 +14,7 @@ import com.tagtracker.model.resource.TagResource;
 import com.tagtracker.repository.ProjectRepository;
 import com.tagtracker.repository.TagRepository;
 import com.tagtracker.service.gitlab.GitlabService;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -83,10 +85,11 @@ public class TagService {
     return conversionService.convert(dependentTagSaved, TagResource.class);
   }
 
-  public TagResource playJob(String projectIdentifier, String tagName, JobDto job)
+  public TagResource runJob(String projectIdentifier, String tagName, JobDto job)
       throws ProjectNotFoundException {
     var project = projectService.getProject(projectIdentifier);
     Tag tag = project.findTag(tagName);
+
 
     /*
     TODO:
@@ -98,6 +101,31 @@ public class TagService {
 
     return conversionService.convert(savedTag, TagResource.class);
   }
+
+  public List<JobResource> getTagJobs(String projectId) {
+
+    GitlabJob[] gitlabJobs = gitlabService.getProjectJobs(projectId);
+
+    List<JobResource> jobsOfTags = Arrays.stream(gitlabJobs).filter(job -> job.getTag())
+        .map(gitlabJob -> conversionService.convert(gitlabJob, JobResource.class))
+        .collect(Collectors.toList());
+
+    return jobsOfTags;
+  }
+
+  public JobResource getTagJob(String projectId, String tagName, String jobId) {
+
+    GitlabJob gitlabJob = gitlabService.getProjectJob(projectId, jobId);
+    return conversionService.convert(gitlabJob, JobResource.class);
+  }
+
+  public JobResource runJob(String projectId, String tagName, String jobId,
+      JOB_OPERATION jobOperation) {
+    GitlabJob gitlabJob = gitlabService.playAJob(projectId, jobId, jobOperation);
+
+    return conversionService.convert(gitlabJob, JobResource.class);
+  }
+
 
   public TagResource createTag(String identifier, TagDto tagDto) throws ProjectNotFoundException {
     Project project = projectService.getProject(identifier);
@@ -138,7 +166,6 @@ public class TagService {
     // project.removeTag(tagName);
 
     var tags = tagRepository.findAll();
-    System.out.println(Iterables.size(tags));
   }
 
   public List<TagResource> getTagsOfAProject(String identifier) throws ProjectNotFoundException {

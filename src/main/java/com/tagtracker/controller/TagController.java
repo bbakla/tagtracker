@@ -56,13 +56,13 @@ public class TagController {
     return ResponseEntity.ok().body(tagResource);
   }
 
-  @PatchMapping(PROJECT_PATH_TO_DEPLOY)
-  public ResponseEntity<TagResource> deployTo(
+  @PostMapping(PROJECT_PATH_TO_DEPLOY)
+  public ResponseEntity<TagResource> runJob(
       @PathVariable String identifier,
       @PathVariable String tagName,
-      @PathVariable JobDto jobDto)
+      @RequestBody JobDto jobDto)
       throws ProjectNotFoundException {
-    TagResource tagResource = tagService.playJob(identifier, tagName, jobDto);
+    TagResource tagResource = tagService.runJob(identifier, tagName, jobDto);
 
     return ResponseEntity.ok().body(tagResource);
   }

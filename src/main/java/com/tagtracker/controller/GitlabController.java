@@ -1,7 +1,6 @@
 package com.tagtracker.controller;
 
 import static com.tagtracker.controller.Constants.GITLAB_PROJECT_BASE_PATH;
-import static com.tagtracker.controller.Constants.GITLAB_PROJECT_JOBS;
 import static com.tagtracker.controller.Constants.GITLAB_PROJECT_TAGS_BY_IDENTIFIER;
 import static com.tagtracker.controller.Constants.PROJECT_PATH_BY_ID;
 import static com.tagtracker.controller.Constants.PROJECT_TAG_BY_NAME;
@@ -10,12 +9,11 @@ import com.tagtracker.model.entity.gitlab.GitlabProject;
 import com.tagtracker.model.entity.gitlab.tags.GitlabTag;
 import com.tagtracker.service.ProjectNotFoundException;
 import com.tagtracker.service.gitlab.GitlabService;
-import com.tagtracker.service.gitlab.TagNotFoundException;
+import com.tagtracker.service.TagNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

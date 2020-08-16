@@ -26,10 +26,10 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "job_title",
     "work_information"
 })
-public class User {
+public class GitlabUser {
 
   @JsonProperty("id")
-  private Integer id;
+  private Long id;
   @JsonProperty("name")
   private String name;
   @JsonProperty("username")
@@ -66,12 +66,12 @@ public class User {
   private String workInformation;
 
   @JsonProperty("id")
-  public Integer getId() {
+  public Long getId() {
     return id;
   }
 
   @JsonProperty("id")
-  public void setId(Integer id) {
+  public void setId(Long id) {
     this.id = id;
   }
 

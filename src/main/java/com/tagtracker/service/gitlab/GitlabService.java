@@ -1,5 +1,6 @@
 package com.tagtracker.service.gitlab;
 
+import static com.tagtracker.controller.Constants.GITLAB_PROJECT_JOB;
 import static com.tagtracker.controller.Constants.GITLAB_PROJECT_JOBS;
 import static com.tagtracker.controller.Constants.GITLAB_PROJECT_JOB_OPERATION;
 
@@ -10,8 +11,8 @@ import com.tagtracker.model.entity.gitlab.pipelines.GitlabJob;
 import com.tagtracker.model.entity.gitlab.tags.GitlabTag;
 
 import com.tagtracker.service.ProjectNotFoundException;
+import com.tagtracker.service.TagNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.info.ProjectInfoProperties.Git;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -142,7 +143,17 @@ public class GitlabService {
     WebClient.ResponseSpec responseSpec = request.accept(MediaType.APPLICATION_JSON).retrieve();
 
     return responseSpec.bodyToMono(GitlabJob[].class).block();
+  }
 
+  public GitlabJob getProjectJob(String projectId, String jobId) {
+
+    WebClient.RequestBodySpec request = (RequestBodySpec)
+        client.get()
+            .uri(uriBuilder -> uriBuilder.path(GITLAB_PROJECT_JOB).build(projectId, jobId));
+
+    WebClient.ResponseSpec responseSpec = request.accept(MediaType.APPLICATION_JSON).retrieve();
+
+    return responseSpec.bodyToMono(GitlabJob.class).block();
   }
 
   public GitlabJob playAJob(String projectId, String jobId, JOB_OPERATION operation) {
