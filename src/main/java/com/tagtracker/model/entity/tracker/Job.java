@@ -2,42 +2,48 @@ package com.tagtracker.model.entity.tracker;
 
 
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
-@Entity
+//@Entity
+@Embeddable
 public class Job {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long id;
+  // @Id
+  // @GeneratedValue(strategy = GenerationType.AUTO)
+  // private Long id;
 
-  @Column
+  //@Column
   private String jobId;
 
-  @Column
+  //@Column
   private String stage;
 
-  @Column
+  //@Column
   private String name;
 
-  @Column
+  //@Column
   private String pipelineStatus;
 
+  private String status;
 
-  @OneToOne
+
+  //@OneToOne
+  @Embedded
   private User user;
 
-  public Long getId() {
+/*  public Long getId() {
     return id;
   }
 
   public void setId(Long id) {
     this.id = id;
-  }
+  }*/
 
   public String getStage() {
     return stage;
@@ -77,5 +83,13 @@ public class Job {
 
   public void setUser(User user) {
     this.user = user;
+  }
+
+  public String getStatus() {
+    return status;
+  }
+
+  public void setStatus(String status) {
+    this.status = status;
   }
 }

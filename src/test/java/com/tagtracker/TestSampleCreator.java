@@ -36,6 +36,7 @@ public class TestSampleCreator {
     job.setJobId("111");
     job.setName("name_" + stage);
     job.setStage(stage);
+    job.setPipelineStatus("manual");
 
     return job;
 

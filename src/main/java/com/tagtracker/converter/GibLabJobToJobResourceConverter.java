@@ -15,6 +15,7 @@ public class GibLabJobToJobResourceConverter implements Converter<GitlabJob, Job
     jobResource.setName(source.getName());
     jobResource.setJobId(source.getId());
     jobResource.setPipelineStatus(source.getPipeline().getStatus());
+    jobResource.setStatus(source.getStatus());
 
     UserResource user = new UserResource();
     user.setName(source.getUser().getName());

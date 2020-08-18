@@ -1,14 +1,15 @@
 package com.tagtracker.service;
 
 import com.tagtracker.model.dto.DependencyDto;
-import com.tagtracker.model.dto.JOB_OPERATION;
 import com.tagtracker.model.dto.JobDto;
 import com.tagtracker.model.dto.gitlab.TagDto;
 import com.tagtracker.model.entity.gitlab.pipelines.GitlabJob;
 import com.tagtracker.model.entity.tracker.Job;
+import com.tagtracker.model.entity.tracker.Jobs;
 import com.tagtracker.model.entity.tracker.Project;
 import com.tagtracker.model.entity.tracker.Tag;
 import com.tagtracker.model.entity.gitlab.tags.GitlabTag;
+import com.tagtracker.model.entity.tracker.User;
 import com.tagtracker.model.resource.JobResource;
 import com.tagtracker.model.resource.TagResource;
 import com.tagtracker.repository.ProjectRepository;
@@ -89,40 +90,37 @@ public class TagService {
       throws ProjectNotFoundException {
     var project = projectService.getProject(projectIdentifier);
     Tag tag = project.findTag(tagName);
+    Jobs stageJobs = tag.getStages().get(job.getStage());
 
+    if (stageJobs == null) {
+      throw new IllegalArgumentException(
+          String.format("The stage %s is not found", job.getStage()));
+    }
 
-    /*
-    TODO:
-    1. play/retry job
-    2. Update tag job status
-    *  */
+    GitlabJob gitlabJob = gitlabService
+        .playAJob(project.getRemoteProjectId(), job.getJobId(), job.getJobOperation());
+    Optional<Job> playedJob = stageJobs.getJobs().stream()
+        .filter(j -> j.getName().equals(gitlabJob.getName())).findAny();
+
+    if (playedJob.isEmpty()) {
+      throw new IllegalArgumentException(
+          String.format("The JOB %s is not found", gitlabJob.getName()));
+    }
+
+    Job jobToBeUpdated = playedJob.get();
+    jobToBeUpdated.setUser(conversionService.convert(gitlabJob.getUser(), User.class));
+    jobToBeUpdated.setJobId(gitlabJob.getId());
+
+    tagRepository.save(tag);
 
     Tag savedTag = tagRepository.save(tag);
 
     return conversionService.convert(savedTag, TagResource.class);
   }
 
-  public List<JobResource> getTagJobs(String projectId) {
-
-    GitlabJob[] gitlabJobs = gitlabService.getProjectJobs(projectId);
-
-    List<JobResource> jobsOfTags = Arrays.stream(gitlabJobs).filter(job -> job.getTag())
-        .map(gitlabJob -> conversionService.convert(gitlabJob, JobResource.class))
-        .collect(Collectors.toList());
-
-    return jobsOfTags;
-  }
-
   public JobResource getTagJob(String projectId, String tagName, String jobId) {
 
     GitlabJob gitlabJob = gitlabService.getProjectJob(projectId, jobId);
-    return conversionService.convert(gitlabJob, JobResource.class);
-  }
-
-  public JobResource runJob(String projectId, String tagName, String jobId,
-      JOB_OPERATION jobOperation) {
-    GitlabJob gitlabJob = gitlabService.playAJob(projectId, jobId, jobOperation);
-
     return conversionService.convert(gitlabJob, JobResource.class);
   }
 

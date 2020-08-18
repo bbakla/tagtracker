@@ -211,19 +211,4 @@ public class ProjectRepositoryTests {
         tagForApplication2.getTagName(),
         savedProject.getTags().iterator().next().getDependentOn().iterator().next().getTagName());
   }
-
-  @Test
-  public void canDeployToAnEnvironment() throws Exception {
-    Project project = TestSampleCreator.createAProjectWithNoDependencies(true);
-    projectRepository.save(project);
-
-    project.getTags().iterator().next().deployedTo(TestSampleCreator.createJob("testJob"));
-
-    projectRepository.save(project);
-    Optional<Project> savedProject =
-        projectRepository.findProjectByRemoteProjectId(project.getRemoteProjectId());
-
-    assertTrue(
-        savedProject.get().getTags().iterator().next().getPipelines().size() == 1);
-  }
 }

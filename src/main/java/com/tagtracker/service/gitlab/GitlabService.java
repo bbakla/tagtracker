@@ -3,9 +3,11 @@ package com.tagtracker.service.gitlab;
 import static com.tagtracker.controller.Constants.GITLAB_PROJECT_JOB;
 import static com.tagtracker.controller.Constants.GITLAB_PROJECT_JOBS;
 import static com.tagtracker.controller.Constants.GITLAB_PROJECT_JOB_OPERATION;
+import static com.tagtracker.controller.Constants.GITLAB_REPOSITORY_READ_FILE;
 
 import com.tagtracker.model.dto.JOB_OPERATION;
 import com.tagtracker.model.dto.gitlab.TagDto;
+import com.tagtracker.model.entity.gitlab.GitlabFile;
 import com.tagtracker.model.entity.gitlab.GitlabProject;
 import com.tagtracker.model.entity.gitlab.pipelines.GitlabJob;
 import com.tagtracker.model.entity.gitlab.tags.GitlabTag;
@@ -166,6 +168,20 @@ public class GitlabService {
         .retrieve();
 
     return responseSpec.bodyToMono(GitlabJob.class).block();
+  }
+
+  public GitlabFile readFileInRepository(String projectId, String filePath) {
+    WebClient.RequestBodySpec requestBodySpec = (RequestBodySpec)
+        client.get()
+            .uri(uriBuilder -> uriBuilder.path(GITLAB_REPOSITORY_READ_FILE)
+                .query("ref=master")
+                .build(projectId, filePath));
+
+    WebClient.ResponseSpec responseSpec = requestBodySpec.accept(MediaType.APPLICATION_JSON)
+        .retrieve();
+
+    return responseSpec.bodyToMono(GitlabFile.class).block();
+
   }
 
 }

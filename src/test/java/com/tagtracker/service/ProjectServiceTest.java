@@ -3,14 +3,19 @@ package com.tagtracker.service;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.tagtracker.model.entity.tracker.Job;
 import com.tagtracker.model.entity.tracker.Project;
 import com.tagtracker.model.resource.ProjectResource;
 import com.tagtracker.repository.ProjectRepository;
 import com.tagtracker.repository.TagRepository;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,7 +25,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
-public class ApplicationServiceTest {
+public class ProjectServiceTest {
 
   @Autowired
   private ProjectService projectService;
@@ -94,7 +99,30 @@ public class ApplicationServiceTest {
     assertEquals(project.getEncodedPath(), projectResourceGetById.getEncodedPath());
   }
 
+  @Test
+  public void canGetAllTagJobsOfAProject() throws Exception {
+    String projectId = "135330";
 
+    Map<JobKey, Set<Job>> jobs = projectService.getTagJobs(projectId);
+
+    jobs.entrySet().forEach(e -> {
+      assertTrue(e.getKey().getTagName().startsWith("v"));
+      assertNotNull(e.getValue());
+    });
+  }
+
+  @Test
+  public void canGetTheOrderOfStages() throws Exception {
+    String projectId = "135330";
+
+    var stages = projectService.readStageOrder(projectId);
+
+    assertTrue(stages.get(0).equals("build-runner"));
+    assertTrue(stages.get(1).equals("build"));
+    assertTrue(stages.get(2).equals("test"));
+    assertTrue(stages.get(3).equals("qualitygate"));
+
+  }
 
 
 }

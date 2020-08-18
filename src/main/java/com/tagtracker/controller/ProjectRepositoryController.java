@@ -2,9 +2,12 @@ package com.tagtracker.controller;
 
 import static com.tagtracker.controller.Constants.PROJECT_BASE_PATH;
 import static com.tagtracker.controller.Constants.PROJECT_PATH_BY_ID;
+import static com.tagtracker.controller.Constants.PROJECT_STAGES_ORDER;
 
+import ch.qos.logback.core.pattern.util.RegularEscapeUtil;
 import com.tagtracker.model.dto.ProjectDto;
 import com.tagtracker.model.resource.ProjectResource;
+import com.tagtracker.model.resource.StageSequenceResource;
 import com.tagtracker.service.ProjectService;
 import com.tagtracker.service.ProjectNotFoundException;
 import java.net.URI;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.reactive.function.client.WebClient.ResponseSpec;
 
 @RestController
 @RequestMapping(PROJECT_BASE_PATH)
@@ -44,7 +48,7 @@ public class ProjectRepositoryController {
   }
 
   @PostMapping()
-  public ResponseEntity<ProjectResource> saveApplication(
+  public ResponseEntity<ProjectResource> saveProject(
       @Valid @RequestBody ProjectDto projectDto)
       throws ProjectNotFoundException, URISyntaxException {
 
@@ -56,11 +60,18 @@ public class ProjectRepositoryController {
   }
 
   @DeleteMapping(PROJECT_PATH_BY_ID)
-  public ResponseEntity<?> deleteApplication(@PathVariable String identifier)
+  public ResponseEntity<?> deleteProject(@PathVariable String identifier)
       throws ProjectNotFoundException {
     projectService.deleteProject(identifier);
 
     return ResponseEntity.noContent().build();
   }
+
+ /* @GetMapping(PROJECT_STAGES_ORDER)
+  public ResponseEntity<List<StageSequenceResource>> getStageOrders(@PathVariable String identifier) {
+    var stageOrders = projectService.readStageOrder(identifier);
+
+    return ResponseEntity.ok().body(stageOrders);
+  }*/
 
 }

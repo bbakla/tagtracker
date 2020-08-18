@@ -18,7 +18,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -51,12 +50,12 @@ public class Tag implements Serializable {
   @ManyToOne
   private Project project;
 
-  @OneToMany(cascade = CascadeType.ALL)
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   @CollectionTable(name = "pipeline_jobs",
       joinColumns = {@JoinColumn(name = "pipeline_tag_name", referencedColumnName = "tag_name")}
   )
-  @MapKey(name = "stage")
-  private Map<String, Job> pipelines = new HashMap<>();
+  //@MapKey(name = "stage")
+  private Map<String, Jobs> stages = new HashMap<>();
 
   @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   @JoinTable(name = "tag_relations",
@@ -126,16 +125,46 @@ public class Tag implements Serializable {
     return this.project.getRemoteProjectId();
   }
 
-  public Map<String, Job> getPipelines() {
-    return pipelines;
+  public Map<String, Jobs> getStages() {
+    return stages;
   }
 
-  public void setPipelines(Map<String, Job> deployedEnvironments) {
-    this.pipelines = deployedEnvironments;
+  public void setStages(Map<String, Jobs> deployedEnvironments) {
+    this.stages = deployedEnvironments;
   }
 
-  public void deployedTo(Job job) {
-    this.pipelines.put(job.getStage(), job);
+  public void addJobToStage(Job job) {
+    Jobs jobs = this.stages.get(job.getStage());
+    if (jobs == null) {
+      jobs = new Jobs();
+      jobs.setStage(job.getStage());
+      addNewStage(jobs);
+    }
+
+    jobs.addJob(job);
+  }
+
+  public void addJobToStage(Set<Job> jobSet) {
+    String stage = jobSet.iterator().next().getStage();
+    Jobs jobs = this.stages.get(stage);
+    if (jobs == null) {
+      jobs = new Jobs();
+      jobs.setStage(stage);
+      jobs.setJobs(jobSet);
+      addNewStage(jobs);
+    } else {
+
+      jobs.getJobs().addAll(jobSet);
+    }
+  }
+
+
+  public void addNewStage(Jobs jobs) {
+    if (this.stages.containsKey(jobs.getStage())) {
+      System.out.printf("%s is already in the stage list", jobs.getStage());
+    } else {
+      this.stages.put(jobs.getStage(), jobs);
+    }
   }
 
   public void setRelatedTags(Set<Tag> dependentToMe) {

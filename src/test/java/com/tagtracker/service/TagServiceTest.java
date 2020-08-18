@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.tagtracker.model.dto.DependencyDto;
 import com.tagtracker.model.dto.gitlab.TagDto;
+import com.tagtracker.model.entity.tracker.Job;
 import com.tagtracker.model.entity.tracker.Project;
 import com.tagtracker.model.entity.tracker.Tag;
 import com.tagtracker.model.resource.JobResource;
@@ -136,15 +137,5 @@ public class TagServiceTest {
 
   }
 
-  @Test
-  public void canGetAllTagJobsOfAProject() throws Exception {
-    String projectId = "135330";
 
-    List<JobResource> jobs = tagService.getTagJobs(projectId);
-
-    jobs.forEach(j -> {
-      assertTrue(j.getName().startsWith("v"));
-      assertNotNull(j.getId());
-    });
-  }
 }

@@ -4,7 +4,6 @@ import java.util.Date;
 
 public class JobResource {
 
-  private String id;
   private String jobId;
   private String status;
   private String name;
@@ -14,15 +13,8 @@ public class JobResource {
   private String duration;
   private UserResource userResource;
   private String pipelineStatus;
+  private String pipelineId;
 
-
-  public String getId() {
-    return id;
-  }
-
-  public void setId(String id) {
-    this.id = id;
-  }
 
   public String getStatus() {
     return status;
@@ -94,5 +86,13 @@ public class JobResource {
 
   public void setStage(String stage) {
     this.stage = stage;
+  }
+
+  public String getPipelineId() {
+    return pipelineId;
+  }
+
+  public void setPipelineId(String pipelineId) {
+    this.pipelineId = pipelineId;
   }
 }
