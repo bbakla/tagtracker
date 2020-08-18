@@ -76,7 +76,7 @@ public class TagToTagResourceConverter implements Converter<Tag, TagResource> {
 
     Map<String, JobsResource> result = jobsList.entrySet()
         .stream()
-        //.sorted(Map.Entry.comparingByValue())
+        .sorted(Map.Entry.comparingByValue())
         .collect(Collectors.toMap(
             Map.Entry::getKey,
             Map.Entry::getValue,

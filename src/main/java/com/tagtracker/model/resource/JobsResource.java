@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-public class JobsResource implements Comparable<Jobs> {
+public class JobsResource implements Comparable<JobsResource> {
 
   private String stage;
   private Integer stageIndex;
@@ -81,7 +81,7 @@ public class JobsResource implements Comparable<Jobs> {
   }
 
   @Override
-  public int compareTo(Jobs o) {
-    return this.stageIndex - o.getStageOrder();
+  public int compareTo(JobsResource o) {
+    return this.stageIndex - o.getStageIndex();
   }
 }
