@@ -1,49 +1,24 @@
 package com.tagtracker.model.entity.tracker;
 
-
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
 
-//@Entity
 @Embeddable
 public class Job {
 
-  // @Id
-  // @GeneratedValue(strategy = GenerationType.AUTO)
-  // private Long id;
-
-  //@Column
   private String jobId;
 
-  //@Column
   private String stage;
 
-  //@Column
   private String name;
 
-  //@Column
   private String pipelineStatus;
 
   private String status;
 
-
-  //@OneToOne
   @Embedded
   private User user;
 
-/*  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }*/
 
   public String getStage() {
     return stage;
