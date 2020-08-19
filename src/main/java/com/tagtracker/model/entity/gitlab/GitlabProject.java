@@ -1,6 +1,7 @@
 
 package com.tagtracker.model.entity.gitlab;
 
+import com.tagtracker.model.entity.gitlab.tags.Links;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -847,7 +848,8 @@ public class GitlabProject {
   }
 
   @JsonProperty("only_allow_merge_if_all_discussions_are_resolved")
-  public void setOnlyAllowMergeIfAllDiscussionsAreResolved(Boolean onlyAllowMergeIfAllDiscussionsAreResolved) {
+  public void setOnlyAllowMergeIfAllDiscussionsAreResolved(
+      Boolean onlyAllowMergeIfAllDiscussionsAreResolved) {
     this.onlyAllowMergeIfAllDiscussionsAreResolved = onlyAllowMergeIfAllDiscussionsAreResolved;
   }
 

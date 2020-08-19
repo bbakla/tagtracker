@@ -7,9 +7,11 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.tagtracker.model.dto.JOB_OPERATION;
 import com.tagtracker.model.dto.gitlab.TagDto;
 import com.tagtracker.model.entity.gitlab.GitlabProject;
-import com.tagtracker.model.entity.gitlab.GitlabTag;
+import com.tagtracker.model.entity.gitlab.pipelines.GitlabJob;
+import com.tagtracker.model.entity.gitlab.tags.GitlabTag;
 import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -80,6 +82,23 @@ public class GitlabServiceTest {
 
 //     assertThrows(
 //         OperationNotSuccessfulException.class, () -> gitlabService.getTagOfARepo("102943", newTag.getName()));
+
+  }
+
+  @Test
+  public void canGetJobsOfAProject() throws Exception {
+    GitlabJob[] jobs = gitlabService.getProjectJobs("135330");
+
+    assertTrue(jobs.length > 0);
+    Arrays.stream(jobs).anyMatch(j -> j.getStage().equals("test"));
+  }
+
+  @Test
+  public void canPlayAJob() throws Exception {
+    GitlabJob job = gitlabService.playAJob("135330", "30193005 ", JOB_OPERATION.play);
+
+    assertEquals("build", job.getStage());
+    assertNotNull(job);
 
   }
 }

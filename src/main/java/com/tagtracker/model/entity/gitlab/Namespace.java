@@ -1,81 +1,134 @@
+
 package com.tagtracker.model.entity.gitlab;
 
+import java.util.HashMap;
+import java.util.Map;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({
+    "id",
+    "name",
+    "path",
+    "kind",
+    "full_path",
+    "parent_id",
+    "avatar_url",
+    "web_url"
+})
 public class Namespace {
 
-  private float id;
+  @JsonProperty("id")
+  private Integer id;
+  @JsonProperty("name")
   private String name;
+  @JsonProperty("path")
   private String path;
+  @JsonProperty("kind")
   private String kind;
-  private String full_path;
-  private String parent_id = null;
-  private String avatar_url;
-  private String web_url;
+  @JsonProperty("full_path")
+  private String fullPath;
+  @JsonProperty("parent_id")
+  private Integer parentId;
+  @JsonProperty("avatar_url")
+  private Object avatarUrl;
+  @JsonProperty("web_url")
+  private String webUrl;
+  @JsonIgnore
+  private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-  // Getter Methods
-
-  public float getId() {
+  @JsonProperty("id")
+  public Integer getId() {
     return id;
   }
 
+  @JsonProperty("id")
+  public void setId(Integer id) {
+    this.id = id;
+  }
+
+  @JsonProperty("name")
   public String getName() {
     return name;
   }
 
-  public String getPath() {
-    return path;
-  }
-
-  public String getKind() {
-    return kind;
-  }
-
-  public String getFull_path() {
-    return full_path;
-  }
-
-  public String getParent_id() {
-    return parent_id;
-  }
-
-  public String getAvatar_url() {
-    return avatar_url;
-  }
-
-  public String getWeb_url() {
-    return web_url;
-  }
-
-  // Setter Methods
-
-  public void setId(float id) {
-    this.id = id;
-  }
-
+  @JsonProperty("name")
   public void setName(String name) {
     this.name = name;
   }
 
+  @JsonProperty("path")
+  public String getPath() {
+    return path;
+  }
+
+  @JsonProperty("path")
   public void setPath(String path) {
     this.path = path;
   }
 
+  @JsonProperty("kind")
+  public String getKind() {
+    return kind;
+  }
+
+  @JsonProperty("kind")
   public void setKind(String kind) {
     this.kind = kind;
   }
 
-  public void setFull_path(String full_path) {
-    this.full_path = full_path;
+  @JsonProperty("full_path")
+  public String getFullPath() {
+    return fullPath;
   }
 
-  public void setParent_id(String parent_id) {
-    this.parent_id = parent_id;
+  @JsonProperty("full_path")
+  public void setFullPath(String fullPath) {
+    this.fullPath = fullPath;
   }
 
-  public void setAvatar_url(String avatar_url) {
-    this.avatar_url = avatar_url;
+  @JsonProperty("parent_id")
+  public Integer getParentId() {
+    return parentId;
   }
 
-  public void setWeb_url(String web_url) {
-    this.web_url = web_url;
+  @JsonProperty("parent_id")
+  public void setParentId(Integer parentId) {
+    this.parentId = parentId;
+  }
+
+  @JsonProperty("avatar_url")
+  public Object getAvatarUrl() {
+    return avatarUrl;
+  }
+
+  @JsonProperty("avatar_url")
+  public void setAvatarUrl(Object avatarUrl) {
+    this.avatarUrl = avatarUrl;
+  }
+
+  @JsonProperty("web_url")
+  public String getWebUrl() {
+    return webUrl;
+  }
+
+  @JsonProperty("web_url")
+  public void setWebUrl(String webUrl) {
+    this.webUrl = webUrl;
+  }
+
+  @JsonAnyGetter
+  public Map<String, Object> getAdditionalProperties() {
+    return this.additionalProperties;
+  }
+
+  @JsonAnySetter
+  public void setAdditionalProperty(String name, Object value) {
+    this.additionalProperties.put(name, value);
   }
 }

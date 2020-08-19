@@ -8,7 +8,7 @@ import React, {createContext, useEffect, useReducer, useState} from "react";
 import AppReducer from "./AppReducer";
 import {DEPENDENT_ON, DEPENDENT_ON_ME} from "./dependencies/dependency";
 
-/* const initialState = {
+/*const initialState = {
         projects: [
             {
                 projectName: "TicketService",
@@ -188,7 +188,9 @@ import {DEPENDENT_ON, DEPENDENT_ON_ME} from "./dependencies/dependency";
 export const GlobalContext = createContext([]);
 
 const Store = ({children}) => {
-    const [{projects, isLoading, isError}, setProjects] = useInit();
+  const [{projects, isLoading, isError}, setProjects] = useInit();
+
+  console.log(projects)
 
   const addRepository = (projectIdentifier) => {
     const body = {

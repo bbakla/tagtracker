@@ -6,10 +6,10 @@ import static com.tagtracker.controller.Constants.PROJECT_PATH_BY_ID;
 import static com.tagtracker.controller.Constants.PROJECT_TAG_BY_NAME;
 
 import com.tagtracker.model.entity.gitlab.GitlabProject;
-import com.tagtracker.model.entity.gitlab.GitlabTag;
+import com.tagtracker.model.entity.gitlab.tags.GitlabTag;
 import com.tagtracker.service.ProjectNotFoundException;
 import com.tagtracker.service.gitlab.GitlabService;
-import com.tagtracker.service.gitlab.TagNotFoundException;
+import com.tagtracker.service.TagNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

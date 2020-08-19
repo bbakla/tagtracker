@@ -1,8 +1,7 @@
 package com.tagtracker.converter;
 
-import com.tagtracker.model.entity.Tag;
-import com.tagtracker.model.entity.gitlab.GitlabTag;
-import com.tagtracker.model.resource.TagResource;
+import com.tagtracker.model.entity.tracker.Tag;
+import com.tagtracker.model.entity.gitlab.tags.GitlabTag;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;

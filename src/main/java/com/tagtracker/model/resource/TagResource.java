@@ -1,11 +1,10 @@
 package com.tagtracker.model.resource;
 
-import com.tagtracker.model.entity.Environment;
-import com.tagtracker.model.entity.Tag;
-import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 public class TagResource {
 
@@ -16,7 +15,7 @@ public class TagResource {
   private String releaseNotes;
   private Set<TagResource> tagsDependentOn = new HashSet();
   private Set<TagResource> tagsDependentOnMe = new HashSet();
-  private Map<Environment, Boolean> deployedEnvironments = new EnumMap<>(Environment.class);
+  private Map<String, JobsResource> stages = new HashMap<>();
 
 
   public TagResource(String projectId, String projectName, String tagName, String message,
@@ -69,13 +68,13 @@ public class TagResource {
     this.tagsDependentOnMe = tagsDependentOnMe;
   }
 
-  public Map<Environment, Boolean> getDeployedEnvironments() {
-    return deployedEnvironments;
+  public Map<String, JobsResource> getStages() {
+    return stages;
   }
 
-  public void setDeployedEnvironments(
-      Map<Environment, Boolean> deployedEnvironments) {
-    this.deployedEnvironments = deployedEnvironments;
+  public void setStages(
+      Map<String, JobsResource> stages) {
+    this.stages = stages;
   }
 
   public String getProjectId() {

@@ -2,9 +2,9 @@
 left to right direction
 skinparam packageStyle rectangle
 
-actor user
+actor gitlabUser
 rectangle checkout {
-user -- (List Services)
+gitlabUser -- (List Services)
 (List Services) .> (Get Tag Status From Repo) : includes
 (List Services) .> (Retrieve Tags from Repo) : includes
 (List Services) .> (Create A Tag) : includes

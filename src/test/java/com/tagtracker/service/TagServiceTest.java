@@ -2,17 +2,21 @@ package com.tagtracker.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.tagtracker.model.dto.DependencyDto;
 import com.tagtracker.model.dto.gitlab.TagDto;
-import com.tagtracker.model.entity.Project;
-import com.tagtracker.model.entity.Tag;
+import com.tagtracker.model.entity.tracker.Job;
+import com.tagtracker.model.entity.tracker.Project;
+import com.tagtracker.model.entity.tracker.Tag;
+import com.tagtracker.model.resource.JobResource;
 import com.tagtracker.model.resource.ProjectResource;
 import com.tagtracker.model.resource.TagResource;
 import com.tagtracker.repository.ProjectRepository;
 import com.tagtracker.repository.TagRepository;
+import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -78,42 +82,6 @@ public class TagServiceTest {
   }
 
   @Test
-  public void canATagStoresTheTagsThatAreDependentOnThatTag() throws Exception {
-    String tenant1ProjectId = "116955";
-    ProjectResource dependentProject = projectService
-        .saveRemoteProjectRepositoryInformation(tenant1ProjectId); // has only one tag
-
-    String terraformProjectId = "102943";
-    ProjectResource notDependentProject = projectService
-        .saveRemoteProjectRepositoryInformation(terraformProjectId);
-    Tag notDependentTag = tagRepository.findTagByTagNameAndProjectProjectName(
-        notDependentProject.getTags().iterator().next().getTagName(),
-        notDependentProject.getProjectName());
-
-    notDependentProject.getTags().forEach(t -> assertEquals(0, t.getTagsDependentOn().size()));
-
-    Tag dependentTag = tagRepository.findTagByTagNameAndProjectProjectName(
-        dependentProject.getTags().iterator().next().getTagName(),
-        dependentProject.getProjectName());
-    dependentTag.addDependency(notDependentTag);
-    Tag savedDependentTag = tagRepository.save(dependentTag);
-
-    DependencyDto dependentOnMeDto = new DependencyDto(
-        dependentProject.getProjectName(),
-        dependentProject.getProjectId(),
-        savedDependentTag.getTagName());
-    TagResource savedMainTag = tagService
-        .addATagAsDependentOnMe(notDependentProject.getProjectId(), notDependentTag.getTagName(),
-            dependentOnMeDto);
-
-    Tag getMainTagFromRepo = tagRepository
-        .findTagByTagNameAndProject_RemoteProjectId(savedMainTag.getTagName(),
-            savedMainTag.getProjectId());
-
-    assertTrue(1 == getMainTagFromRepo.getRelatedTags().size());
-  }
-
-  @Test
   public void canCreateATag() throws Exception {
     String tenant1ProjectId = "116955";
     ProjectResource project = projectService
@@ -168,4 +136,6 @@ public class TagServiceTest {
             .equals(createdTag.getMessage())));
 
   }
+
+
 }

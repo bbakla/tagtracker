@@ -3,10 +3,10 @@ import React, {useState} from "react";
 import {Modal} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 
-export default function Deployment({deploymentStatus, projectId}){
+export default function Deployment({deploymentStatus, projectId, tagName}) {
 
-    const[showDeployStatus, setShowDeployStatus] = useState(false);
-
+  const [showDeployStatus, setShowDeployStatus] = useState(false);
+  const [deployments, setDeployments] = useState(deploymentStatus);
 
   const close = () => {
     setShowDeployStatus(false);
@@ -22,28 +22,32 @@ export default function Deployment({deploymentStatus, projectId}){
     }
   }
 
-  const deploy = (event) => {
-    console.log(event.target.value);
+  const deploy = (name, value) => {
+    console.log(value);
+    console.log(name);
 
   }
 
-    const inProgress = "pipelineRunning spinner-border  text-primary";
+  const inProgress = "pipelineRunning spinner-border  text-primary";
 
-    const status = () => {
-        if (!Object.hasOwnProperty(deploymentStatus)) {
-            Object.keys(deploymentStatus).map((key, value) =>
-
-                <div key={key} className="row">
-                    <i className={deploymentStatus[key] === "true" ? "far fa-check-circle pipelinePass text-success pr-2" : "far fa-times-circle pipelineFails text-danger pr-2"}/>
-                    <label className="switch">
-                        <input type="checkbox" checked={deploymentStatus[key] === "true"} onChange={deploy}/>
-                        <span className="slider round"></span>
-                    </label>
-                    <label className="pl-2">{key}</label>
-                </div>
-            );
-        }
-    }
+  const status = Object.keys(deploymentStatus).map((key, value) => {
+        return (
+            <div key={key + "_" + value} className="row">
+              <i className={deploymentStatus[key] === "true"
+                  ? "far fa-check-circle pipelinePass text-success pr-2"
+                  : "far fa-times-circle pipelineFails text-danger pr-2"}/>
+              <label className="switch">
+                <input type="checkbox" name={key}
+                       checked={deploymentStatus[key] === "true"}
+                       onChange={e => deploy(e.target.name,
+                           deploymentStatus[key])}/>
+                <span className="slider round"></span>
+              </label>
+              <label className="pl-2">{key}</label>
+            </div>
+        )
+      }
+  );
 
 
     return (
@@ -60,7 +64,7 @@ export default function Deployment({deploymentStatus, projectId}){
               <Modal.Body>
 
                 <div className="custom-control custom-switch">
-                    {Object.hasOwnProperty(deploymentStatus)} && {status}
+                  {status}
 
                 </div>
               </Modal.Body>
@@ -69,7 +73,7 @@ export default function Deployment({deploymentStatus, projectId}){
               </Modal.Footer>
 
             </Modal>
-        </div>
+          </div>
         </div>
     );
 

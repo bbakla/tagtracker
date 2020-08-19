@@ -1,4 +1,4 @@
-package com.tagtracker.model.entity;
+package com.tagtracker.model.entity.tracker;
 
 import java.util.Date;
 import javax.persistence.Column;

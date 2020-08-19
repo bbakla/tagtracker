@@ -1,4 +1,4 @@
-package com.tagtracker.model.entity.gitlab;
+package com.tagtracker.model.entity.gitlab.tags;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
