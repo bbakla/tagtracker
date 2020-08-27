@@ -130,15 +130,8 @@ input:checked + .slider:before {
 }
 
 .align-bottom {
-  vertical-align: bottom !important;
+  vertical-align: top !important;
 }
-
-
-
-/*.job {
-
-  margin-bottom: 10px;
-}*/
 
 .pipeline-graph {
   position: relative;
@@ -245,4 +238,9 @@ input:checked + .slider:before {
 
 .color-green {
   color: #06a246;
+}
+
+button:hover {
+  background-color: #eee;
+  border: 1px solid #b7b7b7;
 }

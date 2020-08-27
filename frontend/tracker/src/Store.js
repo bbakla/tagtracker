@@ -8,7 +8,7 @@ import React, {createContext, useEffect, useReducer, useState} from "react";
 import AppReducer from "./AppReducer";
 import {DEPENDENT_ON, DEPENDENT_ON_ME} from "./dependencies/dependency";
 
- const initialState = {
+ /*const initialState = {
         projects: [
             {
     "createdBy": "user",
@@ -130,7 +130,7 @@ import {DEPENDENT_ON, DEPENDENT_ON_ME} from "./dependencies/dependency";
     ]
 }
         ]
-    }
+    }*/
 
 export const GlobalContext = createContext([]);
 
@@ -293,9 +293,9 @@ const useInit = () => {
         const fetchData = async () => {
 
             try {
-              //const result = await axios(basePathForProjects);
-              //setProjects(result.data);
-                setProjects(initialState.projects)
+              const result = await axios(basePathForProjects);
+              setProjects(result.data);
+              //  setProjects(initialState.projects)
               setError(false);
               setLoading(true);
 

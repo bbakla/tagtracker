@@ -34,14 +34,17 @@ export default function Stage({stage}) {
                             <li className="build">
                                 <div className="ci-job-component">
 
-                                <i className={jobStatusIcon(j.status)}>
+
                                     <span>
-                                        <span className="ci-status-text w-100 ml-2 text-truncate job-font align-bottom">
+                                        <span>
+                                            <i className={jobStatusIcon(j.status)}/>
+                                        </span>
+                                        <span className="ci-status-text w-100 ml-2 mr-3 text-truncate job-font">
                                             {j.name}
                                         </span>
 
                                     </span>
-                                    </i>
+
                                     <button type="button" className=" job-action">
                                         <i className={jobActionIcon(j.status)}></i>
                                     </button>
