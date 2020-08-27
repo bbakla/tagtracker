@@ -1,8 +1,9 @@
 package com.tagtracker;
 
-import com.tagtracker.model.entity.Project;
+import com.tagtracker.model.entity.tracker.Job;
+import com.tagtracker.model.entity.tracker.Project;
 
-import com.tagtracker.model.entity.Tag;
+import com.tagtracker.model.entity.tracker.Tag;
 import java.util.Date;
 
 public class TestSampleCreator {
@@ -28,5 +29,16 @@ public class TestSampleCreator {
     tag.setProject(project);
 
     return tag;
+  }
+
+  public static Job createJob(String stage) {
+    Job job = new Job();
+    job.setJobId("111");
+    job.setName("name_" + stage);
+    job.setStage(stage);
+    job.setPipelineStatus("manual");
+
+    return job;
+
   }
 }

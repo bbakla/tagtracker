@@ -1,7 +1,5 @@
 import React, {useContext} from "react";
 import {Link} from "react-router-dom";
-import {GlobalContext} from "../Store";
-
 
 export default function Tag({currentTagName, projectName, projectId, tags}) {
   const pathName = (projectId) => `/projects/${projectId}/tags`;

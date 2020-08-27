@@ -7,10 +7,13 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.tagtracker.model.dto.JOB_OPERATION;
 import com.tagtracker.model.dto.gitlab.TagDto;
 import com.tagtracker.model.entity.gitlab.GitlabProject;
-import com.tagtracker.model.entity.gitlab.GitlabTag;
+import com.tagtracker.model.entity.gitlab.pipelines.GitlabJob;
+import com.tagtracker.model.entity.gitlab.tags.GitlabTag;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,14 +75,25 @@ public class GitlabServiceTest {
     Thread.sleep(2000);
 
     gitlabService.deleteTag("102943", newTag.getName());
+  }
 
-   /* Tag tag = gitlabService.getTagOfARepo("102943", newTag.getName());
+  @Test
+  public void canGetJobsOfAProject() throws Exception {
+    GitlabJob[] jobs = gitlabService.getProjectJobs("135330");
 
-    assertNull(tag);
-*/
+    assertTrue(jobs.length > 0);
+    assertTrue(Arrays.stream(jobs).anyMatch(j -> j.getStage().equals("test")));
+    var jobsOfTag = Arrays.stream(jobs).filter(j -> j.getStage().equals("build") && j.getTag())
+        .collect(Collectors.toList());
+    assertEquals(2, jobsOfTag.size());
+  }
 
-//     assertThrows(
-//         OperationNotSuccessfulException.class, () -> gitlabService.getTagOfARepo("102943", newTag.getName()));
+  @Test
+  public void canPlayAJob() throws Exception {
+    GitlabJob job = gitlabService.playAJob("135330", "30193005 ", JOB_OPERATION.play);
+
+    assertEquals("build", job.getStage());
+    assertNotNull(job);
 
   }
 }

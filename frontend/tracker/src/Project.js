@@ -26,7 +26,7 @@ export default function Project({project, removeProject}) {
         }
 
     });
-    
+
     const handleSelect = (event) => {
         let selectedTagName = event.target.value
 
@@ -75,15 +75,16 @@ export default function Project({project, removeProject}) {
 
             <div className="card-body">
 
-                    <select className="form-control col-md-4"
-                            onChange={handleSelect}>
+              <select className="form-control col-md-4"
+                      onChange={handleSelect}>
 
-                        {
-                            tagsToBeSelected.map(tag => (
-                                <option key={tag.tagName} value={tag.tagName}>{tag.tagName} </option>
-                            ))
-                        }
-                    </select>
+                {
+                  tagsToBeSelected.map(tag => (
+                      <option key={tag.tagName}
+                              value={tag.tagName}>{tag.tagName} </option>
+                  ))
+                }
+              </select>
 
                     <div>
                         <p className="card-title font-weight-bold">{description}</p>
@@ -91,19 +92,19 @@ export default function Project({project, removeProject}) {
                     </div>
 
                     <div className="row">
-                        <div className="col-xs-6 col-md-6">
+                      <div className="col-xs-6 col-md-6">
 
-                          <Tag currentTagName={selectedTag}
-                               projectName={project.projectName}
-                               projectId={project.projectId}
-                               tags={tagsToBeSelected}
-                          />
+                        <Tag currentTagName={selectedTag}
+                             projectName={project.projectName}
+                             projectId={project.projectId}
+                             tags={tagsToBeSelected}
+                        />
 
-                            <Deployments deploymentStatus={deployments}
-                                        projectId={project.projectId}
-                                         tagName={selectedTag}
-                            />
-                        </div>
+                        <Deployments deploymentStatus={deployments}
+                                     projectId={project.projectId}
+                                     tagName={selectedTag}
+                        />
+                      </div>
                       <div className="col-xs-6 col-md-6">
                         <ShowDependency relationshipType={DEPENDENT_ON}
                             //dependencies={dependentOn}

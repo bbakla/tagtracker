@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.tagtracker.TestSampleCreator;
 import com.tagtracker.model.dto.ProjectDto;
-import com.tagtracker.model.entity.Project;
+import com.tagtracker.model.entity.tracker.Project;
 import com.tagtracker.repository.ProjectRepository;
 import com.tagtracker.repository.TagRepository;
 import com.tagtracker.service.gitlab.GitlabService;

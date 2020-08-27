@@ -1,17 +1,15 @@
-package com.tagtracker.model.entity;
+package com.tagtracker.model.entity.tracker;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,8 +18,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapKeyColumn;
-import javax.persistence.MapKeyEnumerated;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -29,7 +25,7 @@ import javax.validation.constraints.NotNull;
 import org.springframework.data.annotation.CreatedDate;
 
 @Entity
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"tagName", "remote_project_id"})})
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"tag_name", "remote_project_id"})})
 public class Tag implements Serializable {
 
   @Id
@@ -37,11 +33,12 @@ public class Tag implements Serializable {
   private Long id;
 
   @NotNull
-  @Column(name = "tagName")
+  @Column(name = "tag_name")
   private String tagName;
 
   private String message;
 
+  @Column(columnDefinition = "LONGTEXT")
   private String releaseMessage;
 
   private Date commitMessage;
@@ -49,23 +46,22 @@ public class Tag implements Serializable {
   @CreatedDate
   private Date createdDate;
 
-
   @JoinColumn(name = "remote_project_id", referencedColumnName = "remote_project_id")
   @ManyToOne
   private Project project;
 
-  @MapKeyEnumerated(EnumType.STRING)
-  @ElementCollection(fetch = FetchType.EAGER)
-  @MapKeyColumn(name = "ENV")
-  @CollectionTable(name = "DEPLOYED_ENV")
-  @Column(name = "IS_DEPLOYED")
-  private Map<Environment, Boolean> deployedEnvironments = new EnumMap<>(Environment.class);
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @CollectionTable(name = "pipeline_jobs",
+      joinColumns = {@JoinColumn(name = "pipeline_tag_name", referencedColumnName = "tag_name")}
+  )
+  //@MapKey(name = "stage")
+  private Map<String, Jobs> stages = new HashMap<>();
 
   @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-  @JoinTable(name="tag_relations",
-      joinColumns = {@JoinColumn(name="dependent_on_id")},
+  @JoinTable(name = "tag_relations",
+      joinColumns = {@JoinColumn(name = "dependent_on_id")},
       inverseJoinColumns = {@JoinColumn(name = "tag_id")}
-      )
+  )
   private Set<Tag> relatedTags = new HashSet();
 
 
@@ -129,16 +125,46 @@ public class Tag implements Serializable {
     return this.project.getRemoteProjectId();
   }
 
-  public Map<Environment, Boolean> getDeployedEnvironments() {
-    return deployedEnvironments;
+  public Map<String, Jobs> getStages() {
+    return stages;
   }
 
-  public void setDeployedEnvironments(Map<Environment, Boolean> deployedEnvironments) {
-    this.deployedEnvironments = deployedEnvironments;
+  public void setStages(Map<String, Jobs> deployedEnvironments) {
+    this.stages = deployedEnvironments;
   }
 
-  public void deployedTo(Environment environment) {
-    this.deployedEnvironments.put(environment, true);
+  public void addJobToStage(Job job) {
+    Jobs jobs = this.stages.get(job.getStage());
+    if (jobs == null) {
+      jobs = new Jobs();
+      jobs.setStage(job.getStage());
+      addNewStage(jobs);
+    }
+
+    jobs.addJob(job);
+  }
+
+  public void addJobToStage(Set<Job> jobSet) {
+    String stage = jobSet.iterator().next().getStage();
+    Jobs jobs = this.stages.get(stage);
+    if (jobs == null) {
+      jobs = new Jobs();
+      jobs.setStage(stage);
+      jobs.setJobs(jobSet);
+      addNewStage(jobs);
+    } else {
+
+      jobs.getJobs().addAll(jobSet);
+    }
+  }
+
+
+  public void addNewStage(Jobs jobs) {
+    if (this.stages.containsKey(jobs.getStage())) {
+      System.out.printf("%s is already in the stage list", jobs.getStage());
+    } else {
+      this.stages.put(jobs.getStage(), jobs);
+    }
   }
 
   public void setRelatedTags(Set<Tag> dependentToMe) {

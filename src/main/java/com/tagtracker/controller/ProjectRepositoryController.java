@@ -44,7 +44,7 @@ public class ProjectRepositoryController {
   }
 
   @PostMapping()
-  public ResponseEntity<ProjectResource> saveApplication(
+  public ResponseEntity<ProjectResource> saveProject(
       @Valid @RequestBody ProjectDto projectDto)
       throws ProjectNotFoundException, URISyntaxException {
 
@@ -56,11 +56,18 @@ public class ProjectRepositoryController {
   }
 
   @DeleteMapping(PROJECT_PATH_BY_ID)
-  public ResponseEntity<?> deleteApplication(@PathVariable String identifier)
+  public ResponseEntity<?> deleteProject(@PathVariable String identifier)
       throws ProjectNotFoundException {
     projectService.deleteProject(identifier);
 
     return ResponseEntity.noContent().build();
   }
+
+ /* @GetMapping(PROJECT_STAGES_ORDER)
+  public ResponseEntity<List<StageSequenceResource>> getStageOrders(@PathVariable String identifier) {
+    var stageOrders = projectService.readStageOrder(identifier);
+
+    return ResponseEntity.ok().body(stageOrders);
+  }*/
 
 }

@@ -1,4 +1,4 @@
-package com.tagtracker.service.gitlab;
+package com.tagtracker.service;
 
 public class OperationNotSuccessfulException extends Exception {
 

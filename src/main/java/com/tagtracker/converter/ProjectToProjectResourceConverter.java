@@ -1,6 +1,6 @@
 package com.tagtracker.converter;
 
-import com.tagtracker.model.entity.Project;
+import com.tagtracker.model.entity.tracker.Project;
 import com.tagtracker.model.resource.ProjectResource;
 import com.tagtracker.model.resource.TagResource;
 import java.util.Set;

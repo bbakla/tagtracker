@@ -1,5 +1,5 @@
 
-package com.tagtracker.model.entity.gitlab;
+package com.tagtracker.model.entity.gitlab.tags;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -118,6 +118,4 @@ public class Links {
   public void setAdditionalProperty(String name, Object value) {
     this.additionalProperties.put(name, value);
   }
-
-
 }

@@ -1,9 +1,8 @@
 package com.tagtracker.repository;
 
 import com.tagtracker.TestSampleCreator;
-import com.tagtracker.model.entity.Environment;
-import com.tagtracker.model.entity.Project;
-import com.tagtracker.model.entity.Tag;
+import com.tagtracker.model.entity.tracker.Project;
+import com.tagtracker.model.entity.tracker.Tag;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
@@ -211,20 +210,5 @@ public class ProjectRepositoryTests {
     assertEquals(
         tagForApplication2.getTagName(),
         savedProject.getTags().iterator().next().getDependentOn().iterator().next().getTagName());
-  }
-
-  @Test
-  public void canDeployToAnEnvironment() throws Exception {
-    Project project = TestSampleCreator.createAProjectWithNoDependencies(true);
-    projectRepository.save(project);
-
-    project.getTags().iterator().next().deployedTo(Environment.DEV);
-
-    projectRepository.save(project);
-    Optional<Project> savedProject =
-        projectRepository.findProjectByRemoteProjectId(project.getRemoteProjectId());
-
-    assertTrue(
-        savedProject.get().getTags().iterator().next().getDeployedEnvironments().size() == 1);
   }
 }

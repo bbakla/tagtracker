@@ -7,8 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.tagtracker.model.dto.DependencyDto;
 import com.tagtracker.model.dto.gitlab.TagDto;
-import com.tagtracker.model.entity.Project;
-import com.tagtracker.model.entity.Tag;
+import com.tagtracker.model.entity.tracker.Project;
+import com.tagtracker.model.entity.tracker.Tag;
 import com.tagtracker.model.resource.ProjectResource;
 import com.tagtracker.model.resource.TagResource;
 import com.tagtracker.repository.ProjectRepository;

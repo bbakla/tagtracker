@@ -1,6 +1,6 @@
 package com.tagtracker.model.resource;
 
-import com.tagtracker.model.entity.Auditable;
+import com.tagtracker.model.entity.tracker.Auditable;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;

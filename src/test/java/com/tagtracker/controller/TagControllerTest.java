@@ -3,7 +3,6 @@ package com.tagtracker.controller;
 import static com.tagtracker.controller.TestConstants.PROJECT_CREATE_TAGS;
 import static com.tagtracker.controller.TestConstants.PROJECT_PATH_BY_ID_AND_DEPENDENT_TO_ME_TO_BE_FORMATTED;
 import static com.tagtracker.controller.TestConstants.PROJECT_PATH_DELETE_TAG_BY_NAME;
-import static com.tagtracker.controller.TestConstants.PROJECT_DEPLOY_PATH_TEMPLATE;
 import static com.tagtracker.controller.TestConstants.PROJECT_PATH_BY_ID_AND_DEPENDENCY_PATH_TEMPLATE;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -21,16 +20,14 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.tagtracker.TestSampleCreator;
 import com.tagtracker.model.dto.DependencyDto;
 import com.tagtracker.model.dto.gitlab.TagDto;
-import com.tagtracker.model.entity.Environment;
-import com.tagtracker.model.entity.Project;
-import com.tagtracker.model.entity.Tag;
-import com.tagtracker.model.entity.gitlab.GitlabTag;
+import com.tagtracker.model.entity.tracker.Project;
+import com.tagtracker.model.entity.tracker.Tag;
+import com.tagtracker.model.entity.gitlab.tags.GitlabTag;
 import com.tagtracker.repository.ProjectRepository;
 import com.tagtracker.repository.TagRepository;
 import com.tagtracker.service.gitlab.GitlabService;
-import com.tagtracker.service.gitlab.TagNotFoundException;
+import com.tagtracker.service.TagNotFoundException;
 import java.util.Set;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -168,32 +165,6 @@ public class TagControllerTest {
     assertEquals(1, notDependentTagInDatabase.getRelatedTags().size());
   }
 
-  @Test
-  public void canDeployATagToAnEnvironment() throws Exception {
-    Project project = TestSampleCreator.createAProjectWithNoDependencies(true);
-    Project savedProject = projectRepository.save(project);
-
-    String path = String
-        .format(PROJECT_DEPLOY_PATH_TEMPLATE, project.getRemoteProjectId(),
-            savedProject.getTags().iterator().next().getTagName(),
-            Environment.DEV);
-
-    mockMvc
-        .perform(patch(path))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.projectId").value(savedProject.getRemoteProjectId()))
-        .andExpect(jsonPath("$.deployedEnvironments", Matchers.aMapWithSize(1)))
-        .andExpect(
-            jsonPath("$.deployedEnvironments", Matchers.hasEntry(Environment.DEV.name(), true)));
-
-    Tag tag = tagRepository.findTagByTagNameAndProjectProjectName(
-        savedProject.getTags().iterator().next().getTagName(), savedProject.getProjectName());
-
-    assertEquals(1, tag.getDeployedEnvironments().size());
-    assertTrue(tag.getDeployedEnvironments().get(Environment.DEV));
-    assertNull(tag.getDeployedEnvironments().get(Environment.INT));
-    assertNull(tag.getDeployedEnvironments().get(Environment.PROD));
-  }
 
   @Test
   public void canDeleteTagOfAProjectFromDatabase() throws Exception {
