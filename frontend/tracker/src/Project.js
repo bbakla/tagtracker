@@ -3,6 +3,7 @@ import Tag from "./tags/Tag";
 import Deployment from "./deployment/Deployment";
 import ShowDependency from "./dependencies/ShowDependency";
 import {DEPENDENT_ON, DEPENDENT_ON_ME} from "./dependencies/dependency";
+import Deployments from "./deployment/Deployments";
 
 
 const sortTags =  (t1, t2) => {
@@ -101,6 +102,11 @@ export default function Project({project, removeProject}) {
 
                           <Deployment deploymentStatus={deployments}
                                       projectId={project.projectId}/>
+
+                            <Deployments deploymentStatus={deployments}
+                                        projectId={project.projectId}
+                                         tagName={selectedTag}
+                            />
                         </div>
                       <div className="col-xs-6 col-md-6">
                         <ShowDependency relationshipType={DEPENDENT_ON}

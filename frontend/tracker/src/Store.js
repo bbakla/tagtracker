@@ -8,182 +8,129 @@ import React, {createContext, useEffect, useReducer, useState} from "react";
 import AppReducer from "./AppReducer";
 import {DEPENDENT_ON, DEPENDENT_ON_ME} from "./dependencies/dependency";
 
-/* const initialState = {
+ const initialState = {
         projects: [
             {
-                projectName: "TicketService",
-                projectId: "1",
-                description: "TicketService description",
-                tags: [
-                    {
-                        tagName: 'v0.1.0',
-                        message: "message1",
-                        releaseNotes: "releaseNote1",
-                        createdDate: "2018-01-01T23:28:56.782Z",
-                        tagsDependentOnMe: [
-                            {
-                                projectName: "soris",
-                                tag: "v0.1.0"
+    "createdBy": "user",
+    "createdDate": "2020-08-19T06:39:56.717+0000",
+    "lastModifiedBy": "user",
+    "lastModifiedDate": "2020-08-19T06:39:56.717+0000",
+    "projectId": "135330",
+    "projectName": "GitlabCI",
+    "encodedPath": "baris.bakla1%252Fgitlabci",
+    "description": "",
+    "tags": [
+        {
+            "projectId": "135330",
+            "projectName": "GitlabCI",
+            "message": "",
+            "tagName": "v0.0.1",
+            "releaseNotes": "* test",
+            "tagsDependentOn": [],
+            "tagsDependentOnMe": [],
+            "stages": {
+                "build-runner": {
+                    "stage": "build-runner",
+                    "stageIndex": 0,
+                    "pipelineStatus": "success",
+                    "pipelineId": "6552843",
+                    "jobResources": [
+                        {
+                            "jobId": "30276993",
+                            "status": "success",
+                            "name": "build runner",
+                            "stage": "build-runner",
+                            "createdAt": null,
+                            "startedAt": null,
+                            "duration": null,
+                            "userResource": {
+                                "userId": 12176,
+                                "name": "Baris Bakla",
+                                "userName": "baris.bakla1"
                             },
-                            {
-                                projectName: "rule-engine",
-                                tag: "v0.1.1"
-                            }],
-                        tagsDependentOn: [
-                            {
-                                projectName: "dependentOn1",
-                                tag: "v0.1.1"
-                            }],
-                        deployments:
-
-                            {
-                                "dev": "false",
-                                "int": "false",
-                                "prod": "false"
-                            }
-
-
-                    },
-                    {
-                        tagName: 'v0.1.4',
-                        message: "message2",
-                        releaseNotes: "releaseNote2",
-                        createdDate: "2019-01-01T23:28:56.782Z",
-                        tagsDependentOnMe: [
-                            {
-                                projectName: "soris",
-                                tag: "v0.0.5555"
+                            "pipelineStatus": null,
+                            "pipelineId": null
+                        }
+                    ]
+                },
+                "build": {
+                    "stage": "build",
+                    "stageIndex": 1,
+                    "pipelineStatus": "success",
+                    "pipelineId": "6552843",
+                    "jobResources": [
+                        {
+                            "jobId": "30276997",
+                            "status": "manual",
+                            "name": "build dev",
+                            "stage": "build",
+                            "createdAt": null,
+                            "startedAt": null,
+                            "duration": null,
+                            "userResource": {
+                                "userId": 12176,
+                                "name": "Baris Bakla",
+                                "userName": "baris.bakla1"
                             },
-                            {
-                                projectName: "rule-engine",
-                                tag: "v0.1.0001"
-                            }],
-                        tagsDependentOn: [
-                            {
-                                projectName: "dependentOn1",
-                                tag: "v0.00.111"
-                            }],
-                        deployments:
-                            {
-                                dev: "true",
-                                int: "true",
-                                prod: "false"
-                            }
-
-                    },
-                    {
-                        tagName: 'v0.2.0',
-                        message: "message3",
-                        releaseNotes: "releaseNote3",
-                        createdDate: "2020-01-01T23:28:56.782Z",
-                        tagsDependentOnMe: [
-                            {
-                                projectName: "soris",
-                                tag: "v0.1.06767"
+                            "pipelineStatus": null,
+                            "pipelineId": null
+                        }
+                    ]
+                },
+                "test": {
+                    "stage": "test",
+                    "stageIndex": 2,
+                    "pipelineStatus": "success",
+                    "pipelineId": "6552843",
+                    "jobResources": [
+                        {
+                            "jobId": "30277001",
+                            "status": "success",
+                            "name": "test allgemein",
+                            "stage": "test",
+                            "createdAt": null,
+                            "startedAt": null,
+                            "duration": null,
+                            "userResource": {
+                                "userId": 12176,
+                                "name": "Baris Bakla",
+                                "userName": "baris.bakla1"
                             },
-                            {
-                                projectName: "rule-engine",
-                                tag: "v0.1.879879781"
-                            }],
-                        tagsDependentOn: [
-                            {
-                                projectName: "dependentOn1",
-                                tag: "v0.1.991"
-                            }],
-                        deployments:
-                            {
-                                "dev": "true",
-                                "int": "false",
-                                "prod": "false"
-                            }
-                    }]
-            },
-            {
-                projectName: "SorisAdapter",
-                projectId: "2",
-                description: "SorisAdapter description",
-                tags: [
-                    {
-                        tagName: 'v0.1.57775',
-                        message: "message51",
-                        releaseNotes: "releaseNote51",
-                        createdDate: "2020-01-01T23:28:56.782Z",
-                        tagsDependentOnMe: [
-                            {
-                                projectName: "soris5",
-                                tag: "v0.1.580"
+                            "pipelineStatus": null,
+                            "pipelineId": null
+                        }
+                    ]
+                },
+                "qualitygate": {
+                    "stage": "qualitygate",
+                    "stageIndex": 3,
+                    "pipelineStatus": "success",
+                    "pipelineId": "6552843",
+                    "jobResources": [
+                        {
+                            "jobId": "30277005",
+                            "status": "manual",
+                            "name": "check MyQuality",
+                            "stage": "qualitygate",
+                            "createdAt": null,
+                            "startedAt": null,
+                            "duration": null,
+                            "userResource": {
+                                "userId": 12176,
+                                "name": "Baris Bakla",
+                                "userName": "baris.bakla1"
                             },
-                            {
-                                projectName: "rule-engine5",
-                                tag: "v0.1.1445"
-                            }],
-                        tagsDependentOn: [
-                            {
-                                projectName: "dependentOn15",
-                                tag: "v0.1.1445"
-                            }],
-                        deployments:
-                            {
-                                dev: "true",
-                                int: "false",
-                                prod: "false"
-                            }
-                    },
-                    {
-                        tagName: 'v0.1.45',
-                        message: "message52",
-                        releaseNotes: "releaseNote52",
-                        createdDate: "2019-02-01T23:28:56.782Z",
-                        tagsDependentOnMe: [
-                            {
-                                projectName: "soris565",
-                                tag: "v0.1.50"
-                            },
-                            {
-                                projectName: "rule-engine5",
-                                tag: "v0.1.151111"
-                            }],
-                        tagsDependentOn: [
-                            {
-                                projectName: "dependentOn15",
-                                tag: "v0.1.15"
-                            }],
-                        deployments:
-                            {
-                                dev: "true",
-                                int: "false",
-                                prod: "false"
-                            }
-                    },
-                    {
-                        tagName: 'v0.2.50',
-                        message: "message53",
-                        releaseNotes: "releaseNote53",
-                        createdDate: "2020-03-01T23:28:56.782Z",
-                        tagsDependentOnMe: [
-                            {
-                                projectName: "soris5",
-                                tag: "v0.1.50"
-                            },
-                            {
-                                projectName: "rule-engine5",
-                                tag: "v0.1.15"
-                            }],
-                        tagsDependentOn: [
-                            {
-                                projectName: "dependentOn15",
-                                tag: "v0.1.15"
-                            }],
-                        deployments:
-                            {
-                                dev: "true",
-                                int: "true",
-                                prod: "false"
-                            }
-                    }]
+                            "pipelineStatus": null,
+                            "pipelineId": null
+                        }
+                    ]
+                }
             }
+        }
+    ]
+}
         ]
-    }*/
+    }
 
 export const GlobalContext = createContext([]);
 
@@ -346,8 +293,9 @@ const useInit = () => {
         const fetchData = async () => {
 
             try {
-              const result = await axios(basePathForProjects);
-              setProjects(result.data);
+              //const result = await axios(basePathForProjects);
+              //setProjects(result.data);
+                setProjects(initialState.projects)
               setError(false);
               setLoading(true);
 

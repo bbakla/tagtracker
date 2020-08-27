@@ -112,7 +112,7 @@ export default function DisplayTags() {
 
         <div className="container">
 
-          <h3 className="mt-3">{location.state.projectName}</h3>
+          <h3 className="mt-6">{location.state.projectName}</h3>
           <div className="row">
             <div className="col-12">
               <Table responsive hover>
