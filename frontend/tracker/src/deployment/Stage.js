@@ -29,7 +29,6 @@ export default function Stage({stage}) {
             {stage.jobResources.map(j => {
 
                 return(
-
                     <div key= {j.jobId} className=" pipeline-graph ">
                         <ul key={j.jobId} className="job-list">
                             <li className="build">
@@ -49,7 +48,6 @@ export default function Stage({stage}) {
                                 </div>
                             </li>
                         </ul>
-
                 </div>
                    )
             })}

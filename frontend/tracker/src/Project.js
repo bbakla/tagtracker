@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
 import Tag from "./tags/Tag";
-import Deployment from "./deployment/Deployment";
 import ShowDependency from "./dependencies/ShowDependency";
 import {DEPENDENT_ON, DEPENDENT_ON_ME} from "./dependencies/dependency";
 import Deployments from "./deployment/Deployments";
@@ -99,9 +98,6 @@ export default function Project({project, removeProject}) {
                                projectId={project.projectId}
                                tags={tagsToBeSelected}
                           />
-
-                          <Deployment deploymentStatus={deployments}
-                                      projectId={project.projectId}/>
 
                             <Deployments deploymentStatus={deployments}
                                         projectId={project.projectId}

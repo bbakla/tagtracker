@@ -98,17 +98,11 @@ public class TagServiceTest {
     dependentTag.addDependency(notDependentTag);
     Tag savedDependentTag = tagRepository.save(dependentTag);
 
-    DependencyDto dependentOnMeDto = new DependencyDto(
-        dependentProject.getProjectName(),
-        dependentProject.getProjectId(),
-        savedDependentTag.getTagName());
-    TagResource savedMainTag = tagService
-        .addATagAsDependentOnMe(notDependentProject.getProjectId(), notDependentTag.getTagName(),
-            dependentOnMeDto);
+
 
     Tag getMainTagFromRepo = tagRepository
-        .findTagByTagNameAndProject_RemoteProjectId(savedMainTag.getTagName(),
-            savedMainTag.getProjectId());
+        .findTagByTagNameAndProject_RemoteProjectId(notDependentTag.getTagName(),
+            notDependentProject.getProjectId());
 
     assertTrue(1 == getMainTagFromRepo.getRelatedTags().size());
   }
