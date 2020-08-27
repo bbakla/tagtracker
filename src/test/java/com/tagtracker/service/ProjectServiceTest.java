@@ -111,6 +111,7 @@ public class ProjectServiceTest {
             e -> {
               assertTrue(e.getKey().getTagName().startsWith("v"));
               assertNotNull(e.getValue());
+              System.out.println(e.getKey());
 
               if (e.getKey().getStage().equals("build")) {
                 assertEquals(2, e.getValue().size());

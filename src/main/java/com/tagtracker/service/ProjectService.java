@@ -139,7 +139,8 @@ public class ProjectService {
                       gitlabJob.getRef(),
                       gitlabJob.getStage(),
                       String.valueOf(gitlabJob.getPipeline().getId()));
-              Set<Job> jobs = jobMap.get(gitlabJob.getRef());
+
+              Set<Job> jobs = jobMap.get(key);
 
               if (jobs != null) {
                 jobs.add(job);
