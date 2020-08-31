@@ -1,8 +1,9 @@
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useContext, useEffect, useState} from "react";
 import Tag from "./tags/Tag";
 import ShowDependency from "./dependencies/ShowDependency";
 import {DEPENDENT_ON, DEPENDENT_ON_ME} from "./dependencies/dependency";
 import Deployments from "./deployment/Deployments";
+import {GlobalContext} from "./Store";
 
 
 const sortTags =  (t1, t2) => {
@@ -15,10 +16,11 @@ const sortTags =  (t1, t2) => {
     }
 }
 
-export default function Project({project, removeProject}) {
+export default function Project({project}) {
     const [selectedTagIndex, setSelectedTagIndex] = useState(0);
     const [selectedTag, setSelectedTag] = useState("");
     const [tagsToBeSelected, setTagsToBeSelected] = useState(() => {
+
         if (project.tags.length > 0) {
             return project.tags.sort(sortTags);
         } else {
@@ -26,6 +28,8 @@ export default function Project({project, removeProject}) {
         }
 
     });
+
+    const {deleteRepository} = useContext(GlobalContext);
 
     const handleSelect = (event) => {
         let selectedTagName = event.target.value
@@ -39,7 +43,7 @@ export default function Project({project, removeProject}) {
     const handleRemove = () => {
         let confirmDelete = window.confirm("Are you sure deleting the tag?")
         if (confirmDelete) {
-            removeProject(project.projectName)
+            deleteRepository(project.projectId)
         }
     }
 
@@ -49,10 +53,6 @@ export default function Project({project, removeProject}) {
 
     const deployments = project.tags.length === 0 ? []
         : project.tags[selectedTagIndex].deployments
-    /*const dependentToMe = project.tags.length === 0 ? []
-        : project.tags[selectedTagIndex].tagsDependentOnMe
-    const dependentOn = project.tags.length === 0 ? []
-        : project.tags[selectedTagIndex].tagsDependentOn*/
 
     useEffect(() => {
         if (tagsToBeSelected.length > 0) {

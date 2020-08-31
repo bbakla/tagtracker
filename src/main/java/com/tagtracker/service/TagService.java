@@ -107,11 +107,15 @@ public class TagService {
           String.format("The JOB %s is not found", gitlabJob.getName()));
     }
 
+
     Job jobToBeUpdated = playedJob.get();
+    stageJobs.removeJob(jobToBeUpdated.getJobId());
+
     jobToBeUpdated.setUser(conversionService.convert(gitlabJob.getUser(), User.class));
     jobToBeUpdated.setJobId(gitlabJob.getId());
+    jobToBeUpdated.setStatus(gitlabJob.getStatus());
 
-    tagRepository.save(tag);
+    stageJobs.addJob(jobToBeUpdated);
 
     Tag savedTag = tagRepository.save(tag);
 
@@ -138,6 +142,8 @@ public class TagService {
     newTag.setMessage(tagInRemote.getMessage());
     newTag.setReleaseMessage(tagInRemote.getRelease() != null ? tagInRemote.getRelease().getDescription() : null);
     newTag.setProject(projectInDatabase);
+
+    projectService.putJobsIntoTheTag(identifier, newTag);
 
     projectInDatabase.addTag(newTag);
     Project projectWithNewTag = projectRepository.save(projectInDatabase);

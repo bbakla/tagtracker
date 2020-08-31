@@ -8,20 +8,24 @@ export default function Stage({jobs, stageName, projectId, tagName}) {
   const jobStatusIcon = (status) => {
     if (status === "success") {
       return "far fa-check-circle  color-green fa-lg build-content ci-status-icon ";
-    } else if (status === "manual") {
+    } else if (status === "manual" ) {
       return "fa fa-cog fa-lg  job build-content ci-status-icon";
     } else if (status === "failed") {
-      return "far fa-times-circle btn-outline-danger ci-status-icon fa-lg build-content";
+      return "far fa-times-circle btn-outline-danger fa-lg build-content ci-status-icon";
+    } else if (status === "pending" || status === "created") {
+        return "fas fa-pause btn-outline-warning  job build-content ci-status-icon";
     } else {
       return "";
      }
  }
 
   const jobActionIcon = (status) => {
-    if (status === "success" || status === "failed") {
+    if (status === "success" || status === "failed" ) {
       return "fas fa-sync  btn-blank btn-transparent ci-action-icon-container ";
-    } else if (status === "manual") {
+    } else if (status === "manual" )  {
       return "fas fa-play  btn-blank btn-transparent ci-action-icon-container ";
+    } else if (status === "pending" || status === "created") {
+        return "fas fa-ban  btn-blank btn-transparent ci-action-icon-container";
     } else {
       return "";
     }

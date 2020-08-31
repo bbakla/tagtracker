@@ -1,7 +1,7 @@
 import axios from "axios";
 import {
-  dependentOnPath,
-  basePathForProjects, runJobPath,
+    dependentOnPath,
+    basePathForProjects, runJobPath, projectWithId,
 
 } from "./paths";
 import React, {createContext, useEffect, useReducer, useState} from "react";
@@ -160,6 +160,27 @@ const Store = ({children}) => {
 
   }
 
+  const deleteRepository = (projectId) => {
+      const path = projectWithId.replace("{identifier}", projectId);
+
+      const deleteProject = async () => {
+          const response = await axios.delete(path,
+              {
+                  headers: {
+                      'Content-Type': 'application/json'
+                  }
+              }).catch(err => console.log(err))
+      }
+
+      deleteProject();
+
+      const projectListAfterDeletion = projects.filter(p => p.projectId !== projectId)
+
+
+      setProjects(projects.filter(p => p.projectId !== projectId));
+
+  }
+
   const createTag = (projectId, newTag) => {
     const path = (identifier) => `/projects/${identifier}/tags`;
     const body = JSON.stringify(newTag)
@@ -286,6 +307,7 @@ const Store = ({children}) => {
         projects,
         setProjects,
         addRepository,
+          deleteRepository,
         createTag,
         deleteTag,
         isLoading,
@@ -311,6 +333,7 @@ const useInit = () => {
 
             try {
               const result = await axios(basePathForProjects);
+
               setProjects(result.data);
               //  setProjects(initialState.projects)
               setError(false);
