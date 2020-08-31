@@ -104,7 +104,7 @@ public class ProjectServiceTest {
   public void canGetAllTagJobsOfAProject() throws Exception {
     String projectId = "135330";
 
-    Map<JobKey, Set<Job>> jobs = projectService.getTagJobs(projectId);
+    Map<JobKey, Set<Job>> jobs = projectService.getAllTagsJobs(projectId);
 
     jobs.entrySet()
         .forEach(

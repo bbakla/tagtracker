@@ -46,13 +46,13 @@ public class Jobs {
     this.jobs = jobs;
   }
 
-  void addJob(Job job) {
+  public void addJob(Job job) {
     jobs.add(job);
   }
 
- /* void removeJob(String jobId) {
+  public  void removeJob(String jobId) {
     jobs.removeIf(job -> job.getJobId().equals(jobId));
-  }*/
+  }
 
   public String getStage() {
     return stage;
