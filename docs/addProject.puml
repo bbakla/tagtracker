@@ -2,6 +2,8 @@
 skinparam ParticipantPadding 20
 skinparam BoxPadding 10
 
+
+
 title Add Project ( 1. scenario)
 autonumber
 Frontend -> Backend: Add Project
@@ -16,8 +18,9 @@ Backend -> Backend: save Job(stage, name, id)
   end
 Backend --> Frontend: project
 
-newpage Add Project(2. scenario)
+newpage Add Project(2. scenario) (I chose this scenario)
 autonumber
+
 Frontend -> Backend: Add Project
 Backend -> Gitlab: Add project
 Gitlab --> Backend: project
@@ -31,9 +34,8 @@ autonumber
 Frontend -> Backend: Create Tag
 Backend -> Gitlab: Create Tag
 Gitlab --> Backend: Tag
-Backend -> Gitlab: Get pipelines (projectId)
-Gitlab --> Backend: pipelines
-Backend -> Gitlab: Get jobs of the pipeline (projectId, pipelineId)
+Backend -> Gitlab: Get jobs (projectId)
+Gitlab --> Backend: jobs
 Backend -> Backend: Put related tags' jobs into Tag
 Backend -> Backend: Save tag
 Backend --> Frontend: Tag
