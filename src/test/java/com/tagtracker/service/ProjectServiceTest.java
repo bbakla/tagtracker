@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -105,10 +106,17 @@ public class ProjectServiceTest {
 
     Map<JobKey, Set<Job>> jobs = projectService.getTagJobs(projectId);
 
-    jobs.entrySet().forEach(e -> {
-      assertTrue(e.getKey().getTagName().startsWith("v"));
-      assertNotNull(e.getValue());
-    });
+    jobs.entrySet()
+        .forEach(
+            e -> {
+              assertTrue(e.getKey().getTagName().startsWith("v"));
+              assertNotNull(e.getValue());
+              System.out.println(e.getKey());
+
+              if (e.getKey().getStage().equals("build")) {
+                assertEquals(2, e.getValue().size());
+              }
+            });
   }
 
   @Test

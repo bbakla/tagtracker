@@ -51,7 +51,7 @@ public class ProjectService {
     if (gitlabProject == null) {
       throw new ProjectNotFoundException(
           String.format(
-              "Be ure that project with the identifier %s is saved in this service",
+              "Be sure that project with the identifier %s is saved in this service",
               appIdentifier));
     }
 
@@ -89,39 +89,7 @@ public class ProjectService {
     }
   }
 
-  private void putJobsToTheProject(String repositoryId, Set<Tag> tags) {
-    Map<JobKey, Set<Job>> tagJobs = getTagJobs(repositoryId);
-
-    List<String> stageSequence = readStageOrder(repositoryId);
-    System.out.println(stageSequence);
-
-    tagJobs.entrySet().stream()
-        .forEach(
-            e -> {
-              Optional<Tag> optionalTag =
-                  tags.stream()
-                      .filter(t -> t.getTagName().equals(e.getKey().getTagName()))
-                      .findFirst();
-              Tag tag = optionalTag.get();
-
-              Jobs jobs = tag.getStages().get(e.getKey().getStage());
-              if (jobs == null) {
-                Jobs newJobs = new Jobs();
-                newJobs.setStage(e.getKey().getStage());
-                newJobs.setJobs(e.getValue());
-                newJobs.setPipelineId(e.getKey().getPipelineId());
-                newJobs.setStageOrder(stageSequence.indexOf(newJobs.getStage()));
-
-                tag.addNewStage(newJobs);
-              } else {
-                tag.addJobToStage(e.getValue());
-              }
-            });
-
-
-  }
-
-  public Map<JobKey, Set<Job>> getTagJobs(String projectId) {
+  public Map<JobKey, Set<Job>> getAllTagsJobs(String projectId) {
 
     GitlabJob[] gitlabJobs = gitService.getProjectJobs(projectId);
     Map<JobKey, Set<Job>> jobMap = new HashMap<>();
@@ -136,13 +104,40 @@ public class ProjectService {
                       gitlabJob.getRef(),
                       gitlabJob.getStage(),
                       String.valueOf(gitlabJob.getPipeline().getId()));
-              Set<Job> jobs = jobMap.get(gitlabJob.getRef());
+
+              Set<Job> jobs = jobMap.get(key);
 
               if (jobs != null) {
                 jobs.add(job);
               } else {
                 jobMap.put(key, Stream.of(job).collect(Collectors.toSet()));
               }
+            });
+
+    return jobMap;
+  }
+
+  public void putJobsIntoTheTag(String repositoryId, Tag tag) {
+    Map<JobKey, Set<Job>> tagJobs = getJobsOfATag(repositoryId, tag.getTagName());
+
+    tagJobs.entrySet().stream()
+        .forEach(
+            e -> {
+              addJobsToTag(tag, repositoryId, e.getKey().getStage(), e.getKey().getPipelineId(), e.getValue());
+            }
+        );
+  }
+
+  private Map<JobKey, Set<Job>> getJobsOfATag(String projectId, String tagName) {
+
+    GitlabJob[] gitlabJobs = gitService.getProjectJobs(projectId);
+    Map<JobKey, Set<Job>> jobMap = new HashMap<>();
+
+    Arrays.stream(gitlabJobs)
+        .filter(job -> job.getTag() && job.getRef().equals(tagName))
+        .forEach(
+            gitlabJob -> {
+              putJobsInToMap(jobMap, gitlabJob);
             });
 
     return jobMap;
@@ -225,6 +220,73 @@ public class ProjectService {
           String.format(
               "Be sure that you saved the project with projectIdentifier, %s into this service. Try first saving it before calling. ",
               projectIdentifier));
+    }
+  }
+
+  private void putJobsInToMap(Map<JobKey, Set<Job>> jobMap, GitlabJob gitlabJob) {
+
+    Job job = conversionService.convert(gitlabJob, Job.class);
+    JobKey key =
+        new JobKey(
+            gitlabJob.getRef(),
+            gitlabJob.getStage(),
+            String.valueOf(gitlabJob.getPipeline().getId()));
+
+    Set<Job> jobs = jobMap.get(key);
+
+    if (jobs != null) {
+      jobs.add(job);
+    } else {
+      jobMap.put(key, Stream.of(job).collect(Collectors.toSet()));
+    }
+  }
+
+  private void putJobsToTheProject(String repositoryId, Set<Tag> tags) {
+    Map<JobKey, Set<Job>> tagJobs = getAllTagsJobs(repositoryId);
+
+    List<String> stageSequence = readStageOrder(repositoryId);
+
+    tagJobs.entrySet().stream()
+        .forEach(
+            e -> {
+              Optional<Tag> optionalTag =
+                  tags.stream()
+                      .filter(t -> t.getTagName().equals(e.getKey().getTagName()))
+                      .findFirst();
+              if (optionalTag.isPresent()) {
+                Tag tag = optionalTag.get();
+
+                Jobs jobs = tag.getStages().get(e.getKey().getStage());
+                if (jobs == null) {
+                  Jobs newJobs = new Jobs();
+                  newJobs.setStage(e.getKey().getStage());
+                  newJobs.setJobs(e.getValue());
+                  newJobs.setPipelineId(e.getKey().getPipelineId());
+                  newJobs.setStageOrder(stageSequence.indexOf(newJobs.getStage()));
+
+                  tag.addNewStage(newJobs);
+                } else {
+                  tag.addJobToStage(e.getValue());
+                }
+              }
+
+            });
+  }
+
+  private void addJobsToTag(Tag tag, String repositoryId, String stage, String pipelineId, Set<Job> jobsList) {
+    List<String> stageSequence = readStageOrder(repositoryId);
+
+    Jobs jobs = tag.getStages().get(stage);
+    if (jobs == null) {
+      Jobs newJobs = new Jobs();
+      newJobs.setStage(stage);
+      newJobs.setJobs(jobsList);
+      newJobs.setPipelineId(pipelineId);
+      newJobs.setStageOrder(stageSequence.indexOf(newJobs.getStage()));
+
+      tag.addNewStage(newJobs);
+    } else {
+      tag.addJobToStage(jobsList);
     }
   }
 }

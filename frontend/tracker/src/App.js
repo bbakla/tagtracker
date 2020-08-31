@@ -8,6 +8,8 @@ import DisplayTags from "./tags/DisplayTags";
 import ProjectDashboard from "./ProjectDashboard";
 import Navbar from "./navigation/Navbar";
 import RelatedProjects from "./dependencies/RelatedProjects";
+import Deployments from "./deployment/Deployments";
+import DeploymentView from "./deployment/DeploymentView";
 
 export default function App() {
 
@@ -21,6 +23,7 @@ export default function App() {
             <Switch>
                 <Route exact path="/" component={ProjectDashboard}/>
                 <Route exact path="/projects/:projectId/tags" component={DisplayTags}/>
+                <Route exact path="/projects/:projectId/deployments" component={DeploymentView}/>
                 <Route exact path="/projects/:projectId/dependentOn"
                        component={RelatedProjects}/>
               <Route exact path="/projects/:projectId/dependentOnMe"

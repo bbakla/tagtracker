@@ -68,7 +68,7 @@ export default function ProjectDashboard() {
         </div>
 
         <div className="row mt-5">
-                    <DisplayProjects />
+            {projects.length > 0 && <DisplayProjects/>}
                 </div>
 
 

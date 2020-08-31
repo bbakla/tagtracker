@@ -181,7 +181,6 @@ public class GitlabService {
         .retrieve();
 
     return responseSpec.bodyToMono(GitlabFile.class).block();
-
   }
 
 }

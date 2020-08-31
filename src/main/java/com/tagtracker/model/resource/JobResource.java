@@ -1,8 +1,9 @@
 package com.tagtracker.model.resource;
 
 import java.util.Date;
+import java.util.Objects;
 
-public class JobResource {
+public class JobResource implements Comparable<JobResource> {
 
   private String jobId;
   private String status;
@@ -95,4 +96,30 @@ public class JobResource {
   public void setPipelineId(String pipelineId) {
     this.pipelineId = pipelineId;
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    JobResource that = (JobResource) o;
+    return Objects.equals(stage, that.stage) &&
+        Objects.equals(jobId, that.getJobId()) &&
+        Objects.equals(pipelineStatus, that.pipelineStatus) &&
+        Objects.equals(pipelineId, that.pipelineId);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(stage, jobId, pipelineStatus, pipelineId);
+  }
+
+  @Override
+  public int compareTo(JobResource o) {
+    return Integer.parseInt(this.jobId) - Integer.parseInt(o.getJobId());
+  }
+
 }

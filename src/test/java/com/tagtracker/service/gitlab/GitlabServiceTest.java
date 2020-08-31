@@ -13,6 +13,7 @@ import com.tagtracker.model.entity.gitlab.GitlabProject;
 import com.tagtracker.model.entity.gitlab.pipelines.GitlabJob;
 import com.tagtracker.model.entity.gitlab.tags.GitlabTag;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,15 +75,6 @@ public class GitlabServiceTest {
     Thread.sleep(2000);
 
     gitlabService.deleteTag("102943", newTag.getName());
-
-   /* Tag tag = gitlabService.getTagOfARepo("102943", newTag.getName());
-
-    assertNull(tag);
-*/
-
-//     assertThrows(
-//         OperationNotSuccessfulException.class, () -> gitlabService.getTagOfARepo("102943", newTag.getName()));
-
   }
 
   @Test
@@ -90,7 +82,10 @@ public class GitlabServiceTest {
     GitlabJob[] jobs = gitlabService.getProjectJobs("135330");
 
     assertTrue(jobs.length > 0);
-    Arrays.stream(jobs).anyMatch(j -> j.getStage().equals("test"));
+    assertTrue(Arrays.stream(jobs).anyMatch(j -> j.getStage().equals("test")));
+    var jobsOfTag = Arrays.stream(jobs).filter(j -> j.getStage().equals("build") && j.getTag())
+        .collect(Collectors.toList());
+    assertEquals(2, jobsOfTag.size());
   }
 
   @Test

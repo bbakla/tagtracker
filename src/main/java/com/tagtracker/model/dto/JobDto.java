@@ -4,7 +4,6 @@ public class JobDto {
 
   private String stage;
   private String name;
-  private String jobId;
   private JOB_OPERATION jobOperation;
 
   public String getStage() {
@@ -21,14 +20,6 @@ public class JobDto {
 
   public void setName(String name) {
     this.name = name;
-  }
-
-  public String getJobId() {
-    return jobId;
-  }
-
-  public void setJobId(String jobId) {
-    this.jobId = jobId;
   }
 
   public JOB_OPERATION getJobOperation() {
