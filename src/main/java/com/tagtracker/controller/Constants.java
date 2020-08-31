@@ -6,7 +6,7 @@ public class Constants {
   public static final String PROJECT_PATH_BY_ID = "/{identifier}";
   public static final String PROJECT_STAGES_ORDER = PROJECT_PATH_BY_ID + "/stage-orders";
   public static final String PROJECT_TAG_BY_NAME = "/{identifier}/tags/{tagName}";
-  public static final String PROJECT_PATH_TO_DEPLOY = "/{identifier}/tags/{tagName}/run";
+  public static final String PROJECT_PATH_TO_DEPLOY = "/{identifier}/tags/{tagName}/jobs/{jobId}";
   public static final String PROJECT_PATH_BY_ID_AND_DEPENDENCY_PATH = "/{identifier}/tags/{tagName}/dependent-on";
 
 

@@ -60,9 +60,10 @@ public class TagController {
   public ResponseEntity<TagResource> runJob(
       @PathVariable String identifier,
       @PathVariable String tagName,
+      @PathVariable String jobId,
       @RequestBody JobDto jobDto)
       throws ProjectNotFoundException {
-    TagResource tagResource = tagService.runJob(identifier, tagName, jobDto);
+    TagResource tagResource = tagService.runJob(identifier, tagName, jobId, jobDto);
 
     return ResponseEntity.ok().body(tagResource);
   }

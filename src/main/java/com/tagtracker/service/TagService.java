@@ -86,7 +86,7 @@ public class TagService {
     return conversionService.convert(dependentTagSaved, TagResource.class);
   }
 
-  public TagResource runJob(String projectIdentifier, String tagName, JobDto job)
+  public TagResource runJob(String projectIdentifier, String tagName, String jobId, JobDto job)
       throws ProjectNotFoundException {
     var project = projectService.getProject(projectIdentifier);
     Tag tag = project.findTag(tagName);
@@ -98,7 +98,7 @@ public class TagService {
     }
 
     GitlabJob gitlabJob = gitlabService
-        .playAJob(project.getRemoteProjectId(), job.getJobId(), job.getJobOperation());
+        .playAJob(project.getRemoteProjectId(), jobId, job.getJobOperation());
     Optional<Job> playedJob = stageJobs.getJobs().stream()
         .filter(j -> j.getName().equals(gitlabJob.getName())).findAny();
 

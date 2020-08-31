@@ -1,141 +1,141 @@
 import axios from "axios";
 import {
   dependentOnPath,
-  basePathForProjects,
+  basePathForProjects, runJobPath,
 
 } from "./paths";
 import React, {createContext, useEffect, useReducer, useState} from "react";
 import AppReducer from "./AppReducer";
 import {DEPENDENT_ON, DEPENDENT_ON_ME} from "./dependencies/dependency";
 
- /*const initialState = {
-        projects: [
-            {
-    "createdBy": "user",
-    "createdDate": "2020-08-19T06:39:56.717+0000",
-    "lastModifiedBy": "user",
-    "lastModifiedDate": "2020-08-19T06:39:56.717+0000",
-    "projectId": "135330",
-    "projectName": "GitlabCI",
-    "encodedPath": "baris.bakla1%252Fgitlabci",
-    "description": "",
-    "tags": [
-        {
-            "projectId": "135330",
-            "projectName": "GitlabCI",
-            "message": "",
-            "tagName": "v0.0.1",
-            "releaseNotes": "* test",
-            "tagsDependentOn": [],
-            "tagsDependentOnMe": [],
-            "stages": {
-                "build-runner": {
-                    "stage": "build-runner",
-                    "stageIndex": 0,
-                    "pipelineStatus": "success",
-                    "pipelineId": "6552843",
-                    "jobResources": [
-                        {
-                            "jobId": "30276993",
-                            "status": "success",
-                            "name": "build runner",
-                            "stage": "build-runner",
-                            "createdAt": null,
-                            "startedAt": null,
-                            "duration": null,
-                            "userResource": {
-                                "userId": 12176,
-                                "name": "Baris Bakla",
-                                "userName": "baris.bakla1"
-                            },
-                            "pipelineStatus": null,
-                            "pipelineId": null
-                        }
-                    ]
-                },
-                "build": {
-                    "stage": "build",
-                    "stageIndex": 1,
-                    "pipelineStatus": "success",
-                    "pipelineId": "6552843",
-                    "jobResources": [
-                        {
-                            "jobId": "30276997",
-                            "status": "manual",
-                            "name": "build dev",
-                            "stage": "build",
-                            "createdAt": null,
-                            "startedAt": null,
-                            "duration": null,
-                            "userResource": {
-                                "userId": 12176,
-                                "name": "Baris Bakla",
-                                "userName": "baris.bakla1"
-                            },
-                            "pipelineStatus": null,
-                            "pipelineId": null
-                        }
-                    ]
-                },
-                "test": {
-                    "stage": "test",
-                    "stageIndex": 2,
-                    "pipelineStatus": "success",
-                    "pipelineId": "6552843",
-                    "jobResources": [
-                        {
-                            "jobId": "30277001",
-                            "status": "success",
-                            "name": "test allgemein",
-                            "stage": "test",
-                            "createdAt": null,
-                            "startedAt": null,
-                            "duration": null,
-                            "userResource": {
-                                "userId": 12176,
-                                "name": "Baris Bakla",
-                                "userName": "baris.bakla1"
-                            },
-                            "pipelineStatus": null,
-                            "pipelineId": null
-                        }
-                    ]
-                },
-                "qualitygate": {
-                    "stage": "qualitygate",
-                    "stageIndex": 3,
-                    "pipelineStatus": "success",
-                    "pipelineId": "6552843",
-                    "jobResources": [
-                        {
-                            "jobId": "30277005",
-                            "status": "manual",
-                            "name": "check MyQuality",
-                            "stage": "qualitygate",
-                            "createdAt": null,
-                            "startedAt": null,
-                            "duration": null,
-                            "userResource": {
-                                "userId": 12176,
-                                "name": "Baris Bakla",
-                                "userName": "baris.bakla1"
-                            },
-                            "pipelineStatus": null,
-                            "pipelineId": null
-                        }
-                    ]
-                }
-            }
-        }
-    ]
+/*const initialState = {
+       projects: [
+           {
+   "createdBy": "user",
+   "createdDate": "2020-08-19T06:39:56.717+0000",
+   "lastModifiedBy": "user",
+   "lastModifiedDate": "2020-08-19T06:39:56.717+0000",
+   "projectId": "135330",
+   "projectName": "GitlabCI",
+   "encodedPath": "baris.bakla1%252Fgitlabci",
+   "description": "",
+   "tags": [
+       {
+           "projectId": "135330",
+           "projectName": "GitlabCI",
+           "message": "",
+           "tagName": "v0.0.1",
+           "releaseNotes": "* test",
+           "tagsDependentOn": [],
+           "tagsDependentOnMe": [],
+           "stages": {
+               "build-runner": {
+                   "stage": "build-runner",
+                   "stageIndex": 0,
+                   "pipelineStatus": "success",
+                   "pipelineId": "6552843",
+                   "jobResources": [
+                       {
+                           "jobId": "30276993",
+                           "status": "success",
+                           "name": "build runner",
+                           "stage": "build-runner",
+                           "createdAt": null,
+                           "startedAt": null,
+                           "duration": null,
+                           "userResource": {
+                               "userId": 12176,
+                               "name": "Baris Bakla",
+                               "userName": "baris.bakla1"
+                           },
+                           "pipelineStatus": null,
+                           "pipelineId": null
+                       }
+                   ]
+               },
+               "build": {
+                   "stage": "build",
+                   "stageIndex": 1,
+                   "pipelineStatus": "success",
+                   "pipelineId": "6552843",
+                   "jobResources": [
+                       {
+                           "jobId": "30276997",
+                           "status": "manual",
+                           "name": "build dev",
+                           "stage": "build",
+                           "createdAt": null,
+                           "startedAt": null,
+                           "duration": null,
+                           "userResource": {
+                               "userId": 12176,
+                               "name": "Baris Bakla",
+                               "userName": "baris.bakla1"
+                           },
+                           "pipelineStatus": null,
+                           "pipelineId": null
+                       }
+                   ]
+               },
+               "test": {
+                   "stage": "test",
+                   "stageIndex": 2,
+                   "pipelineStatus": "success",
+                   "pipelineId": "6552843",
+                   "jobResources": [
+                       {
+                           "jobId": "30277001",
+                           "status": "success",
+                           "name": "test allgemein",
+                           "stage": "test",
+                           "createdAt": null,
+                           "startedAt": null,
+                           "duration": null,
+                           "userResource": {
+                               "userId": 12176,
+                               "name": "Baris Bakla",
+                               "userName": "baris.bakla1"
+                           },
+                           "pipelineStatus": null,
+                           "pipelineId": null
+                       }
+                   ]
+               },
+               "qualitygate": {
+                   "stage": "qualitygate",
+                   "stageIndex": 3,
+                   "pipelineStatus": "success",
+                   "pipelineId": "6552843",
+                   "jobResources": [
+                       {
+                           "jobId": "30277005",
+                           "status": "manual",
+                           "name": "check MyQuality",
+                           "stage": "qualitygate",
+                           "createdAt": null,
+                           "startedAt": null,
+                           "duration": null,
+                           "userResource": {
+                               "userId": 12176,
+                               "name": "Baris Bakla",
+                               "userName": "baris.bakla1"
+                           },
+                           "pipelineStatus": null,
+                           "pipelineId": null
+                       }
+                   ]
+               }
+           }
+       }
+   ]
 }
-        ]
-    }*/
+       ]
+   }*/
 
 export const GlobalContext = createContext([]);
 
 const Store = ({children}) => {
-    const [{projects, isLoading, isError}, setProjects] = useInit();
+  const [{projects, isLoading, isError}, setProjects] = useInit();
 
   const addRepository = (projectIdentifier) => {
     const body = {
@@ -148,8 +148,8 @@ const Store = ({children}) => {
       const project = {
         projectName: response.data.projectName,
         projectId: response.data.projectId,
-                description: response.data.description,
-                tags: response.data.tags
+        description: response.data.description,
+        tags: response.data.tags
       }
 
       setProjects(projectList => [...projectList, project]);
@@ -257,6 +257,24 @@ const Store = ({children}) => {
     removeDependency();
   }
 
+  const runJob = (jobId, projectId, tagName, jobDto) => {
+
+    let path = runJobPath.replace("{identifier}", projectId)
+    .replace("{tagName}", tagName)
+    .replace("{jobId}", jobId);
+
+    const runJob = async () => {
+      const response = await axios.post(path,
+          JSON.stringify(jobDto), {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }).catch(err => console.log(err))
+    }
+
+    runJob();
+  }
+
   const loading = () => {
     return (<div>
       <h1>Loading</h1>
@@ -274,18 +292,17 @@ const Store = ({children}) => {
         loading,
         saveDependency,
         deleteDependency,
+        runJob
       }}>
         {isLoading ? loading() : children}
 
-        </GlobalContext.Provider>
-    );
+      </GlobalContext.Provider>
+  );
 };
 
 
 const useInit = () => {
-
     const [projects, setProjects] = useState([]);
-
     const [isLoading, setLoading] = useState(false);
     const [isError, setError] = useState(false);
 
@@ -298,7 +315,6 @@ const useInit = () => {
               //  setProjects(initialState.projects)
               setError(false);
               setLoading(true);
-
 
             } catch (e) {
                 setError(true);
@@ -313,8 +329,6 @@ const useInit = () => {
 
     return [{projects, isLoading, isError}, setProjects]
 }
-
-
 
 
 /*

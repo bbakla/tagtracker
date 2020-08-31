@@ -32,7 +32,11 @@ export default function DeploymentView(){
                         <li>
                             <div className="stage-name">{key}</div>
 
-                        <Stage stage={stages[key]}/>
+                            <Stage jobs={stages[key]}
+                                   stageName={key}
+                                   projectId={location.state.projectId}
+                                   tagName={location.state.tagName}
+                            />
                         </li>
                     </ul>
 
